@@ -29,7 +29,7 @@ meta :: Char -> Integer -> Var
 meta c i  = if isUpper c then Meta c i else error "meta variable must be upper case"
 
 var  :: Char -> Integer -> Var
-var c i   = if isLower c then Var  c i else error "variable must be lower case"
+var  c i  = if isLower c then Var  c i else error "variable must be lower case"
 
 
 
