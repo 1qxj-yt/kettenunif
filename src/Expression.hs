@@ -34,7 +34,7 @@ var c i   = if isLower c then Var  c i else error "variable must be lower case"
 
 
 isMeta :: Var -> Bool
-isMeta (Var _ _) = True
+isMeta (Meta _ _) = True
 isMeta _         = False
 
 ------------------------------------------------
