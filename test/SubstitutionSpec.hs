@@ -10,6 +10,12 @@ import Expression
     , isMeta
     )
 
+import Data.Char(isUpper)
+
+-- Easy creation of variables.
+v :: Char -> Var
+v c = (if ($c) isUpper then meta else var) c 0
+
 
 spec :: Spec
 spec = do
@@ -19,7 +25,7 @@ spec = do
 
 
 subst :: Substitution
-subst = [meta 'Y' 0 → meta 'X' 0, meta 'X' 0 → meta 'Y' 0]
+subst = [v 'Y' → v 'X', v 'X' → v 'Y']
 
 sbind :: Token
-sbind = B (meta 'X' 0 := meta 'Y' 0)
+sbind = B (v 'X' := v 'Y')
