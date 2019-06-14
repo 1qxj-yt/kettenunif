@@ -12,25 +12,19 @@ import Expression
     , isMeta
     )
 
+import Data.List(find)
 
 ------------------------------------------------
 -- Data Types
 ------------------------------------------------
 
-
-data SingleSubst    = Subst {fun :: Var -> Var, tup :: (Var, Var)}
+type SingleSubst    = (Var,Var)
 type Substitution   = [SingleSubst]
-
-instance Show SingleSubst where
-    show Subst{tup=(v1,v2)}  = show v1++"→"++(show v2) 
-
 
 -- Constructor
 infixl →
 (→) :: Var -> Var -> SingleSubst
-(→) bef aft = if isMeta bef
-    then Subst (\v -> if v == bef then aft else v) (bef,aft)
-    else error "substitution origin is non-meta"
+v1 → v2 = (v1, v2)
 
 
 ------------------------------------------------
@@ -38,7 +32,9 @@ infixl →
 ------------------------------------------------
 
 onVar :: Substitution -> (Var -> Var)
-onVar σ = foldl (.) id (map fun σ)
+onVar σ v1 = case find ((==v1).fst) σ of
+    Nothing     -> v1
+    Just (_,v2) -> v2
 
 onBind :: Substitution -> (Bind -> Bind)
 onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
