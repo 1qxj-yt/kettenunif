@@ -19,8 +19,8 @@ v c = (if ($c) isUpper then meta else var) c 0
 
 spec :: Spec
 spec = do
-    describe "two times back-and-forth substitution {Y→X,X→Y}" $ do
-        it "equals identity" $ do
+    describe "double-application of transposition {Y→X,X→Y}" $ do
+        it "equals identity on binding X:=Y" $ do
             (subst `onAny`) (subst `onAny` sbind) `shouldBe` sbind
 
 
