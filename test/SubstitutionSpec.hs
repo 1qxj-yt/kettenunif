@@ -32,6 +32,9 @@ times n f = f . ((n-1) `times` f)
 
 spec :: Spec
 spec = do
+    describe "single substitution X→a" $ do
+        it "succeeds on single var X" $ do
+            [v 'X' → v 'a'] `onAny` V (v 'X') `shouldBe` V (v 'a')
     describe "double-application of transposition {Y→X,X→Y}" $ do
         it "equals identity on binding X:=Y" $ do
             (subst `onAny`) (subst `onAny` sbind) `shouldBe` sbind
