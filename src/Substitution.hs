@@ -2,6 +2,7 @@ module Substitution
     ( Substitution
     , Token(..)
     , (→)
+    , isWellDef
     , onAny
     ) where
 
@@ -12,7 +13,7 @@ import Expression
     , isMeta
     )
 
-import Data.List(find)
+import Data.List(find,nub)
 
 ------------------------------------------------
 -- Data Types
@@ -30,6 +31,11 @@ infixl →
 v1 → v2 = if isMeta v1
     then Subst (v1,v2)
     else error "substitution origin is non-meta"
+
+isWellDef :: Substitution -> Bool
+isWellDef σ = let origins = map (fst.tup) σ
+            in  length origins == length (nub origins) 
+                && all isMeta origins
 
 
 ------------------------------------------------
