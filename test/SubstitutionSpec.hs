@@ -32,6 +32,19 @@ times n f = f . ((n-1) `times` f)
 
 spec :: Spec
 spec = do
+    -- Constructor
+    describe "(→)" $ do
+        it "does not allow invalid substitution [x→a] to be created" $ do
+            (print (v 'x' → v 'a')) `shouldThrow` anyErrorCall
+
+    -- Test data check
+    describe "isWellDef" $ do
+        it "recognizes substitution [X→a,X→b] to be ill-defined" $ do
+            ($[v 'X' → v 'a', v 'X' → v 'b']) isWellDef `shouldBe` False
+        it "recognizes test case substitutions to be well-defined" $ do
+            all isWellDef [transposeXY, transposeABC, transposeCBA] `shouldBe` True
+
+    -- Substitution
     describe "single substitution X→a" $ do
         it "succeeds on single var X" $ do
             [v 'X' → v 'a'] `onAny` V (v 'X') `shouldBe` V (v 'a')
