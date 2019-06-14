@@ -37,15 +37,16 @@ spec = do
             [v 'X' → v 'a'] `onAny` V (v 'X') `shouldBe` V (v 'a')
     describe "double-application of transposition {Y→X,X→Y}" $ do
         it "equals identity on binding X:=Y" $ do
-            (subst `onAny`) (subst `onAny` sbind) `shouldBe` sbind
+            (2 `times` (transposeXY `onAny`)) bindXtoY `shouldBe` bindXtoY
 
 ------------------------------------------------
 -- Test Data
 ------------------------------------------------
 
+transposeXY :: Substitution
+transposeXY = [v 'Y' → v 'X', v 'X' → v 'Y']
 
-subst :: Substitution
-subst = [v 'Y' → v 'X', v 'X' → v 'Y']
+bindXtoY :: Token
+bindXtoY = B (v 'X' := v 'Y')
 
-sbind :: Token
-sbind = B (v 'X' := v 'Y')
+
