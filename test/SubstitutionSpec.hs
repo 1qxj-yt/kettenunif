@@ -38,6 +38,13 @@ spec = do
     describe "double-application of transposition {Y→X,X→Y}" $ do
         it "equals identity on binding X:=Y" $ do
             (2 `times` (transposeXY `onAny`)) bindXtoY `shouldBe` bindXtoY
+    describe "triple-application of permutation {C→A,A→B,B→C}" $ do
+        it "equals identity on expression {A:=B,B:=B,C:=B}" $ do
+            (3 `times` (transposeABC `onAny`)) exprAB_BB_CB `shouldBe` exprAB_BB_CB
+    describe "triple-application of reordered permutation {A→B,C→A,B→A}" $ do
+        it "equals identity on expression {A:=B,B:=B,C:=B}" $ do
+            (3 `times` (transposeCBA `onAny`)) exprAB_BB_CB `shouldBe` exprAB_BB_CB
+
 
 ------------------------------------------------
 -- Test Data
@@ -48,5 +55,15 @@ transposeXY = [v 'Y' → v 'X', v 'X' → v 'Y']
 
 bindXtoY :: Token
 bindXtoY = B (v 'X' := v 'Y')
+
+
+transposeABC :: Substitution
+transposeABC = [v 'A' → v 'B', v 'B' → v 'C', v 'C' → v 'A']
+
+transposeCBA :: Substitution
+transposeCBA = [v 'A' → v 'B', v 'C' → v 'A', v 'B' → v 'C']
+
+exprAB_BB_CB :: Token
+exprAB_BB_CB = E [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B']
 
 
