@@ -21,6 +21,9 @@ import Data.List(find)
 data SingleSubst    = Subst{tup::(Var,Var)} deriving Eq
 type Substitution   = [SingleSubst]
 
+instance Show SingleSubst where
+    show (Subst (v1,v2)) = show v1++"→"++(show v2)
+
 -- Constructor
 infixl →
 (→) :: Var -> Var -> SingleSubst
