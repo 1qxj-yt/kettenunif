@@ -18,13 +18,15 @@ import Data.List(find)
 -- Data Types
 ------------------------------------------------
 
-type SingleSubst    = (Var,Var)
+data SingleSubst    = Subst{tup::(Var,Var)} deriving Eq
 type Substitution   = [SingleSubst]
 
 -- Constructor
 infixl →
 (→) :: Var -> Var -> SingleSubst
-v1 → v2 = (v1, v2)
+v1 → v2 = if isMeta v1
+    then Subst (v1,v2)
+    else error "substitution origin is non-meta"
 
 
 ------------------------------------------------
@@ -32,9 +34,9 @@ v1 → v2 = (v1, v2)
 ------------------------------------------------
 
 onVar :: Substitution -> (Var -> Var)
-onVar σ v1 = case find ((==v1).fst) σ of
-    Nothing     -> v1
-    Just (_,v2) -> v2
+onVar σ v1 = case find ((==v1).fst.tup) σ of
+    Nothing -> v1
+    Just x  -> (snd.tup) x
 
 onBind :: Substitution -> (Bind -> Bind)
 onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
