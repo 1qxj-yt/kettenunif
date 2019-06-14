@@ -20,6 +20,11 @@ import Data.Char(isUpper)
 v :: Char -> Var
 v c = (if ($c) isUpper then meta else var) c 0
 
+times :: Int -> (a -> a) -> (a -> a)
+times 0 _ = id
+times 1 f = f
+times n f = f . ((n-1) `times` f)
+
 
 ------------------------------------------------
 -- Specification
