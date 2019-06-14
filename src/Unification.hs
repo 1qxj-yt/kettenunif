@@ -34,7 +34,7 @@ probToSolver = S.map probToSolver'
 
 
 ------------------------------------------------
--- Applier
+-- Substitution Application
 ------------------------------------------------
 
 onEq :: Substitution -> Equation -> Equation
@@ -47,10 +47,13 @@ onProblem :: Substitution -> UnifProblem -> SolverDS
 onProblem σ = (σ `onSolver`) . probToSolver
 
 
-
+------------------------------------------------
+-- Checks
+------------------------------------------------
 
 check :: Equation -> Bool
 check (e1 :=?: e2) = e1 == e2
 
 solves :: Substitution -> UnifProblem -> Bool
 solves σ p = all check (σ `onProblem` p)
+
