@@ -12,16 +12,28 @@ import Expression
 
 import Data.Char(isUpper)
 
+------------------------------------------------
+-- Utility Functions
+------------------------------------------------
+
 -- Easy creation of variables.
 v :: Char -> Var
 v c = (if ($c) isUpper then meta else var) c 0
 
+
+------------------------------------------------
+-- Specification
+------------------------------------------------
 
 spec :: Spec
 spec = do
     describe "double-application of transposition {Y→X,X→Y}" $ do
         it "equals identity on binding X:=Y" $ do
             (subst `onAny`) (subst `onAny` sbind) `shouldBe` sbind
+
+------------------------------------------------
+-- Test Data
+------------------------------------------------
 
 
 subst :: Substitution
