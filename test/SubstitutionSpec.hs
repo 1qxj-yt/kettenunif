@@ -45,17 +45,18 @@ spec = do
             all isWellDef [transposeXY, transposeABC, transposeCBA] `shouldBe` True
 
     -- Substitution
-    describe "single substitution X→a" $ do
-        it "succeeds on single var X" $ do
+    describe "substitution" $ do
+        it "[X→a]{X} === {a}" $ do
             [v 'X' → v 'a'] `onAny` V (v 'X') `shouldBe` V (v 'a')
-    describe "double-application of transposition {Y→X,X→Y}" $ do
-        it "equals identity on binding X:=Y" $ do
+        it "[X→a]{x} === {x}" $ do
+            [v 'X' → v 'a'] `onAny` V (v 'x') `shouldBe` V (v 'x')
+        it "[Y→X,X→Y]{X:=Y} === {Y:=X}" $ do
+            transposeXY `onAny` bindXtoY `shouldBe` B (v 'Y' := v 'X')
+        it "([Y→X,X→Y]^2){X:=Y} === {X:=Y}" $ do
             (2 `times` (transposeXY `onAny`)) bindXtoY `shouldBe` bindXtoY
-    describe "triple-application of permutation {C→A,A→B,B→C}" $ do
-        it "equals identity on expression {A:=B,B:=B,C:=B}" $ do
+        it "([C→A,A→B,B→C]^3){A:=B,B:=B,C:=B} === {A:=B,B:=B,C:=B}" $ do
             (3 `times` (transposeABC `onAny`)) exprAB_BB_CB `shouldBe` exprAB_BB_CB
-    describe "triple-application of reordered permutation {A→B,C→A,B→A}" $ do
-        it "equals identity on expression {A:=B,B:=B,C:=B}" $ do
+        it "([A→B,C→A,B→A]^3){A:=B,B:=B,C:=B} === {A:=B,B:=B,C:=B}" $ do
             (3 `times` (transposeCBA `onAny`)) exprAB_BB_CB `shouldBe` exprAB_BB_CB
 
 
