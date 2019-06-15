@@ -1,6 +1,6 @@
 module Unification
     ( SolverDS
-    , Equation
+    , Equation((:=?:))
     ) where
 
 import qualified Data.Set as S

@@ -9,7 +9,7 @@ module Substitution
 import Expression
     ( Expr
     , Bind((:=))
-    , Var, var, meta
+    , Var,
     , isMeta
     )
 
