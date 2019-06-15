@@ -45,5 +45,5 @@ instance Show Bind where
     show (s := t) = show s++"="++show t
 
 instance Show Var where
-    show (Meta c i) = c:if i==0 then [] else (show i)
-    show (Var  c i) = c:if i==0 then [] else (show i)
+    show (Meta c i) = c:if i==0 then [] else show i
+    show (Var  c i) = c:if i==0 then [] else show i
