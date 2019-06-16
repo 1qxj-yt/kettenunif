@@ -1,3 +1,5 @@
 .stack-work/
 kettenunif.cabal
 *~
+*.sublime-project
+*.sublime-workspace
