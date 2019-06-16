@@ -2,7 +2,7 @@ module Rules
     ( decomposition
     ) where
 
-import Unification
+import UnifProblem
     ( SolverDS
     , Equation((:=?:))
     )

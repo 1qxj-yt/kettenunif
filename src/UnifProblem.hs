@@ -1,4 +1,4 @@
-module Unification
+module UnifProblem
     ( SolverDS
     , Equation((:=?:))
     , onProblem
