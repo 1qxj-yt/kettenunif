@@ -49,6 +49,12 @@ extend sl sr = Subst $ M.unionWith sound (mp sl) (mp sr)
 build :: [Substitution] -> Substitution
 build = foldr extend (Subst $ M.empty)
 
+compose :: Substitution -> Substitution -> Substitution
+compose sl sr =
+    let newr = Subst $ M.map (sl `onVar`) (mp sr)
+    in  extend sl newr
+
+
 ------------------------------------------------
 -- Substitution Application
 ------------------------------------------------
