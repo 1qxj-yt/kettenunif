@@ -2,7 +2,8 @@ module Substitution
     ( Substitution
     , Token(..)
     , (→)
-    , isWellDef
+    , build
+    , isValid
     , onAny
     ) where
 
@@ -13,39 +14,49 @@ import Expression
     , isMeta
     )
 
-import Data.List(find,nub)
+import Data.List(find,nub,intercalate)
+import qualified Data.Map as M
 
 ------------------------------------------------
 -- Data Types
 ------------------------------------------------
 
-data SingleSubst    = Subst{tup::(Var,Var)} deriving Eq
-type Substitution   = [SingleSubst]
+data Substitution = Subst {mp :: M.Map Var Var}
 
-instance Show SingleSubst where
-    show (Subst (v1,v2)) = show v1++"→"++(show v2)
+instance Show Substitution where
+    show (Subst mp) = '{': (intercalate "," $ map showAsc (M.assocs mp)) ++ "}"
+        where showAsc (v1,v2) = show v1++"→"++(show v2)
 
 -- Constructor
 infixl →
-(→) :: Var -> Var -> SingleSubst
+(→) :: Var -> Var -> Substitution
 v1 → v2 = if isMeta v1
-    then Subst (v1,v2)
+    then Subst (M.singleton v1 v2)
     else error "substitution origin is non-meta"
 
-isWellDef :: Substitution -> Bool
-isWellDef σ = let origins = map (fst.tup) σ
-            in  length origins == length (nub origins)
-                && all isMeta origins
+isValid :: Substitution -> Bool
+isValid σ = let origins = M.keys (mp σ)
+              in  all isMeta origins
 
+------------------------------------------------
+-- Operations
+------------------------------------------------
+
+extend :: Substitution -> Substitution -> Substitution
+extend sl sr = Subst $ M.unionWith sound (mp sl) (mp sr)
+    where sound a1 a2 = if a1==a2 then a1 else error "contradictory entries"
+
+build :: [Substitution] -> Substitution
+build = foldr extend (Subst $ M.empty)
 
 ------------------------------------------------
 -- Substitution Application
 ------------------------------------------------
 
 onVar :: Substitution -> (Var -> Var)
-onVar σ v1 = case find ((==v1).fst.tup) σ of
+onVar σ v1 = case M.lookup v1 (mp σ) of
     Nothing -> v1
-    Just x  -> (snd.tup) x
+    Just v2 -> v2
 
 onBind :: Substitution -> (Bind -> Bind)
 onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)

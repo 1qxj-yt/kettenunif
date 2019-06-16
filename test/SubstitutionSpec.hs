@@ -11,6 +11,7 @@ import Expression
     )
 
 import Data.Char(isUpper)
+import qualified Data.Map as M
 
 ------------------------------------------------
 -- Utility Functions
@@ -36,20 +37,24 @@ spec = do
     describe "(→)" $ do
         it "does not allow invalid substitution [x→a] to be created" $ do
             (print (v 'x' → v 'a')) `shouldThrow` anyErrorCall
+    describe "build" $ do
+        it "does not allow ill-defined substitution [X→a,X→b] to be created" $ do
+            (print $ build [v 'X' → v 'a', v 'X' → v 'b']) `shouldThrow` anyErrorCall
+
+    -- TODO
+    -- tests for compose & extend
 
     -- Test data check
-    describe "isWellDef" $ do
-        it "recognizes substitution [X→a,X→b] to be ill-defined" $ do
-            ($[v 'X' → v 'a', v 'X' → v 'b']) isWellDef `shouldBe` False
-        it "recognizes test case substitutions to be well-defined" $ do
-            all isWellDef [transposeXY, transposeABC, transposeCBA] `shouldBe` True
+    describe "isValid" $ do
+        it "recognizes test case substitutions to be valid" $ do
+            all isValid [transposeXY, transposeABC, transposeCBA] `shouldBe` True
 
     -- Substitution
     describe "substitution" $ do
         it "[X→a]{X} === {a}" $ do
-            [v 'X' → v 'a'] `onAny` V (v 'X') `shouldBe` V (v 'a')
+            build [v 'X' → v 'a'] `onAny` V (v 'X') `shouldBe` V (v 'a')
         it "[X→a]{x} === {x}" $ do
-            [v 'X' → v 'a'] `onAny` V (v 'x') `shouldBe` V (v 'x')
+            build [v 'X' → v 'a'] `onAny` V (v 'x') `shouldBe` V (v 'x')
         it "[Y→X,X→Y]{X:=Y} === {Y:=X}" $ do
             transposeXY `onAny` bindXtoY `shouldBe` B (v 'Y' := v 'X')
         it "([Y→X,X→Y]^2){X:=Y} === {X:=Y}" $ do
@@ -65,17 +70,17 @@ spec = do
 ------------------------------------------------
 
 transposeXY :: Substitution
-transposeXY = [v 'Y' → v 'X', v 'X' → v 'Y']
+transposeXY = build [v 'Y' → v 'X', v 'X' → v 'Y']
 
 bindXtoY :: Token
 bindXtoY = B (v 'X' := v 'Y')
 
 
 transposeABC :: Substitution
-transposeABC = [v 'A' → v 'B', v 'B' → v 'C', v 'C' → v 'A']
+transposeABC = build [v 'A' → v 'B', v 'B' → v 'C', v 'C' → v 'A']
 
 transposeCBA :: Substitution
-transposeCBA = [v 'A' → v 'B', v 'C' → v 'A', v 'B' → v 'C']
+transposeCBA = build [v 'A' → v 'B', v 'C' → v 'A', v 'B' → v 'C']
 
 exprAB_BB_CB :: Token
 exprAB_BB_CB = E [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B']
