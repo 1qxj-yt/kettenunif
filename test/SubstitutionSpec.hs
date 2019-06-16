@@ -79,5 +79,3 @@ transposeCBA = [v 'A' → v 'B', v 'C' → v 'A', v 'B' → v 'C']
 
 exprAB_BB_CB :: Token
 exprAB_BB_CB = E [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B']
-
-

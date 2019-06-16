@@ -58,4 +58,3 @@ check (e1 :=?: e2) = e1 == e2
 
 solves :: Substitution -> UnifProblem -> Bool
 solves σ p = all check (σ `onProblem` p)
-

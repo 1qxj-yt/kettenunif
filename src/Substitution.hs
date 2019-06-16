@@ -34,7 +34,7 @@ v1 → v2 = if isMeta v1
 
 isWellDef :: Substitution -> Bool
 isWellDef σ = let origins = map (fst.tup) σ
-            in  length origins == length (nub origins) 
+            in  length origins == length (nub origins)
                 && all isMeta origins
 
 
