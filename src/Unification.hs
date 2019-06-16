@@ -32,7 +32,7 @@ probToSolver :: UnifProblem -> SolverDS
 probToSolver = S.map probToSolver'
     where
         probToSolver' :: UnifProblemEl -> Equation
-        probToSolver' (e1 :=.: e2) = (E e1 :=?: E e2)
+        probToSolver' (e1 :=.: e2) = E e1 :=?: E e2
 
 
 ------------------------------------------------
