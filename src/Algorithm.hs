@@ -24,6 +24,8 @@ import Rules
     , application
     , orientation
     )
+
+import qualified Data.Set as S(null,deleteFindMin)
 applyRuleFor :: Equation -> Rule
 applyRuleFor (B _ :=?: B _)   = decomposition
 applyRuleFor (E [] :=?: E []) = tautology
