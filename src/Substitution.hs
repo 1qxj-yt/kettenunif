@@ -2,6 +2,7 @@ module Substitution
     ( Substitution
     , Token(..)
     , (→)
+    , identity
     , build
     , compose
     , isValid
@@ -34,6 +35,9 @@ infixl →
 v1 → v2 = if isMeta v1
     then Subst (M.singleton v1 v2)
     else error "substitution origin is non-meta"
+
+identity :: Substitution
+identity = Subst M.empty -- == build []
 
 isValid :: Substitution -> Bool
 isValid σ = let origins = M.keys (mp σ)
