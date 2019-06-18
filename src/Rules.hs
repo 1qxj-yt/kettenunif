@@ -34,6 +34,24 @@ infixr %
 (%) = S.insert
 
 
+tautology :: Rule
+tautology (sol,_,γ) = [(sol,γ)]
+
+clash :: Rule
+clash _ = []
+
+distribution :: Rule
+distribution (sol,E (b1:e1s) :=?: E e2,γ) =
+            [(sol, (B b1 :=?: B b2) % (E e1s :=?: E (delete b2 e2)) % γ) | b2<-e2 ]
+
 decomposition :: Rule
 decomposition (sol,B (x:=y) :=?: B (x':=y'),γ) =
             [(sol, (V x :=?: V x') % (V y :=?: V y') % γ)]
+
+application :: Rule
+application (sol,V v1:=?: V v2,γ) =
+            [((v1 → v2):sol, (v1 → v2) `onSolver` γ)]
+
+orientation :: Rule
+orientation (sol, x:=?:y, γ) =
+            [(sol, (y:=?:x) % γ)]
