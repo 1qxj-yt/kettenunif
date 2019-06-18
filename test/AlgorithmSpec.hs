@@ -42,6 +42,8 @@ spec = do
             solve testProblem1 `shouldBe` [build [v 'X' → v 'x', v 'Y' → v 'y']]
         it "solves {x=x =. z=z} to []" $ do
             solve testProblem2 `shouldBe` []
+        it "solves {X=Y =. Y=a} to [{X→a,Y→a}]" $ do
+            solve testProblem3 `shouldBe` [build [v 'X' → v 'a', v 'Y' → v 'a']]
 
 
 ------------------------------------------------
