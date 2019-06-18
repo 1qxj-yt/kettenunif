@@ -26,6 +26,18 @@ import Rules
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
+
+solve :: UnifProblem -> [Substitution]
+solve prob = solveAux ([identity], probToSolver prob)
+
+solveAux :: ([Substitution], SolverDS) -> [Substitution]
+solveAux (sol,γ)
+    | S.null γ  = [foldr compose identity sol]
+    | otherwise = let (eq,γ') = S.deleteFindMin γ
+                      nextLs = applyRuleFor eq (sol, eq, γ')
+                  in concat [solveAux next | next <- nextLs ]
+
+
 applyRuleFor :: Equation -> Rule
 applyRuleFor (B _ :=?: B _)   = decomposition
 applyRuleFor (E [] :=?: E []) = tautology
