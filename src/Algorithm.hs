@@ -1,5 +1,6 @@
 module Algorithm
     ( solve
+    , solveVerbose
     ) where
 
 import Expression
