@@ -1,4 +1,6 @@
-module Algorithm where
+module Algorithm
+    ( solve
+    ) where
 
 import Expression
     ( isMeta
