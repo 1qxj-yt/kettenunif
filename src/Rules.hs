@@ -1,5 +1,11 @@
 module Rules
-    ( decomposition
+    ( Rule
+    , tautology
+    , clash
+    , distribution
+    , decomposition
+    , application
+    , orientation
     ) where
 
 import UnifProblem
