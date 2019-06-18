@@ -28,6 +28,7 @@ import Rules
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
+import Control.Monad.Writer
 ------------------------------------------------
 -- Silent Solver
 ------------------------------------------------
