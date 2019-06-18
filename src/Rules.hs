@@ -33,10 +33,14 @@ import Data.List(delete)
 
 type Input  = ([Substitution], Equation, SolverDS)
 type Output = ([Substitution], SolverDS)
+newtype SSList = SSL [Substitution]
 data Rule   = R {name::String, apply::Input -> [Output]}
 
 instance Show Rule where
     show = name
+
+instance Show SSList where
+    show (SSL list) = show list
 
 
 infixr %
