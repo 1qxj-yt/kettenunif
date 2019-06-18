@@ -4,11 +4,11 @@ module Algorithm
     ) where
 
 import Expression
-    ( isMeta
+    ( Token(E,B,V)
+    , isMeta
     )
 import Substitution
     ( Substitution
-    , Token(E,B,V)
     , identity
     , compose
     )

@@ -1,6 +1,5 @@
 module Substitution
     ( Substitution
-    , Token(..)
     , (→)
     , identity
     , build
@@ -13,6 +12,7 @@ import Expression
     ( Expr
     , Bind((:=))
     , Var
+    , Token(E,B,V)
     , isMeta
     )
 
@@ -74,13 +74,6 @@ onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
 
 onExpr :: Substitution -> (Expr -> Expr)
 onExpr σ = map (σ `onBind`)
-
-
-------------------------------------------------
--- Generalization
-------------------------------------------------
-
-data Token = B Bind | V Var | E Expr deriving (Eq,Ord,Show)
 
 onAny :: Substitution -> Token -> Token
 onAny σ t = case t of

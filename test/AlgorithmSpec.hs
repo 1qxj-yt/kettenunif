@@ -7,6 +7,7 @@ import Expression
     ( Expr
     , Bind((:=))
     , Var, var, meta
+    , Token(..)
     )
 import UnifProblem
     ( UnifProblem
@@ -16,7 +17,6 @@ import Substitution
     ( Substitution
     , (→)
     , build
-    , Token(..)
     )
 
 import Data.Char(isUpper)
@@ -44,6 +44,10 @@ spec = do
             solve testProblem2 `shouldBe` []
         it "solves {X=Y =. Y=a} to [{X→a,Y→a}]" $ do
             solve testProblem3 `shouldBe` [build [v 'X' → v 'a', v 'Y' → v 'a']]
+        it "solves {X=Y =. Y=A} to [{X→A,Y→A}]" $ do
+            solve testProblem4 `shouldBe` [build [v 'X' → v 'A', v 'Y' → v 'A']]
+        it "solves {X=Y =. Y=A} to [{A→X,Z→X}]" $ do
+            solve testProblem4 `shouldBe` [build [v 'A' → v 'X', v 'Z' → v 'X']]
 
 
 ------------------------------------------------
@@ -55,3 +59,9 @@ testProblem1 = S.fromList [[v 'X' := v 'y'] :=.: [v 'x' := v 'Y']]
 
 testProblem2 :: UnifProblem
 testProblem2 = S.fromList [[v 'x' := v 'x'] :=.: [v 'y' := v 'y']]
+
+testProblem3 :: UnifProblem
+testProblem3 = S.fromList [[v 'X' := v 'Y'] :=.: [v 'Y' := v 'a']]
+
+testProblem4 :: UnifProblem
+testProblem4 = S.fromList [[v 'X' := v 'Y'] :=.: [v 'Y' := v 'A']]

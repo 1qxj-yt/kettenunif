@@ -13,10 +13,10 @@ import qualified Data.Set as S
 
 import Expression
     ( Expr
+    , Token(E,B,V)
     )
 import Substitution
     ( Substitution
-    , Token(..)
     , onAny
     )
 

@@ -2,6 +2,7 @@ module Expression
     ( Expr
     , Bind((:=))
     , Var
+    , Token(B,V,E)
     , meta
     , var
     , isMeta
@@ -19,6 +20,8 @@ type Expr = [Bind]
 data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
+
+data Token = B Bind | V Var | E Expr deriving (Eq,Ord,Show)
 
 
 ------------------------------------------------

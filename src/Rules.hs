@@ -18,11 +18,11 @@ import UnifProblem
     )
 import Substitution
     ( Substitution
-    , Token(E,B,V)
     , (→)
     )
 import Expression
     ( Bind((:=))
+    , Token(E,B,V)
     )
 
 import qualified Data.Set as S

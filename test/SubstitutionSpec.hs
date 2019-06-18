@@ -7,6 +7,7 @@ import Expression
     ( Expr
     , Bind((:=))
     , Var, var, meta
+    , Token(..)
     , isMeta
     )
 
