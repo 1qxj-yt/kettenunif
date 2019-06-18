@@ -40,11 +40,11 @@ solveAux (sol,γ)
                   in concat [solveAux next | next <- nextLs ]
 
 
-applyRuleFor :: Equation -> Rule
-applyRuleFor (B _ :=?: B _)   = decomposition
-applyRuleFor (E [] :=?: E []) = tautology
-applyRuleFor (E e1 :=?: E e2) = if length e1 == length e2 then distribution else clash
-applyRuleFor (V v1 :=?: V v2)
+ruleFor :: Equation -> Rule
+ruleFor (B _ :=?: B _)   = decomposition
+ruleFor (E [] :=?: E []) = tautology
+ruleFor (E e1 :=?: E e2) = if length e1 == length e2 then distribution else clash
+ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
     | otherwise = case (isMeta v1, isMeta v2) of
         (False, False) -> if v1 == v2 then tautology else clash
