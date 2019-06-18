@@ -44,6 +44,20 @@ solve prob = map sslToSubst . fst $ runSolverWriter prob
 
 sslToSubst :: SSList -> Substitution
 sslToSubst (SSL list) = foldr compose identity list
+
+------------------------------------------------
+-- Verbose Solver
+------------------------------------------------
+
+solveVerbose :: UnifProblem -> IO ()
+solveVerbose prob = mapM_ printInfo . snd $ runSolverWriter prob
+
+printInfo :: StepInfo -> IO ()
+printInfo (n,(sol,eq,γ),rule) = do
+    let indent = replicate n ' '
+    putStrLn $ indent ++ "(" ++ show sol ++", "++ show eq ++" ∪ Γ)"
+    putStrLn $ indent ++ name rule
+
 ------------------------------------------------
 -- General Solver
 ------------------------------------------------
