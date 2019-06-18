@@ -5,16 +5,19 @@ module Rules
 import UnifProblem
     ( SolverDS
     , Equation((:=?:))
+    , onSolver
     )
 import Substitution
     ( Substitution
-    , Token(B,V)
+    , Token(E,B,V)
+    , (→)
     )
 import Expression
     ( Bind((:=))
     )
 
 import qualified Data.Set as S
+import Data.List(delete)
 
 ------------------------------------------------
 -- Data Types
