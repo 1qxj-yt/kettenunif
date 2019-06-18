@@ -28,6 +28,9 @@ import Rules
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
+------------------------------------------------
+-- Silent Solver
+------------------------------------------------
 
 solve :: UnifProblem -> [Substitution]
 solve prob = solveAux ([identity], probToSolver prob)
@@ -39,6 +42,9 @@ solveAux (sol,γ)
                       nextLs = applyRuleFor eq (sol, eq, γ')
                   in concat [solveAux next | next <- nextLs ]
 
+------------------------------------------------
+-- Selecting the Right Rule
+------------------------------------------------
 
 ruleFor :: Equation -> Rule
 ruleFor (B _ :=?: B _)   = decomposition
