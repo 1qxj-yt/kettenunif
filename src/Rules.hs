@@ -20,8 +20,8 @@ import qualified Data.Set as S
 -- Data Types
 ------------------------------------------------
 
-type Input  = (Substitution, Equation, SolverDS)
-type Output = (Substitution, SolverDS)
+type Input  = ([Substitution], Equation, SolverDS)
+type Output = ([Substitution], SolverDS)
 type Rule = Input -> [Output]
 
 
