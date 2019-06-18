@@ -1,6 +1,9 @@
 module UnifProblem
-    ( SolverDS
+    ( UnifProblem
+    , UnifProblemEl((:=.:))
+    , SolverDS
     , Equation((:=?:))
+    , probToSolver
     , onSolver
     , onProblem
     , solves
