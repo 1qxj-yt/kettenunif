@@ -1,6 +1,7 @@
 module UnifProblem
     ( SolverDS
     , Equation((:=?:))
+    , onSolver
     , onProblem
     , solves
     ) where
