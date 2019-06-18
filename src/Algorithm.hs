@@ -19,6 +19,8 @@ import UnifProblem
     )
 import Rules
     ( Rule(name,apply)
+    , Input
+    , Output
     , tautology
     , clash
     , distribution
