@@ -2,6 +2,7 @@ module Rules
     ( Rule(name,apply)
     , Input
     , Output
+    , SSList(SSL)
     , tautology
     , clash
     , distribution
