@@ -40,14 +40,10 @@ type StepInfo = (Int,Input,Rule)
 ------------------------------------------------
 
 solve :: UnifProblem -> [Substitution]
-solve prob = solveAux ([identity], probToSolver prob)
+solve prob = map sslToSubst . fst $ runSolverWriter prob
 
-solveAux :: ([Substitution], SolverDS) -> [Substitution]
-solveAux (sol,γ)
-    | S.null γ  = [foldr compose identity sol]
-    | otherwise = let (eq,γ') = S.deleteFindMin γ
-                      nextLs = applyRuleFor eq (sol, eq, γ')
-                  in concat [solveAux next | next <- nextLs ]
+sslToSubst :: SSList -> Substitution
+sslToSubst (SSL list) = foldr compose identity list
 ------------------------------------------------
 -- General Solver
 ------------------------------------------------
