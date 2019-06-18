@@ -1,5 +1,5 @@
 module Rules
-    ( Rule
+    ( Rule(name,apply)
     , tautology
     , clash
     , distribution
