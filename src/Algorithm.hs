@@ -48,6 +48,26 @@ solveAux (sol,γ)
     | otherwise = let (eq,γ') = S.deleteFindMin γ
                       nextLs = applyRuleFor eq (sol, eq, γ')
                   in concat [solveAux next | next <- nextLs ]
+------------------------------------------------
+-- General Solver
+------------------------------------------------
+
+runSolverWriter :: UnifProblem -> ([SSList], [StepInfo])
+runSolverWriter prob = runWriter $ solveGeneral 0 (SSL [identity], probToSolver prob)
+
+solveGeneral :: Int -> Output -> Writer [StepInfo] [SSList]
+solveGeneral n (sol,γ)
+    | S.null γ = return [sol]
+    | otherwise=
+        let (eq,γ') = S.deleteFindMin γ
+            rule    = ruleFor eq
+            nextLs  = apply rule (sol, eq, γ')
+
+            input  = (sol, eq, γ')
+        in do
+            tell [(n,input,rule)]
+            concat <$> sequence [solveGeneral (succ n) next | next <- nextLs ]
+
 
 ------------------------------------------------
 -- Selecting the Right Rule
