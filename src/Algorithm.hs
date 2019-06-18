@@ -18,7 +18,7 @@ import UnifProblem
     , probToSolver
     )
 import Rules
-    ( Rule
+    ( Rule(name,apply)
     , tautology
     , clash
     , distribution
