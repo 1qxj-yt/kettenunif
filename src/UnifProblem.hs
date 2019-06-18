@@ -35,6 +35,15 @@ probToSolver = S.map probToSolver'
         probToSolver' :: UnifProblemEl -> Equation
         probToSolver' (e1 :=.: e2) = E e1 :=?: E e2
 
+isValidEquation :: Equation -> Bool
+isValidEquation (E _ :=?: E _) = True
+isValidEquation (B _ :=?: B _) = True
+isValidEquation (V _ :=?: V _) = True
+isValidEquation _ = False
+
+isValidSolver :: SolverDS -> Bool
+isValidSolver = (== True) . S.findMin . S.map isValidEquation
+
 
 ------------------------------------------------
 -- Substitution Application
