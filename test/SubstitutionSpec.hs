@@ -44,8 +44,10 @@ spec = do
         it "does not allow ill-defined substitution [X→a,X→b] to be created" $ do
             (print $ build [v 'X' → v 'a', v 'X' → v 'b']) `shouldThrow` anyErrorCall
 
-    -- TODO
-    -- tests for compose & extend
+    -- Compose
+    describe "compose" $ do
+        it "{Y→a}.{X→Y} === {X→a,Y→a}" $ do
+            compose (v 'Y' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'a']
 
     -- Test data check
     describe "isValid" $ do

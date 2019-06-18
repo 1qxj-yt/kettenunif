@@ -3,6 +3,7 @@ module Substitution
     , Token(..)
     , (→)
     , build
+    , compose
     , isValid
     , onAny
     ) where
@@ -21,7 +22,7 @@ import qualified Data.Map as M
 -- Data Types
 ------------------------------------------------
 
-data Substitution = Subst {mp :: M.Map Var Var}
+data Substitution = Subst {mp :: M.Map Var Var} deriving Eq
 
 instance Show Substitution where
     show (Subst mp) = '{': (intercalate "," $ map showAsc (M.assocs mp)) ++ "}"
