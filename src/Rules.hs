@@ -33,6 +33,8 @@ type Input  = ([Substitution], Equation, SolverDS)
 type Output = ([Substitution], SolverDS)
 data Rule   = R {name::String, apply::Input -> [Output]}
 
+instance Show Rule where
+    show = name
 
 
 infixr %
