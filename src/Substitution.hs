@@ -16,8 +16,9 @@ import Expression
     , isMeta
     )
 
-import Data.List(find,nub,intercalate)
+import Data.List(find,nub,intercalate,groupBy)
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 ------------------------------------------------
 -- Data Types
