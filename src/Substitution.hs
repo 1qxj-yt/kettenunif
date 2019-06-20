@@ -4,6 +4,7 @@ module Substitution
     , identity
     , build
     , compose
+    , equivalent
     , isValid
     , onAny
     ) where
