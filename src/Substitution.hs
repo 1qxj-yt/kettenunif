@@ -60,6 +60,17 @@ compose sl sr =
     let newr = Subst $ M.map (sl `onVar`) (mp sr)
     in  extend sl newr
 
+equivalent :: Substitution -> Substitution -> Bool
+equivalent (Subst leftMap) (Subst rightMap) =
+    let (ltoMeta, ltoVar) = M.partition isMeta leftMap
+        (rtoMeta, rtoVar) = M.partition isMeta rightMap
+        equatingSnd p q = snd p == snd q
+        lGroupedAssoc = groupBy equatingSnd $ M.assocs ltoMeta :: [[(Var,Var)]]
+        rGroupedAssoc = groupBy equatingSnd $ M.assocs rtoMeta
+        lCodomains = S.fromList $ map (S.fromList . map fst) lGroupedAssoc :: S.Set (S.Set Var)
+        rCodomains = S.fromList $ map (S.fromList . map fst) rGroupedAssoc
+    in  ltoVar == rtoVar && lCodomains == rCodomains
+
 
 ------------------------------------------------
 -- Substitution Application
