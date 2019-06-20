@@ -62,15 +62,26 @@ compose sl sr =
     in  extend sl newr
 
 equivalent :: Substitution -> Substitution -> Bool
-equivalent (Subst leftMap) (Subst rightMap) =
-    let (ltoMeta, ltoVar) = M.partition isMeta leftMap
-        (rtoMeta, rtoVar) = M.partition isMeta rightMap
-        equatingSnd p q = snd p == snd q
-        lGroupedAssoc = groupBy equatingSnd $ M.assocs ltoMeta :: [[(Var,Var)]]
-        rGroupedAssoc = groupBy equatingSnd $ M.assocs rtoMeta
-        lCodomains = S.fromList $ map (S.fromList . map fst) lGroupedAssoc :: S.Set (S.Set Var)
-        rCodomains = S.fromList $ map (S.fromList . map fst) rGroupedAssoc
-    in  ltoVar == rtoVar && lCodomains == rCodomains
+equivalent σ1 σ2 =
+        let (ltoMeta, ltoVar) = M.partition isMeta (mp σ1)
+            (rtoMeta, rtoVar) = M.partition isMeta (mp σ2)
+        in  case findEquatingPerm (Subst ltoMeta) (Subst rtoMeta) of
+                Just _  -> ltoVar == rtoVar
+                Nothing -> False
+
+findEquatingPerm :: Substitution -> Substitution -> Maybe Substitution
+findEquatingPerm σ1 σ2 =
+        let codomain = S.toList $ M.keysSet (mp σ1) `S.union` M.keysSet (mp σ2)
+            σ1onCod  = map (σ1 `onVar`) codomain
+            σ2onCod  = map (σ2 `onVar`) codomain
+            potentialAssocs = zip σ1onCod σ2onCod
+        in  findEquatingPermAux potentialAssocs
+
+-- Assuming variables to be meta
+findEquatingPermAux :: [(Var,Var)] -> Maybe Substitution
+findEquatingPermAux = (Subst <$>) . sequence
+            .   M.fromListWith (\a1 a2 -> if a1 == a2 then a1 else Nothing)
+            .   (map (\(k,a) -> (k,Just a)))
 
 
 ------------------------------------------------
