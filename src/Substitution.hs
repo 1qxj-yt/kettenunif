@@ -58,8 +58,8 @@ build = foldr extend (Subst $ M.empty)
 
 compose :: Substitution -> Substitution -> Substitution
 compose sl sr =
-    let newr = Subst $ M.map (sl `onVar`) (mp sr)
-    in  extend sl newr
+        let newr = Subst $ M.map (sl `onVar`) (mp sr)
+        in  extend sl newr
 
 equivalent :: Substitution -> Substitution -> Bool
 equivalent σ1 σ2 =
