@@ -51,6 +51,45 @@ spec = do
         it "{Y→a}.{X→Y} === {X→a,Y→a}" $ do
             compose (v 'Y' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'a']
 
+    -- Equivalence
+    describe "equivalent" $ do
+        it "{A→X,D→a} =~= {A→X,D→a}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'D'→v 'a'])
+                        (build [v 'A'→v 'X',v 'D'→v 'a'])
+                `shouldBe` True
+        it "{A→X,D→a} =~= {A→Y,D→a}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'D'→v 'a'])
+                        (build [v 'A'→v 'Y',v 'D'→v 'a'])
+                `shouldBe` True
+        it "{A→X,D→a} =~/= {A→Y,D→b}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'D'→v 'a'])
+                        (build [v 'A'→v 'Y',v 'D'→v 'b'])
+                `shouldBe` False
+        it "{A→X,B→X,D→a} =~= {A→Y,B→Y,D→a}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'X',v 'D'→v 'a'])
+                        (build [v 'A'→v 'Y',v 'B'→v 'Y',v 'D'→v 'a'])
+                `shouldBe` True
+        it "{A→X,B→X,D→a} =~/= {A→X,B→Y,D→a}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'X',v 'D'→v 'a'])
+                        (build [v 'A'→v 'X',v 'B'→v 'Y',v 'D'→v 'a'])
+                `shouldBe` False
+        it "{A→X,B→X,D→a} =~/= {A→Y,B→Y,D→b}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'X',v 'D'→v 'a'])
+                        (build [v 'A'→v 'X',v 'B'→v 'Y',v 'D'→v 'a'])
+                `shouldBe` False
+        it "{A→X,B→X,C→Y,D→a} =~= {A→Y,B→Y,C→Z,D→a}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'X',v 'C'→v 'Y',v 'D'→v 'a'])
+                        (build [v 'A'→v 'X',v 'B'→v 'X',v 'C'→v 'Y',v 'D'→v 'a'])
+                `shouldBe` True
+        it "{A→X,B→X,C→Y,D→a} =~/= {A→X,B→Y,C→X,D→a}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'X',v 'C'→v 'Y',v 'D'→v 'a'])
+                        (build [v 'A'→v 'X',v 'B'→v 'Y',v 'C'→v 'X',v 'D'→v 'a'])
+                `shouldBe` False
+        it "{A→X,B→Y} =~= {B→X,A→Y}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'Y'])
+                        (build [v 'B'→v 'X',v 'A'→v 'Y'])
+                `shouldBe` True
+
     -- Test data check
     describe "isValid" $ do
         it "recognizes test case substitutions to be valid" $ do
