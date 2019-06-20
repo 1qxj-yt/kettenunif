@@ -17,6 +17,7 @@ import Substitution
     ( Substitution
     , (→)
     , build
+    , equivalent
     )
 
 import Data.Char(isUpper)
