@@ -89,6 +89,10 @@ spec = do
             equivalent  (build [v 'A'→v 'X',v 'B'→v 'Y'])
                         (build [v 'B'→v 'X',v 'A'→v 'Y'])
                 `shouldBe` True
+        it "{A→X,Z→Y} =~= {A→X,Z→Y}" $ do
+            equivalent  (build [v 'A'→v 'X',v 'B'→v 'Y'])
+                        (build [v 'B'→v 'X',v 'A'→v 'Y'])
+                `shouldBe` True
 
     -- Test data check
     describe "isValid" $ do
