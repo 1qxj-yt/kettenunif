@@ -91,7 +91,7 @@ ruleFor (E e1 :=?: E e2) = if length e1 == length e2 then distribution else clas
 ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
     | otherwise = case (isMeta v1, isMeta v2) of
-        (False, False) -> if v1 == v2 then tautology else clash
+        (False, False) -> clash
         (True , False) -> application
         (False, True ) -> orientation
-        (True , True ) -> if v1 == v2 then tautology else application
+        (True , True ) -> application
