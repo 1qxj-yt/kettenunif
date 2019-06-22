@@ -1,11 +1,15 @@
 module Substitution
     ( Substitution
+    -- * Construction
     , (→)
     , identity
     , build
+    -- * Operations
     , compose
     , equivalent
+    -- * Checks
     , isValid
+    -- * Application
     , onAny
     ) where
 
@@ -32,6 +36,7 @@ instance Show Substitution where
         where showAsc (v1,v2) = show v1++"→"++(show v2)
 
 -- Constructor
+-- | Single mapping.
 infixl →
 (→) :: Var -> Var -> Substitution
 v1 → v2 = if isMeta v1
@@ -53,9 +58,19 @@ extend :: Substitution -> Substitution -> Substitution
 extend sl sr = Subst $ M.unionWith sound (mp sl) (mp sr)
     where sound a1 a2 = if a1==a2 then a1 else error "contradictory entries"
 
+-- | Constructs a substitution from a list of sub-substitutions.
+-- Throws an error if contradictory entries are found.
 build :: [Substitution] -> Substitution
 build = foldr extend (Subst $ M.empty)
 
+-- | Constructs a substitution whose application is equivalent to
+-- applying the right substitution first, then the left substitution.
+-- Throws an error if contradictory entries are found.
+--
+-- > (B→C) `compose` (A→B) == (A→C,B→C)
+-- > (X→a) `compose` (Y→b) == (X→a,Y→b)
+-- > (X→a) `compose` (X→b) == error
+-- > (X→a) `compose` (X→a) == (X→a)
 compose :: Substitution -> Substitution -> Substitution
 compose sl sr =
         let newr = Subst $ M.map (sl `onVar`) (mp sr)
