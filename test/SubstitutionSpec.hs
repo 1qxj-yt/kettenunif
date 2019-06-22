@@ -48,8 +48,16 @@ spec = do
 
     -- Compose
     describe "compose" $ do
+        it "{B→C}.{A→B} === {A→C,B→C}" $ do
+            compose (v 'B' → v 'C') (v 'A' → v 'B') `shouldBe` build [v 'A' → v 'C', v 'B' → v 'C']
         it "{Y→a}.{X→Y} === {X→a,Y→a}" $ do
             compose (v 'Y' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'a']
+        it "{X→a}.{Y→b} === {X→a,Y→b}" $ do
+            compose (v 'X' → v 'a') (v 'Y' → v 'b') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'b']
+        it "{X→a}.{X→b} === error" $ do
+            print (compose (v 'X' → v 'a') (v 'X' → v 'b')) `shouldThrow` anyErrorCall
+        it "{X→a}.{X→a} === {X→a}" $ do
+            compose (v 'X' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a']
 
     -- Equivalence
     describe "equivalent" $ do
