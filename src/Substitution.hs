@@ -69,6 +69,8 @@ equivalent σ1 σ2 =
                 Just _  -> ltoVar == rtoVar
                 Nothing -> False
 
+-- Returns a permutation \(\pi\) such that \(\pi\circ\sigma_1=\sigma_2\),
+-- if such a substitution exisists.
 findEquatingPerm :: Substitution -> Substitution -> Maybe Substitution
 findEquatingPerm σ1 σ2 =
         let codomain = S.toList $ M.keysSet (mp σ1) `S.union` M.keysSet (mp σ2)
@@ -77,7 +79,9 @@ findEquatingPerm σ1 σ2 =
             potentialAssocs = zip σ1onCod σ2onCod
         in  findEquatingPermAux potentialAssocs
 
--- Assuming variables to be meta
+-- Constructs and returns the corresponding substitution,
+-- if the passed list describe the assocs of a permutation.
+-- Assuming all variables of the list to be meta.
 findEquatingPermAux :: [(Var,Var)] -> Maybe Substitution
 findEquatingPermAux = (Subst <$>) . sequence
             .   M.fromListWith (\a1 a2 -> if a1 == a2 then a1 else Nothing)
