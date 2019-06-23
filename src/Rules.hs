@@ -3,6 +3,7 @@ module Rules
     , Input
     , Output
     , SSList(SSL)
+    -- * Rules
     , tautology
     , clash
     , distribution
@@ -31,7 +32,14 @@ import Data.List(delete)
 ------------------------------------------------
 -- Data Types
 ------------------------------------------------
-
+-- | Just a list of substitutions,
+-- but meant to (type-)distinguish
+-- a list of sub-substitutions (especially single mappings)
+-- that will be composed to a whole solution later
+-- from a list of valid solution substitutions.
+--
+-- In the context of that motivation,
+-- @SSList@ is just a different representation of a whole @Substitution@.
 newtype SSList = SSL [Substitution]
 type Input  = (SSList, Equation, SolverDS)
 type Output = (SSList, SolverDS)
