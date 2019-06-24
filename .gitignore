@@ -3,3 +3,4 @@ kettenunif.cabal
 *~
 *.sublime-project
 *.sublime-workspace
+haddock
