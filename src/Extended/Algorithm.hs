@@ -3,22 +3,22 @@ module Extended.Algorithm
     , solveVerbose
     ) where
 
-import Expression
+import Extended.Expression
     ( Token(E,B,V)
     , isMeta
     )
-import Substitution
+import Extended.Substitution
     ( Substitution
     , identity
     , compose
     )
-import UnifProblem
+import Extended.UnifProblem
     ( UnifProblem
     , SolverDS
     , Equation((:=?:))
     , probToSolver
     )
-import Rules
+import Extended.Rules
     ( Rule(name,apply)
     , Input
     , Output

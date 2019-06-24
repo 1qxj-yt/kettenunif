@@ -13,7 +13,7 @@ module Extended.Substitution
     , onAny
     ) where
 
-import Expression
+import Extended.Expression
     ( Expr
     , Bind((:=))
     , Var

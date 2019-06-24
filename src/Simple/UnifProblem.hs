@@ -11,11 +11,11 @@ module Simple.UnifProblem
 
 import qualified Data.Set as S
 
-import Expression
+import Simple.Expression
     ( Expr
     , Token(E,B,V)
     )
-import Substitution
+import Simple.Substitution
     ( Substitution
     , onAny
     )

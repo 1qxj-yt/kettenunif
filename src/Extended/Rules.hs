@@ -12,16 +12,16 @@ module Extended.Rules
     , orientation
     ) where
 
-import UnifProblem
+import Extended.UnifProblem
     ( SolverDS
     , Equation((:=?:))
     , onSolver
     )
-import Substitution
+import Extended.Substitution
     ( Substitution
     , (→)
     )
-import Expression
+import Extended.Expression
     ( Bind((:=))
     , Token(E,B,V)
     )

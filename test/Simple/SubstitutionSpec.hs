@@ -1,9 +1,9 @@
 module Simple.SubstitutionSpec (spec) where
 
 import Test.Hspec
-import Substitution
+import Simple.Substitution
 
-import Expression
+import Simple.Expression
     ( Expr
     , Bind((:=))
     , Var, var, meta

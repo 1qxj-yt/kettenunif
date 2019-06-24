@@ -1,19 +1,19 @@
 module Simple.AlgorithmSpec(spec) where
 
 import Test.Hspec
-import Algorithm
+import Simple.Algorithm
 
-import Expression
+import Simple.Expression
     ( Expr
     , Bind((:=))
     , Var, var, meta
     , Token(..)
     )
-import UnifProblem
+import Simple.UnifProblem
     ( UnifProblem
     , UnifProblemEl((:=.:))
     )
-import Substitution
+import Simple.Substitution
     ( Substitution
     , (→)
     , build

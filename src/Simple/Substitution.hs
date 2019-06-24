@@ -13,7 +13,7 @@ module Simple.Substitution
     , onAny
     ) where
 
-import Expression
+import Simple.Expression
     ( Expr
     , Bind((:=))
     , Var
