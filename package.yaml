@@ -23,6 +23,8 @@ dependencies:
 - base >= 4.7 && < 5
 - containers # Data.Set
 - mtl # Control.Monad.Writer
+- bytestring
+- haskeline
 
 library:
   source-dirs: src
