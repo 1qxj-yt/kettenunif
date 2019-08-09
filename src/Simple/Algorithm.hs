@@ -33,6 +33,7 @@ import Simple.Rules
 
 import qualified Data.Set as S(null,deleteFindMin)
 import Control.Monad.Writer
+import Data.List(intercalate)
 
 type StepInfo = (Int,Input,Rule)
 
@@ -50,14 +51,14 @@ sslToSubst (SSL list) = foldr compose identity list
 -- Verbose Solver
 ------------------------------------------------
 
-solveVerbose :: UnifProblem -> IO ()
-solveVerbose prob = mapM_ printInfo . snd $ runSolverWriter prob
+solveVerbose :: UnifProblem -> String
+solveVerbose prob = intercalate "\n" $  map printInfo . snd $ runSolverWriter prob
 
-printInfo :: StepInfo -> IO ()
-printInfo (n,(sol,eq,γ),rule) = do
+printInfo :: StepInfo -> String
+printInfo (n,(sol,eq,γ),rule) =
     let indent = replicate n ' '
-    putStrLn $ indent ++ "(" ++ show sol ++", "++ show eq ++" ∪ Γ)"
-    putStrLn $ indent ++ name rule
+    in  indent ++ "(" ++ show sol ++", "++ show eq ++" ∪ Γ)" ++ "\n"
+            ++ indent ++ name rule
 
 ------------------------------------------------
 -- General Solver
