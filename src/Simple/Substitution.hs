@@ -32,7 +32,9 @@ import qualified Data.Set as S
 data Substitution = Subst {mp :: M.Map Var Var} deriving Eq
 
 instance Show Substitution where
-    show (Subst mp) = '{': (intercalate "," $ map showAsc (M.assocs mp)) ++ "}"
+    show (Subst mp)
+        | M.null mp = "id"
+        | otherwise = '{': (intercalate "," $ map showAsc (M.assocs mp)) ++ "}"
         where showAsc (v1,v2) = show v1++"→"++(show v2)
 
 -- Constructor
