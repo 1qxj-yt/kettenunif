@@ -67,7 +67,7 @@ parseExpr str = do
     unbracked <- unbracket str          :: Either String BC.ByteString
     binds <- return (bind unbracked)    :: Either String [BC.ByteString]
     vared <- mapM vari binds            :: Either String [(Char,Char)]
-    return $ map (\(l,r)-> v l := v r) vared
+    return $ Expr $ map (\(l,r)-> v l := v r) vared
 
 
 unSpace :: BC.ByteString -> BC.ByteString

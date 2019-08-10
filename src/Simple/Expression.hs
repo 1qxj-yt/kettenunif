@@ -1,5 +1,5 @@
 module Simple.Expression
-    ( Expr
+    ( Expr(Expr)
     , Bind((:=))
     , Var
     , Token(B,V,E)
@@ -15,7 +15,7 @@ import Data.Char(isUpper,isLower)
 -- Data
 ------------------------------------------------
 
-type Expr = [Bind]
+data Expr = Expr [Bind] deriving (Eq,Ord,Show)
 
 data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
 

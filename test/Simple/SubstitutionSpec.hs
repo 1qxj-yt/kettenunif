@@ -4,7 +4,7 @@ import Test.Hspec
 import Simple.Substitution
 
 import Simple.Expression
-    ( Expr
+    ( Expr(Expr)
     , Bind((:=))
     , Var, var, meta
     , Token(..)
@@ -141,4 +141,4 @@ transposeCBA :: Substitution
 transposeCBA = build [v 'A' → v 'B', v 'C' → v 'A', v 'B' → v 'C']
 
 exprAB_BB_CB :: Token
-exprAB_BB_CB = E [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B']
+exprAB_BB_CB = E (Expr [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B'])
