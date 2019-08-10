@@ -56,9 +56,9 @@ solveVerbose :: UnifProblem -> String
 solveVerbose prob = intercalate "\n" $  map printInfo . snd $ runSolverWriter prob
 
 printInfo :: StepInfo -> String
-printInfo (n,(sol,eq,γ),rule) =
+printInfo (n,(SSL sol,eq,γ),rule) =
     let indent = replicate n ' '
-    in  indent ++ "(" ++ show sol ++", "++ show eq ++" ∪ Γ)" ++ "\n"
+    in  indent ++ "(" ++ show (build sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
             ++ indent ++ name rule
 
 ------------------------------------------------
