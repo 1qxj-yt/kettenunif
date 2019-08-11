@@ -6,6 +6,8 @@ module Simple.Expression
     , meta
     , var
     , isMeta
+    , ωBind
+    , ωExpr
     ) where
 
 
