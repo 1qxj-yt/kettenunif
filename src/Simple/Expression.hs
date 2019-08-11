@@ -50,3 +50,14 @@ instance Show Bind where
 instance Show Var where
     show (Meta c i) = c:if i==0 then [] else show i
     show (Var  c i) = c:if i==0 then [] else show i
+
+
+------------------------------------------------
+-- Canonical Extensions
+------------------------------------------------
+
+ωBind :: (Var -> Var) -> (Bind -> Bind)
+ωBind f (v1:=v2) = f v1 := f v2
+
+ωExpr :: (Var -> Var) -> (Expr -> Expr)
+ωExpr f (Expr e) = Expr (map (ωBind f) e)
