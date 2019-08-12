@@ -38,8 +38,6 @@ spec = do
     describe "(→)" $ do
         it "does not allow invalid substitution [x→a] to be created" $ do
             (print (v 'x' → v 'a')) `shouldThrow` anyErrorCall
-        it "constructs substitution [X→a]" $ do
-            (show (v 'X' → v 'a')) `shouldBe` "{X→a}"
 
     -- Build
     describe "build" $ do
