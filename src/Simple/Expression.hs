@@ -2,6 +2,7 @@ module Simple.Expression
     ( Expr(Expr)
     , Bind((:=))
     , Var
+    , SetVar(SetVar)
     , Token(B,V,E)
     , meta
     , var
