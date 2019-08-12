@@ -21,6 +21,8 @@ import Simple.Expression
     , Token(E,B,V)
     , isMeta
     )
+import qualified Simple.VarSubst as Var
+import qualified Simple.SetSubst as Set
 
 import Data.List(find,nub,intercalate,groupBy)
 import qualified Data.Map as M
