@@ -19,6 +19,8 @@ import Simple.Expression
     , Var
     , Token(E,B,V)
     , isMeta
+    , ωBind
+    , ωExpr
     )
 
 import Data.List(find,nub,intercalate,groupBy)
