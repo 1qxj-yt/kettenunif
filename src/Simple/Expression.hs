@@ -20,6 +20,7 @@ import Data.Char(isUpper,isLower)
 data Expr = Expr [Bind] deriving (Eq,Ord,Show)
 
 data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
+newtype SetVar = SetVar Integer deriving (Eq,Ord,Show)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 
