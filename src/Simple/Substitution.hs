@@ -32,62 +32,51 @@ import qualified Data.Set as S
 -- Data Types
 ------------------------------------------------
 
-data Substitution = Subst {mp :: M.Map Var Var} deriving Eq
+data Substitution = Subst { setComponent :: Set.Substitution
+                          , varComponent :: Var.Substitution } deriving Eq
 
 instance Show Substitution where
-    show (Subst mp)
-        | M.null mp = "id"
-        | otherwise = '{': (intercalate "," $ map showAsc (M.assocs mp)) ++ "}"
-        where showAsc (v1,v2) = show v1++"→"++(show v2)
+    show (Subst setC varC)
+        | Set.isIdentity setC && Var.isIdentity varC = "id"
+        | otherwise = '{': (show setC) ++ ('|': (show varC) ++ "}")
 
 -- Constructor
 -- | Single mapping.
 infixl →
 (→) :: Var -> Var -> Substitution
 v1 → v2 = if isMeta v1
-    then Subst (M.singleton v1 v2)
+    then Subst Set.identity (v1 Var.→ v2)
     else error "substitution origin is non-meta"
 
 identity :: Substitution
-identity = Subst M.empty -- == build []
+identity = Subst Set.identity Var.identity
 
 isValid :: Substitution -> Bool
-isValid σ = let origins = M.keys (mp σ)
-              in  all isMeta origins
+isValid (Subst setC varC) = Var.isValid varC
 
 ------------------------------------------------
 -- Operations
 ------------------------------------------------
 
 extend :: Substitution -> Substitution -> Substitution
-extend sl sr = Subst $ M.unionWith sound (mp sl) (mp sr)
-    where sound a1 a2 = if a1==a2 then a1 else error "contradictory entries"
+extend (Subst sL vL) (Subst sR vR) = Subst (Set.extend sL sR) (Var.extend vL vR)
 
 -- | Constructs a substitution from a list of sub-substitutions.
 -- Throws an error if contradictory entries are found.
 build :: [Substitution] -> Substitution
-build = foldr extend (Subst $ M.empty)
+build = foldr extend identity
 
 -- | Constructs a substitution whose application is equivalent to
 -- applying the right substitution first, then the left substitution.
 -- Throws an error if contradictory entries are found.
---
--- > (B→C) `compose` (A→B) == (A→C,B→C)
--- > (X→a) `compose` (Y→b) == (X→a,Y→b)
--- > (X→a) `compose` (X→b) == error
--- > (X→a) `compose` (X→a) == (X→a)
 compose :: Substitution -> Substitution -> Substitution
-compose sl sr =
-        let newr = Subst $ M.map (sl `onVar`) (mp sr)
-        in  extend sl newr
+compose (Subst sL vL) (Subst sR vR) =
+        let varC = Var.compose vL vR
+            setC = Set.compose sL sR
+        in  Subst (Set.mapOnImage (varC `Var.onExpr`) setC) varC
 
 equivalent :: Substitution -> Substitution -> Bool
-equivalent σ1 σ2 =
-        let (ltoMeta, ltoVar) = M.partition isMeta (mp σ1)
-            (rtoMeta, rtoVar) = M.partition isMeta (mp σ2)
-        in  case findEquatingPerm (Subst ltoMeta) (Subst rtoMeta) of
-                Just _  -> ltoVar == rtoVar
-                Nothing -> False
+equivalent σ1 σ2 = Var.equivalent (varComponent σ1) (varComponent σ2)
 
 
 ------------------------------------------------
@@ -95,15 +84,13 @@ equivalent σ1 σ2 =
 ------------------------------------------------
 
 onVar :: Substitution -> (Var -> Var)
-onVar σ v1 = case M.lookup v1 (mp σ) of
-    Nothing -> v1
-    Just v2 -> v2
+onVar (Subst s v) = Var.onVar v
 
 onBind :: Substitution -> (Bind -> Bind)
 onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
 
 onExpr :: Substitution -> (Expr -> Expr)
-onExpr σ (Expr e) = Expr (map (σ `onBind`) e)
+onExpr (Subst s v) expr = v `Var.onExpr` expr
 
 onAny :: Substitution -> Token -> Token
 onAny σ t = case t of
