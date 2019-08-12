@@ -17,6 +17,7 @@ import Simple.Expression
     ( Expr(Expr)
     , Bind((:=))
     , Var
+    , SetVar
     , Token(E,B,V)
     , isMeta
     , ωBind
