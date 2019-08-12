@@ -90,7 +90,7 @@ onBind :: Substitution -> (Bind -> Bind)
 onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
 
 onExpr :: Substitution -> (Expr -> Expr)
-onExpr (Subst s v) expr = v `Var.onExpr` expr
+onExpr (Subst s v) expr = v `Var.onExpr` (s `Set.onExpr` expr)
 
 onAny :: Substitution -> Token -> Token
 onAny σ t = case t of
