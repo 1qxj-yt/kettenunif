@@ -107,6 +107,12 @@ expr = do
     lexeme (char ']')
     return (Expr bs)
 
+setVar :: Parser SetVar
+setVar = do
+    char 'M'
+    n <- option 0 natural
+    return (SetVar n)
+
 problemEl :: Parser UnifProblemEl
 problemEl = do
     e1 <- lexeme expr
