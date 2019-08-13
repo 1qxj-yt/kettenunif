@@ -47,3 +47,6 @@ repl = do
                 Just (Right (Apply subst expr)) -> do
                     outputStrLn (show $ subst `onAny` E expr)
                     loop v
+                Just (Right (Compose substs)) -> do
+                    outputStrLn (show $ foldr compose identity substs)
+                    loop v
