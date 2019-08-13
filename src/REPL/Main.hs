@@ -31,10 +31,13 @@ repl = do
             minput <- getInputLine "> "
             case parseInput <$> minput of
                 Nothing -> return ()
-                Just (Command Quit) -> return ()
-                Just (Command SwitchVerbosity) -> do
+                Just (Left err) -> do
+                    outputStrLn err
+                    loop v
+                Just (Right (Command Quit)) -> return ()
+                Just (Right (Command SwitchVerbosity)) -> do
                     outputStrLn $ "Switched verbosity to: " ++ show (toggle v)
                     loop (toggle v)
-                Just (Solve problem) -> do
+                Just (Right (Solve problem)) -> do
                     outputStrLn (solveVS v problem)
                     loop v
