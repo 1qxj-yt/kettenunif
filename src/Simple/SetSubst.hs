@@ -75,6 +75,7 @@ onExpr :: Substitution -> (Expr -> Expr)
 onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Nothing -> ssve
     Just (Expr e2) -> Expr (e2++e)
+    Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2++e)
 onExpr σ ssve = ssve
 
 mapOnImage :: (Expr -> Expr) -> Substitution -> Substitution
