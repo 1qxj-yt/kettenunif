@@ -175,6 +175,8 @@ subst = do
 
 substAppl :: Parser Command
 substAppl = do
-    s <- lexeme subst
-    e <- lexeme (expr <|> singleSetExpr)
-    return (Apply s e)
+    ss <- many1 (lexeme subst)
+    me <- optionMaybe $ lexeme (expr <|> singleSetExpr)
+    case me of
+        Just e -> return (Apply (foldr compose identity ss) e)
+        Nothing -> return (Compose ss)
