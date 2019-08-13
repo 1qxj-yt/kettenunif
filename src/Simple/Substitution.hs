@@ -48,6 +48,11 @@ v1 → v2 = if isMeta v1
     then Subst Set.identity (v1 Var.→ v2)
     else error "substitution origin is non-meta"
 
+-- | Single set mapping.
+infixl →→
+(→→) :: SetVar -> Expr -> Substitution
+sv →→ e  = Subst (sv Set.→ e) Var.identity
+
 identity :: Substitution
 identity = Subst Set.identity Var.identity
 
