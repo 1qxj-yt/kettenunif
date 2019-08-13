@@ -3,6 +3,7 @@ module REPL.Lexer
     , commaSep
     , natural
     , lexeme
+    , whiteSpace
     ) where
 
 import Text.Parsec
@@ -36,3 +37,4 @@ brackets = Tok.brackets lexer
 commaSep = Tok.commaSep lexer
 natural = Tok.natural lexer
 lexeme = Tok.lexeme lexer
+whiteSpace = Tok.whiteSpace lexer
