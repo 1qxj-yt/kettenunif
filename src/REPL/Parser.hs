@@ -162,9 +162,10 @@ setComponent = do
 subst :: Parser Substitution
 subst = do
     lexeme (char '{')
+    ms <- option [] setComponent
     as <- commaSep assocVar
     lexeme (char '}')
-    return $ build as
+    return $ build (ms++as)
 
 substAppl :: Parser Command
 substAppl = do
