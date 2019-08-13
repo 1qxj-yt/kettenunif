@@ -2,6 +2,7 @@ module Simple.Substitution
     ( Substitution
     -- * Construction
     , (→)
+    , (→→)
     , identity
     , build
     -- * Operations
