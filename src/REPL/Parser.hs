@@ -40,11 +40,11 @@ data ReplCommand = Quit | SwitchVerbosity deriving Show
 instruction :: Parser Command
 instruction = replCommand <|> problem
 
-parseInput :: String -> Command
+parseInput :: String -> Either String Command
 parseInput input =
   case parse instruction "<stdin>" input of
-    Left err -> error (show err)
-    Right ast -> ast
+    Left err -> Left (show err)
+    Right ast -> Right ast
 
 
 ------------------------------------------------
