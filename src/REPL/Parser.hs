@@ -8,6 +8,8 @@ import REPL.Lexer
 
 import Simple.Substitution
     ( Substitution
+    , (→)
+    , build
     )
 import Simple.Expression
     ( Expr(Expr)
