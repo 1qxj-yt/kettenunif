@@ -169,5 +169,5 @@ subst = do
 substAppl :: Parser Command
 substAppl = do
     s <- lexeme subst
-    e <- lexeme expr
+    e <- lexeme (expr <|> singleSetExpr)
     return (Apply s e)
