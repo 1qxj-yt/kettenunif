@@ -41,7 +41,7 @@ instance Show Substitution where
         | otherwise = '{': (show setC) ++ ('|': (show varC) ++ "}")
 
 -- Constructor
--- | Single mapping.
+-- | Single variable mapping.
 infixl →
 (→) :: Var -> Var -> Substitution
 v1 → v2 = if isMeta v1
