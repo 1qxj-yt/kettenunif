@@ -22,7 +22,8 @@ import Simple.Substitution
     , (→)
     )
 import Simple.Expression
-    ( Bind((:=))
+    ( Expr(Expr)
+    , Bind((:=))
     , Token(E,B,V)
     )
 
@@ -64,8 +65,8 @@ clash :: Rule
 clash = R "clash" (const [])
 
 distribution :: Rule
-distribution = R "distribution" (\(sol,E (b1:e1s) :=?: E e2,γ) ->
-            [(sol, (B b1 :=?: B b2) % (E e1s :=?: E (delete b2 e2)) % γ) | b2<-e2 ] )
+distribution = R "distribution" (\(sol,E (Expr (b1:e1s)) :=?: E (Expr e2),γ) ->
+            [(sol, (B b1 :=?: B b2) % (E (Expr e1s) :=?: E (Expr $ delete b2 e2)) % γ) | b2<-e2 ] )
 
 decomposition :: Rule
 decomposition = R "decomposition"

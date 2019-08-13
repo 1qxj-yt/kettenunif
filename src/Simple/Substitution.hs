@@ -14,7 +14,7 @@ module Simple.Substitution
     ) where
 
 import Simple.Expression
-    ( Expr
+    ( Expr(Expr)
     , Bind((:=))
     , Var
     , Token(E,B,V)
@@ -118,7 +118,7 @@ onBind :: Substitution -> (Bind -> Bind)
 onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
 
 onExpr :: Substitution -> (Expr -> Expr)
-onExpr σ = map (σ `onBind`)
+onExpr σ (Expr e) = Expr (map (σ `onBind`) e)
 
 onAny :: Substitution -> Token -> Token
 onAny σ t = case t of

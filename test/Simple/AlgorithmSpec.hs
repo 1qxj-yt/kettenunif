@@ -4,7 +4,7 @@ import Test.Hspec
 import Simple.Algorithm
 
 import Simple.Expression
-    ( Expr
+    ( Expr(Expr)
     , Bind((:=))
     , Var, var, meta
     , Token(..)
@@ -57,13 +57,13 @@ spec = do
 ------------------------------------------------
 
 testProblem1 :: UnifProblem
-testProblem1 = S.fromList [[v 'X' := v 'y'] :=.: [v 'x' := v 'Y']]
+testProblem1 = S.fromList [ Expr [v 'X' := v 'y'] :=.: Expr [v 'x' := v 'Y']]
 
 testProblem2 :: UnifProblem
-testProblem2 = S.fromList [[v 'x' := v 'x'] :=.: [v 'y' := v 'y']]
+testProblem2 = S.fromList [ Expr [v 'x' := v 'x'] :=.: Expr [v 'y' := v 'y']]
 
 testProblem3 :: UnifProblem
-testProblem3 = S.fromList [[v 'X' := v 'Y'] :=.: [v 'Y' := v 'a']]
+testProblem3 = S.fromList [ Expr [v 'X' := v 'Y'] :=.: Expr [v 'Y' := v 'a']]
 
 testProblem4 :: UnifProblem
-testProblem4 = S.fromList [[v 'X' := v 'Y'] :=.: [v 'Y' := v 'A']]
+testProblem4 = S.fromList [ Expr [v 'X' := v 'Y'] :=.: Expr [v 'Y' := v 'A']]

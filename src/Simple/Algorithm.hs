@@ -4,7 +4,8 @@ module Simple.Algorithm
     ) where
 
 import Simple.Expression
-    ( Token(E,B,V)
+    ( Expr(Expr)
+    , Token(E,B,V)
     , isMeta
     )
 import Simple.Substitution
@@ -88,8 +89,8 @@ solveGeneral n (sol,γ)
 
 ruleFor :: Equation -> Rule
 ruleFor (B _ :=?: B _)   = decomposition
-ruleFor (E [] :=?: E []) = tautology
-ruleFor (E e1 :=?: E e2) = if length e1 == length e2 then distribution else clash
+ruleFor (E (Expr []) :=?: E (Expr [])) = tautology
+ruleFor (E (Expr e1) :=?: E (Expr e2)) = if length e1 == length e2 then distribution else clash
 ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
     | otherwise = case (isMeta v1, isMeta v2) of
