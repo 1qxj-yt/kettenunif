@@ -10,7 +10,9 @@ import Simple.Substitution
     ( Substitution
     , (→)
     , (→→)
+    , identity
     , build
+    , compose
     )
 import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
