@@ -113,6 +113,13 @@ setVar = do
     n <- option 0 natural
     return (SetVar n)
 
+singleSetExpr :: Parser Expr
+singleSetExpr = do
+    sv <- setVar
+    char ':'
+    Expr bs <- expr
+    return $ SingleSVarExpr sv bs
+
 problemEl :: Parser UnifProblemEl
 problemEl = do
     e1 <- lexeme expr
