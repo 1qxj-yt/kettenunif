@@ -23,7 +23,7 @@ repl :: IO ()
 repl = do
     putStrLn "Welcome!"
     putStrLn "Type an unifcation problem, :v to toggle verbosity or :q to quit."
-    putStrLn "Example:  [X = a; B = C] =. [X = Y; A = x], [X = g] =. [b = g]"
+    putStrLn "Example:  [X = a, B = C] =. [X = Y, A = x], [X = g] =. [b = g]"
     runInputT defaultSettings (loop Silent)
     where
         loop :: Verbosity -> InputT IO ()
