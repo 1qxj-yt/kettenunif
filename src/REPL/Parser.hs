@@ -151,8 +151,13 @@ assocSet = do
     sv <- lexeme setVar
     lexeme (string "->")
     e  <- lexeme expr
-    lexeme (char '|')
     return (sv →→ e)
+
+setComponent :: Parser [Substitution]
+setComponent = do
+    ms <- commaSep assocSet
+    lexeme (char '|')
+    return ms
 
 subst :: Parser Substitution
 subst = do
