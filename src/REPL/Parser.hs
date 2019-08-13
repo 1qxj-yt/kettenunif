@@ -146,6 +146,14 @@ assocVar = do
     v2 <- lexeme variable
     return (v1 → v2)
 
+assocSet :: Parser Substitution
+assocSet = do
+    sv <- lexeme setVar
+    lexeme (string "->")
+    e  <- lexeme expr
+    lexeme (char '|')
+    return (sv →→ e)
+
 subst :: Parser Substitution
 subst = do
     lexeme (char '{')
