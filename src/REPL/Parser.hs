@@ -117,3 +117,23 @@ problem = do
 ------------------------------------------------
 -- {X -> a} [X = a]
 -- {M -> [] | X -> a} [X = a]
+
+assocVar :: Parser Substitution
+assocVar = do
+    v1 <- lexeme variable
+    lexeme (string "->")
+    v2 <- lexeme variable
+    return (v1 → v2)
+
+subst :: Parser Substitution
+subst = do
+    lexeme (char '{')
+    as <- commaSep assocVar
+    lexeme (char '}')
+    return $ build as
+
+substAppl :: Parser Command
+substAppl = do
+    s <- lexeme subst
+    e <- lexeme expr
+    return (Apply s e)
