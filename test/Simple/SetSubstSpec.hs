@@ -34,3 +34,6 @@ spec = do
         it "{M0 → [Y=b]} (M0:[X=a]) === [Y=b,X=a]" $ do
             (SetVar 0 → (Expr [v 'Y' := v 'b'])) `onExpr` (SingleSVarExpr (SetVar 0) [v 'X' := v 'a'])
                 `shouldBe` Expr [v 'Y' := v 'b', v 'X' := v 'a']
+        it "{M0 → M1:[Y=b]} (M0:[X=a]) === M1:[Y=b,X=a]" $ do
+            (SetVar 0 → (SingleSVarExpr (SetVar 1) [v 'Y' := v 'b'])) `onExpr` (SingleSVarExpr (SetVar 0) [v 'X' := v 'a'])
+                `shouldBe` SingleSVarExpr (SetVar 1) [v 'Y' := v 'b', v 'X' := v 'a']
