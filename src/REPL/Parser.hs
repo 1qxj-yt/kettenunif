@@ -40,7 +40,11 @@ data ReplCommand = Quit | SwitchVerbosity deriving Show
 ------------------------------------------------
 
 instruction :: Parser Command
-instruction = replCommand <|> problem
+instruction = do
+    -- 'problem' choice should be placed at the end,
+    -- otherwise, the problem-parser comsumes input
+    cmd <- substAppl <|> replCommand <|> problem
+    return cmd
 
 parseInput :: String -> Either String Command
 parseInput input =
