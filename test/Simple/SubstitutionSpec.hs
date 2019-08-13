@@ -52,8 +52,8 @@ spec = do
             compose (v 'Y' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'a']
         it "{X→a}.{Y→b} === {X→a,Y→b}" $ do
             compose (v 'X' → v 'a') (v 'Y' → v 'b') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'b']
-        it "{X→a}.{X→b} === error" $ do
-            print (compose (v 'X' → v 'a') (v 'X' → v 'b')) `shouldThrow` anyErrorCall
+        it "{X→a}.{X→b} === {X→b}" $ do
+            compose (v 'X' → v 'a') (v 'X' → v 'b') `shouldBe` build [v 'X' → v 'b']
         it "{X→a}.{X→a} === {X→a}" $ do
             compose (v 'X' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a']
 
