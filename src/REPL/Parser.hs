@@ -44,6 +44,7 @@ instruction = do
     -- 'problem' choice should be placed at the end,
     -- otherwise, the problem-parser comsumes input
     cmd <- substAppl <|> replCommand <|> problem
+    eof
     return cmd
 
 parseInput :: String -> Either String Command
