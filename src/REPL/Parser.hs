@@ -41,6 +41,7 @@ data ReplCommand = Quit | SwitchVerbosity deriving Show
 
 instruction :: Parser Command
 instruction = do
+    whiteSpace
     -- 'problem' choice should be placed at the end,
     -- otherwise, the problem-parser comsumes input
     cmd <- substAppl <|> replCommand <|> problem
