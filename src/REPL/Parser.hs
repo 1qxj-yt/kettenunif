@@ -35,7 +35,11 @@ import qualified Data.Map as M
 import Data.Char(isUpper)
 
 
-data Command = Command ReplCommand | Solve UnifProblem | Apply Substitution Expr deriving Show
+data Command =    Command ReplCommand
+                | Solve UnifProblem
+                | Apply Substitution Expr
+                | Compose [Substitution]
+                    deriving Show
 data ReplCommand = Quit | SwitchVerbosity deriving Show
 
 
