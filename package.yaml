@@ -25,6 +25,7 @@ dependencies:
 - mtl # Control.Monad.Writer
 - bytestring
 - haskeline
+- parsec
 
 library:
   source-dirs: src
