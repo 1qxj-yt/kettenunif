@@ -4,6 +4,8 @@ module REPL.Main
 
 import Simple.UnifProblem(UnifProblem)
 import Simple.Algorithm(solve,solveVerbose)
+import Simple.Expression(Token(E))
+import Simple.Substitution(onAny)
 
 import System.Console.Haskeline
 
@@ -40,4 +42,7 @@ repl = do
                     loop (toggle v)
                 Just (Right (Solve problem)) -> do
                     outputStrLn (solveVS v problem)
+                    loop v
+                Just (Right (Apply subst expr)) -> do
+                    outputStrLn (show $ subst `onAny` E expr)
                     loop v
