@@ -5,7 +5,7 @@ module REPL.Main
 import Simple.UnifProblem(UnifProblem)
 import Simple.Algorithm(solve,solveVerbose)
 import Simple.Expression(Token(E))
-import Simple.Substitution(onAny)
+import Simple.Substitution(identity,compose,onAny)
 
 import System.Console.Haskeline
 
