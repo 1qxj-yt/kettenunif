@@ -60,6 +60,9 @@ spec = do
         it "{X→Y,Y→X}^2 === id" $ do
             let s = build [v 'X' → v 'Y', v 'Y' → v 'X']
             compose s s `shouldBe` identity
+        it "{M→[X=y] | X→a}.id === {M→[X=y] | X→a}" $ do
+            let s = build [SetVar 0 →→ Expr [v 'X' := v 'a'], v 'X' → v 'a']
+            compose s identity `shouldBe` s
 
     -- Equivalence
     describe "equivalent" $ do
