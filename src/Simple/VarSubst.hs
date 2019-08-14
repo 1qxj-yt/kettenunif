@@ -113,6 +113,9 @@ findEquatingPermAux = (Subst <$>) . sequence
             .   M.fromListWith (\a1 a2 -> if a1 == a2 then a1 else Nothing)
             .   (map (\(k,a) -> (k,Just a)))
 
+-- | Removes entries of the form \(x\mapsto y\) with \(x==y\)
+cleanUp :: Substitution -> Substitution
+cleanUp (Subst s) = Subst (M.filterWithKey (/=) s)
 
 ------------------------------------------------
 -- Substitution Application
