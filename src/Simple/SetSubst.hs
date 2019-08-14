@@ -63,9 +63,7 @@ build :: [Substitution] -> Substitution
 build = foldr extend (Subst M.empty)
 
 compose :: Substitution -> Substitution -> Substitution
-compose sl sr =
-        let newr = Subst $ M.map (sl `onExpr`) (mp sr)
-        in  extend sl newr
+compose sl sr = Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 
 ------------------------------------------------
 -- Substitution Application
