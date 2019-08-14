@@ -56,6 +56,9 @@ spec = do
             compose (v 'X' → v 'a') (v 'X' → v 'b') `shouldBe` build [v 'X' → v 'b']
         it "{X→a}.{X→a} === {X→a}" $ do
             compose (v 'X' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a']
+        it "{X→Y,Y→X}^2 === id" $ do
+            let s = build [v 'X' → v 'Y', v 'Y' → v 'X']
+            compose s s `shouldBe` identity
 
     -- Equivalence
     describe "equivalent" $ do
