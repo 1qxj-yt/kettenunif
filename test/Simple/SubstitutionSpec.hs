@@ -7,6 +7,7 @@ import Simple.Expression
     ( Expr(Expr)
     , Bind((:=))
     , Var, var, meta
+    , SetVar(SetVar)
     , Token(..)
     , isMeta
     )
