@@ -78,8 +78,9 @@ build = foldr extend identity
 compose :: Substitution -> Substitution -> Substitution
 compose (Subst sL vL) (Subst sR vR) =
         let varC = Var.compose vL vR
-            setC = Set.compose sL sR
-        in  Subst (Set.mapOnImage (varC `Var.onExpr`) setC) varC
+            newr = Set.mapOnImage (varC `Var.onExpr`) sR
+            setC = Set.compose sL newr
+        in  Subst setC varC
 
 equivalent :: Substitution -> Substitution -> Bool
 equivalent σ1 σ2 = Var.equivalent (varComponent σ1) (varComponent σ2)
