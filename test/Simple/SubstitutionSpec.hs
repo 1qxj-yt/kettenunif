@@ -63,6 +63,11 @@ spec = do
         it "{M→[X=y] | X→a}.id === {M→[X=y] | X→a}" $ do
             let s = build [SetVar 0 →→ Expr [v 'X' := v 'a'], v 'X' → v 'a']
             compose s identity `shouldBe` s
+        it "{A->B}.{M1->[Y=b]|Y->A} === {M1->[Y=b]|A->B,Y->B}" $ do
+            let a = build [v 'A' → v 'B']
+                b = build [SetVar 1 →→ Expr [v 'Y' := v 'b'], v 'Y' → v 'A']
+                s = build [SetVar 1 →→ Expr [v 'Y' := v 'b'], v 'A' → v 'B', v 'Y' → v 'B']
+            compose a b `shouldBe` s
 
     -- Equivalence
     describe "equivalent" $ do
