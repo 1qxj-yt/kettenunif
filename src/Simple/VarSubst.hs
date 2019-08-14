@@ -85,7 +85,7 @@ build = foldr extend (Subst $ M.empty)
 -- > (X→a) `compose` (X→b) == (X→b)
 -- > (X→a) `compose` (X→a) == (X→a)
 compose :: Substitution -> Substitution -> Substitution
-compose sl sr = Subst $ M.union (M.map (sl `onVar`) (mp sr)) (mp sl)
+compose sl sr = cleanUp $ Subst $ M.union (M.map (sl `onVar`) (mp sr)) (mp sl)
 
 equivalent :: Substitution -> Substitution -> Bool
 equivalent σ1 σ2 =
