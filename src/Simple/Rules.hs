@@ -81,3 +81,20 @@ application = R "application" (\(SSL sol,V v1:=?: V v2,γ) ->
 orientation :: Rule
 orientation = R "orientation" (\(sol, x:=?:y, γ) ->
             [(sol, (y:=?:x) % γ)] )
+
+
+------------------------------------------------
+-- Set Extension
+------------------------------------------------
+
+set_distribution :: Rule
+set_distribution = R "set-distribution" (\(sol,E (SingleSVarExpr sv (b1:e1s)) :=?: E (Expr e2),γ) ->
+            [(sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv e1s) :=?: E (Expr $ delete b2 e2)) % γ) | b2 <- e2])
+
+set_application :: Rule
+set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E e,γ) ->
+            [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
+
+set_orientation :: Rule
+set_orientation = R "set-orientation" (\(SSL sol,E (SingleSVarExpr sv e2) :=?: E e,γ) ->
+            [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
