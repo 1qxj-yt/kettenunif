@@ -51,6 +51,10 @@ spec = do
             solve testProblem4 `shouldSatisfy` and . zipWith equivalent [build [v 'X' → v 'A', v 'Y' → v 'A']]
         it "solves {X=Y =. Y=A} to ~[{A→X,Y→X}]" $ do
             solve testProblem4 `shouldSatisfy` and . zipWith equivalent [build [v 'A' → v 'X', v 'Y' → v 'X']]
+    describe "solve with set" $ do
+        it "solves {M:[X=a] =. [A=a,B=D]} to [{M→[B=D]|X→A},{M→[A=a]|D→a,X→B}]" $ do
+            solve testProblem5 `shouldBe` [ build [SetVar 0 →→ Expr [v 'B' := v 'D'], v 'X' → v 'A'],
+                                            build [SetVar 0 →→ Expr [v 'A' := v 'a'], v 'D' → v 'a', v 'X' → v 'B'] ]
 
 
 
@@ -69,3 +73,6 @@ testProblem3 = S.fromList [ Expr [v 'X' := v 'Y'] :=.: Expr [v 'Y' := v 'a']]
 
 testProblem4 :: UnifProblem
 testProblem4 = S.fromList [ Expr [v 'X' := v 'Y'] :=.: Expr [v 'Y' := v 'A']]
+
+testProblem5 :: UnifProblem
+testProblem5 = S.fromList [ SingleSVarExpr (SetVar 0) [v 'X' := v 'a'] :=.: Expr [v 'A' := v 'a', v 'B' := v 'D'] ]
