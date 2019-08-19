@@ -93,6 +93,8 @@ ruleFor :: Equation -> Rule
 ruleFor (B _ :=?: B _)   = decomposition
 ruleFor (E (Expr []) :=?: E (Expr [])) = tautology
 ruleFor (E (Expr e1) :=?: E (Expr e2)) = if length e1 == length e2 then distribution else clash
+ruleFor (E (SingleSVarExpr sv []) :=?: E e) = set_application
+ruleFor (E (SingleSVarExpr sv e1) :=?: E e) = set_distribution
 ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
     | otherwise = case (isMeta v1, isMeta v2) of
