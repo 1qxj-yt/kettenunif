@@ -156,7 +156,7 @@ assocSet :: Parser Substitution
 assocSet = do
     sv <- lexeme setVar
     lexeme (string "->")
-    e  <- lexeme expr
+    e  <- lexeme (expr <|> singleSetExpr)
     return (sv →→ e)
 
 setComponent :: Parser [Substitution]
