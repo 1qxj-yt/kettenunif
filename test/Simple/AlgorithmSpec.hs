@@ -4,8 +4,9 @@ import Test.Hspec
 import Simple.Algorithm
 
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
+    , SetVar(SetVar)
     , Var, var, meta
     , Token(..)
     )
@@ -16,6 +17,7 @@ import Simple.UnifProblem
 import Simple.Substitution
     ( Substitution
     , (→)
+    , (→→)
     , build
     , equivalent
     )
