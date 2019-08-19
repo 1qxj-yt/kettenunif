@@ -21,7 +21,7 @@ import Data.Char(isUpper,isLower)
 data Expr = Expr [Bind] | SingleSVarExpr SetVar [Bind] deriving (Eq,Ord,Show)
 
 data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
-newtype SetVar = SetVar Integer deriving (Eq,Ord,Show)
+newtype SetVar = SetVar Integer deriving (Eq,Ord)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 
@@ -54,6 +54,9 @@ instance Show Bind where
 instance Show Var where
     show (Meta c i) = c:if i==0 then [] else show i
     show (Var  c i) = c:if i==0 then [] else show i
+
+instance Show SetVar where
+    show (SetVar i) = 'M':if i==0 then [] else show i
 
 
 ------------------------------------------------
