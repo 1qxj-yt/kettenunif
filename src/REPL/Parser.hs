@@ -130,7 +130,7 @@ problemEl :: Parser UnifProblemEl
 problemEl = do
     e1 <- lexeme (expr <|> singleSetExpr)
     lexeme (string "=.")
-    e2 <- lexeme expr
+    e2 <- lexeme (expr <|> singleSetExpr)
     return (e1 :=.: e2)
 
 problem :: Parser Command
