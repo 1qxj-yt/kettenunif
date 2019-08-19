@@ -20,9 +20,10 @@ import Simple.UnifProblem
 import Simple.Substitution
     ( Substitution
     , (→)
+    , (→→)
     )
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Token(E,B,V)
     )
