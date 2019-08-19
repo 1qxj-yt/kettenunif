@@ -4,7 +4,7 @@ module Simple.Algorithm
     ) where
 
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
     , isMeta
     )
@@ -31,6 +31,8 @@ import Simple.Rules
     , decomposition
     , application
     , orientation
+    , set_distribution
+    , set_application
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
