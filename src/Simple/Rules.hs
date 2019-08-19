@@ -10,6 +10,8 @@ module Simple.Rules
     , decomposition
     , application
     , orientation
+    , set_distribution
+    , set_application
     ) where
 
 import Simple.UnifProblem
