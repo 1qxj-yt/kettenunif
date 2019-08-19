@@ -18,7 +18,7 @@ import Data.Char(isUpper,isLower)
 -- Data
 ------------------------------------------------
 
-data Expr = Expr [Bind] | SingleSVarExpr SetVar [Bind] deriving (Eq,Ord,Show)
+data Expr = Expr [Bind] | SingleSVarExpr SetVar [Bind] deriving (Eq,Ord)
 
 data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
 newtype SetVar = SetVar Integer deriving (Eq,Ord)
@@ -57,6 +57,10 @@ instance Show Var where
 
 instance Show SetVar where
     show (SetVar i) = 'M':if i==0 then [] else show i
+
+instance Show Expr where
+    show (Expr e) = show e
+    show (SingleSVarExpr sv e) = show sv++":"++show e
 
 
 ------------------------------------------------
