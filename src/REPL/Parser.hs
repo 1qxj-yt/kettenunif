@@ -128,7 +128,7 @@ singleSetExpr = do
 
 problemEl :: Parser UnifProblemEl
 problemEl = do
-    e1 <- lexeme expr
+    e1 <- lexeme (expr <|> singleSetExpr)
     lexeme (string "=.")
     e2 <- lexeme expr
     return (e1 :=.: e2)
