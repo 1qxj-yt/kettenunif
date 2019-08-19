@@ -97,6 +97,3 @@ set_application :: Rule
 set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E e,γ) ->
             [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
 
-set_orientation :: Rule
-set_orientation = R "set-orientation" (\(SSL sol,E (SingleSVarExpr sv e2) :=?: E e,γ) ->
-            [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
