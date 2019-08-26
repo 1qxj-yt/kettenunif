@@ -72,8 +72,8 @@ compose sl sr = Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 onExpr :: Substitution -> (Expr -> Expr)
 onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Nothing -> ssve
-    Just (Expr e2) -> Expr (e2++e)
-    Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2++e)
+    Just (Expr e2) -> Expr (nub $ e2++e)
+    Just (SingleSVarExpr m e2) -> SingleSVarExpr m (nub $ e2++e)
 onExpr σ ssve = ssve
 
 mapOnImage :: (Expr -> Expr) -> Substitution -> Substitution
