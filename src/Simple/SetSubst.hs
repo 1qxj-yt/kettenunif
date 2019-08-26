@@ -69,6 +69,8 @@ compose sl sr = Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 -- Substitution Application
 ------------------------------------------------
 
+-- Note: nub is O(n^2);
+-- data structure for expressions should be changed to something more efficient
 onExpr :: Substitution -> (Expr -> Expr)
 onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Nothing -> ssve
