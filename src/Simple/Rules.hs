@@ -12,6 +12,9 @@ module Simple.Rules
     , orientation
     , set_distribution
     , set_application
+    , biset_tautology
+    , biset_application
+    , biset_distribution
     ) where
 
 import Simple.UnifProblem
