@@ -89,6 +89,7 @@ orientation = R "orientation" (\(sol, x:=?:y, γ) ->
 -- Set Extension
 ------------------------------------------------
 
+-- | Note: Includes set_clash
 set_distribution :: Rule
 set_distribution = R "set-distribution" (\(sol,E (SingleSVarExpr sv (b1:e1s)) :=?: E (Expr e2),γ) ->
             [(sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv e1s) :=?: E (Expr $ delete b2 e2)) % γ) | b2 <- e2])
