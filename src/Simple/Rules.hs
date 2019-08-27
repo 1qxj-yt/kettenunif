@@ -99,3 +99,15 @@ set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E
 
 -- 'set_orientation' is covered by 'orientation'.
 
+biset_tautology :: Rule
+biset_tautology = R "biset-tautology" (\(sol,E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2),γ) ->
+            [(sol, (E (Expr e1) :=?: E (Expr e2)) % γ)] )
+
+biset_distribution :: Rule
+biset_distribution = R "biset-distribution" (\(SSL sol,E (SingleSVarExpr sv1 (b1:e1s)) :=?: E (SingleSVarExpr sv2 e2),γ) ->
+            ((SSL ((sv2 →→ SingleSVarExpr sv2 [b1]):sol)), (E (SingleSVarExpr sv1 e1s) :=?: E (SingleSVarExpr sv2 e2)) % γ):
+            [(SSL sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv1 e1s) :=?: E (SingleSVarExpr sv2 $ delete b2 e2)) % γ) | b2 <- e2])
+
+biset_application :: Rule
+biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E e,γ) ->
+            [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)])
