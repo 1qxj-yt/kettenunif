@@ -97,3 +97,5 @@ set_application :: Rule
 set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E e,γ) ->
             [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
 
+-- 'set_orientation' is covered by 'orientation'.
+
