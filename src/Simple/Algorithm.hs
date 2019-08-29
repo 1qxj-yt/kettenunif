@@ -12,7 +12,6 @@ import Simple.Substitution
     ( Substitution
     , identity
     , compose
-    , build
     )
 import Simple.UnifProblem
     ( UnifProblem
