@@ -64,7 +64,7 @@ solveVerbose prob = intercalate "\n" $  map printInfo . snd $ runSolverWriter pr
 printInfo :: StepInfo -> String
 printInfo (n,(SSL sol,eq,γ),rule) =
     let indent = replicate n ' '
-    in  indent ++ "(" ++ show (build sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
+    in  indent ++ "(" ++ show (foldr compose identity sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
             ++ indent ++ name rule
 
 ------------------------------------------------
