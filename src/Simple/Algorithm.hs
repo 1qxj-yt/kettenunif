@@ -103,6 +103,7 @@ ruleFor (E (SingleSVarExpr sv1 e1) :=?: E (SingleSVarExpr sv2 e2))
                 | null e2       = orientation
                 | otherwise     = biset_distribution
 ruleFor (E (SingleSVarExpr sv []) :=?: E e) = set_application
+ruleFor (E e :=?: E (SingleSVarExpr sv e2)) = orientation
 ruleFor (E (SingleSVarExpr sv e1) :=?: E e) = set_distribution
 ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
