@@ -55,7 +55,8 @@ isIdentity σ = M.null (mp σ)
 
 extend :: Substitution -> Substitution -> Substitution
 extend sl sr = Subst $ M.unionWith sound (mp sl) (mp sr)
-    where sound a1 a2 = if a1==a2 then a1 else error "contradictory entries"
+    where sound a1 a2 = if a1==a2 then a1
+                else error $ "contradictory entries: " ++ show a1 ++ " and "++ show a2
 
 -- | Constructs a substitution from a list of sub-substitutions.
 -- Throws an error if contradictory entries are found.
