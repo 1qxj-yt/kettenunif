@@ -82,7 +82,9 @@ runSolverWriter prob = runWriter $ solveGeneral 0 (SSL [identity], probToSolver 
 
 solveGeneral :: Int -> Output -> Writer [StepInfo] [SSList]
 solveGeneral n (sol,γ)
-    | S.null γ = return [sol]
+    | S.null γ = do
+        tell [(n,(sol,E (Expr []) :=?: E (Expr []) ,γ), termination)]
+        return [sol]
     | otherwise=
         let (eq,γ') = S.deleteFindMin γ
             rule    = ruleFor eq
