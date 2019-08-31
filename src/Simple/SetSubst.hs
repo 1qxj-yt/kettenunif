@@ -28,7 +28,7 @@ import qualified Data.Set as S
 -- Data Types
 ------------------------------------------------
 
-data Substitution = Subst {mp :: M.Map SetVar Expr} deriving Eq
+data Substitution = Subst {mp :: M.Map SetVar Expr} deriving (Eq,Ord)
 
 instance Show Substitution where
     show (Subst mp)
