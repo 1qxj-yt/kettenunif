@@ -66,6 +66,12 @@ build = foldr extend (Subst M.empty)
 compose :: Substitution -> Substitution -> Substitution
 compose sl sr = Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 
+-- | Removes entries of the form \(M\mapsto M':[]\) with \(M==M'\)
+cleanUp :: Substitution -> Substitution
+cleanUp (Subst s) = Subst (M.filterWithKey neq s)
+    where   m `neq` SingleSVarExpr m' e = not (null e) || m /= m'
+            n `neq` _ = True
+
 ------------------------------------------------
 -- Substitution Application
 ------------------------------------------------
