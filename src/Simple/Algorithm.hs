@@ -67,8 +67,11 @@ solveVerbose prob = let (rs,lg) = runSolverWriter prob
 printInfo :: StepInfo -> String
 printInfo (n,(SSL sol,eq,γ),rule) =
     let indent = replicate n ' '
-    in  indent ++ "(" ++ show (foldr compose identity sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
-            ++ indent ++ name rule
+    in  case name rule of
+            "termination" -> indent ++ "** " ++ show (foldr compose identity sol) ++ " **"
+            str ->
+                indent ++ "(" ++ show (foldr compose identity sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
+                ++ indent ++ name rule
 
 ------------------------------------------------
 -- General Solver
