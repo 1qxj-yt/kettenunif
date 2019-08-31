@@ -150,14 +150,14 @@ problem = do
 assocVar :: Parser Substitution
 assocVar = do
     v1 <- lexeme variable
-    lexeme (string "->")
+    lexeme (string "→" <|> string "->")
     v2 <- lexeme variable
     return (v1 → v2)
 
 assocSet :: Parser Substitution
 assocSet = do
     sv <- lexeme setVar
-    lexeme (string "->")
+    lexeme (string "→" <|> string "->")
     e  <- lexeme (expr <|> singleSetExpr)
     return (sv →→ e)
 
