@@ -59,7 +59,7 @@ sslToSubst (SSL list) = foldr compose identity list
 
 solveVerbose :: UnifProblem -> String
 solveVerbose prob = let (rs,lg) = runSolverWriter prob
-        in (intercalate "\n" $  map printInfo lg)
+        in intercalate "\n" (map printInfo lg)
             ++ '\n':show (map (\(SSL l) -> foldr compose identity l) rs)
 
 printInfo :: StepInfo -> String
