@@ -34,7 +34,7 @@ import qualified Data.Set as S
 ------------------------------------------------
 
 data Substitution = Subst { setComponent :: Set.Substitution
-                          , varComponent :: Var.Substitution } deriving Eq
+                          , varComponent :: Var.Substitution } deriving (Eq,Ord)
 
 instance Show Substitution where
     show (Subst setC varC)
