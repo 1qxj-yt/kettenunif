@@ -34,6 +34,7 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Token(E,B,V)
+    , addApos
     )
 
 import qualified Data.Set as S
