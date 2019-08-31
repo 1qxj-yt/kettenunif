@@ -57,6 +57,7 @@ instance Show Var where
 
 instance Show SetVar where
     show (SetVar i) = 'M':if i==0 then [] else show i
+    show (HSetVar a i) = show (SetVar i) ++ replicate a '\''
 
 instance Show Expr where
     show (Expr e) = show e
