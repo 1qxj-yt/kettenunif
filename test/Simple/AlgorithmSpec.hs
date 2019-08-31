@@ -58,6 +58,16 @@ spec = do
         it "solves {M:[X=a] =. [A=a,B=D]} to [{M→[B=D]|X→A},{M→[A=a]|D→a,X→B}]" $ do
             solve testProblem5 `shouldBe` [ build [SetVar 0 →→ Expr [v 'B' := v 'D'], v 'X' → v 'A'],
                                             build [SetVar 0 →→ Expr [v 'A' := v 'a'], v 'D' → v 'a', v 'X' → v 'B'] ]
+        it "solves {M:[X=a] =. M:[c=d, x=A]} to [{M→M:[c=d]|X→x,A→a},{M→M':[c=d,x=A,X=a]}]" $ do
+            S.fromList (solve testProblem7) `shouldBe` S.fromList
+                                        [   build [
+                                                SetVar 0 →→ SingleSVarExpr (SetVar 0) [v 'c' := v 'd']
+                                            ,   v 'X' → v 'x'   , v 'A' → v 'a'
+                                            ]
+                                        ,   build [
+                                                SetVar 0 →→ SingleSVarExpr (addApos $ SetVar 0) [v 'c' := v 'd', v 'x' := v 'A', v 'X' := v 'a']
+                                            ]
+                                        ]
 
 
 
@@ -82,3 +92,7 @@ testProblem5 = S.fromList [ SingleSVarExpr (SetVar 0) [v 'X' := v 'a'] :=.: Expr
 
 testProblem6 :: UnifProblem
 testProblem6 = S.singleton $ Expr [v 'A' := v 'B', v 'C' := v 'D'] :=.: Expr [v 'x' := v 'y', v 'z' := v 'w']
+
+testProblem7 :: UnifProblem
+testProblem7 = S.singleton $ SingleSVarExpr (SetVar 0) [v 'X' := v 'a']
+                            :=.: SingleSVarExpr (SetVar 0) [v 'c' := v 'd', v 'x' := v 'A']
