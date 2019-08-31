@@ -113,5 +113,6 @@ biset_distribution = R "biset-distribution" (\(SSL sol,E (SingleSVarExpr sv1 (b1
             [(SSL sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv1 e1s) :=?: E (SingleSVarExpr sv2 $ delete b2 e2)) % γ) | b2 <- e2])
 
 biset_application :: Rule
-biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E e,γ) ->
-            [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)])
+biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: e,γ) ->
+            let E newE = (foldr compose identity sol) `onAny` e
+            in  [(SSL ((sv →→ newE):sol), (sv →→ newE) `onSolver` γ)] )
