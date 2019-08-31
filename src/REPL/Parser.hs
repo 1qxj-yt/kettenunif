@@ -118,7 +118,8 @@ setVar :: Parser SetVar
 setVar = do
     char 'M'
     n <- option 0 natural
-    return (SetVar n)
+    a <- many (char '\'')
+    return (foldr (.) id (map (const addApos) a) $ SetVar n)
 
 singleSetExpr :: Parser Expr
 singleSetExpr = do
