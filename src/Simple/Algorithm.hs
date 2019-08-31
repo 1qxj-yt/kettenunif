@@ -66,7 +66,7 @@ solveVerbose prob = let (rs,lg) = runSolverWriter prob
 
 printInfo :: StepInfo -> String
 printInfo (n,(SSL sol,eq,γ),rule) =
-    let indent = replicate n ' '
+    let indent = replicate (2*n) ' '
     in  case name rule of
             "termination" -> indent ++ "** " ++ show (foldr compose identity sol) ++ " **"
             str ->
