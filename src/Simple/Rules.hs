@@ -112,8 +112,11 @@ biset_tautology = R "biset-tautology" (\(sol,E (SingleSVarExpr _ e1) :=?: E (Sin
             [(sol, (E (Expr e1) :=?: E (Expr e2)) % γ)] )
 
 biset_distribution :: Rule
-biset_distribution = R "biset-distribution" (\(SSL sol,E (SingleSVarExpr sv1 (b1:e1s)) :=?: E (SingleSVarExpr sv2 e2),γ) ->
-            ((SSL ((sv2 →→ SingleSVarExpr sv2 [b1]):sol)), (E (SingleSVarExpr sv1 e1s) :=?: E (SingleSVarExpr sv2 e2)) % γ):
+biset_distribution = R "biset-distribution" (\(SSL sol,E (SingleSVarExpr sv1 e1@(b1:e1s)) :=?: E (SingleSVarExpr sv2 e2@(b2:e2s)),γ) ->
+            let sv2' = addApos sv2
+                sv1' = if sv1 == sv2 then sv2' else sv1
+            in  ((SSL ((sv2 →→ SingleSVarExpr sv2' [b1]):sol)),
+                    (E (SingleSVarExpr sv1' e1s) :=?: E (SingleSVarExpr sv2' e2)) % ((sv2 →→ SingleSVarExpr sv2' [b1]) `onSolver` γ) ):
             [(SSL sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv1 e1s) :=?: E (SingleSVarExpr sv2 $ delete b2 e2)) % γ) | b2 <- e2])
 
 biset_application :: Rule
