@@ -8,6 +8,7 @@ module Simple.Substitution
     -- * Operations
     , compose
     , equivalent
+    , restrict
     -- * Checks
     , isValid
     -- * Application
