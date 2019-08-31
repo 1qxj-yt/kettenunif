@@ -25,6 +25,7 @@ import Simple.Rules
     , Input
     , Output
     , SSList(SSL)
+    , termination
     , tautology
     , clash
     , distribution
