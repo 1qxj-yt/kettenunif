@@ -52,7 +52,7 @@ solve :: UnifProblem -> [Substitution]
 solve prob = map sslToSubst . fst $ runSolverWriter prob
 
 sslToSubst :: SSList -> Substitution
-sslToSubst (SSL list) = foldr compose identity list
+sslToSubst (SSL list) = restrict $ foldr compose identity list
 
 ------------------------------------------------
 -- Verbose Solver
