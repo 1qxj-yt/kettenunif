@@ -6,6 +6,7 @@ module Simple.SetSubst
     -- * Operations
     , extend
     , compose
+    , restrict
     -- * Checks
     , isIdentity
     -- * Application
