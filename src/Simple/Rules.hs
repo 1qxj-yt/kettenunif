@@ -4,6 +4,7 @@ module Simple.Rules
     , Output
     , SSList(SSL)
     -- * Rules
+    , termination
     , tautology
     , clash
     , distribution
