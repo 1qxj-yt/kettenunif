@@ -17,7 +17,7 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind
     , Var
-    , SetVar
+    , SetVar(SetVar)
     )
 
 import Data.List(intercalate, nub)
