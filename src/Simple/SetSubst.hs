@@ -64,7 +64,7 @@ build :: [Substitution] -> Substitution
 build = foldr extend (Subst M.empty)
 
 compose :: Substitution -> Substitution -> Substitution
-compose sl sr = Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
+compose sl sr = cleanUp $ Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 
 -- | Removes entries of the form \(M\mapsto M':[]\) with \(M==M'\)
 cleanUp :: Substitution -> Substitution
