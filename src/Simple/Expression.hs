@@ -38,6 +38,9 @@ meta c i  = if isUpper c then Meta c i else error "meta variable must be upper c
 var  :: Char -> Integer -> Var
 var  c i  = if isLower c then Var  c i else error "variable must be lower case"
 
+addApos :: SetVar -> SetVar
+addApos (SetVar i) = HSetVar 1 i
+addApos (HSetVar a i) = HSetVar (a+1) i
 
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
