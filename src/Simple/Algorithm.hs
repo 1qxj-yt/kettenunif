@@ -12,6 +12,7 @@ import Simple.Substitution
     ( Substitution
     , identity
     , compose
+    , restrict
     )
 import Simple.UnifProblem
     ( UnifProblem
