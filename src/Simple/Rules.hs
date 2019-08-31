@@ -67,6 +67,8 @@ infixr %
 (%) :: Equation -> SolverDS -> SolverDS
 (%) = S.insert
 
+termination :: Rule
+termination = R "termination" (\(sol,_,γ) -> [(sol,γ)])
 
 tautology :: Rule
 tautology = R "tautology" (\(sol,_,γ) -> [(sol,γ)])
