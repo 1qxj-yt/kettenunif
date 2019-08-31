@@ -60,6 +60,9 @@ identity = Subst Set.identity Var.identity
 isValid :: Substitution -> Bool
 isValid (Subst setC varC) = Var.isValid varC
 
+restrict :: Substitution -> Substitution
+restrict (Subst setC varC) = Subst (Set.restrict setC) varC
+
 ------------------------------------------------
 -- Operations
 ------------------------------------------------
