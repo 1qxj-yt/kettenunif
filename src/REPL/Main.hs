@@ -48,5 +48,5 @@ repl = do
                     outputStrLn (show $ subst `onAny` E expr)
                     loop v
                 Just (Right (Compose substs)) -> do
-                    outputStrLn (show $ foldr compose identity substs)
+                    outputStrLn (show $ restrict $ foldr compose identity substs)
                     loop v
