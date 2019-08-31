@@ -9,6 +9,7 @@ import Simple.Expression
     , SetVar(SetVar)
     , Var, var, meta
     , Token(..)
+    , addApos
     )
 import Simple.UnifProblem
     ( UnifProblem
