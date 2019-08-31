@@ -21,6 +21,7 @@ import Simple.Expression
     , SetVar(SetVar)
     , var
     , meta
+    , addApos
     )
 import Simple.UnifProblem
     ( UnifProblem
