@@ -26,6 +26,9 @@ import Simple.Substitution
     ( Substitution
     , (→)
     , (→→)
+    , onAny
+    , compose
+    , identity
     )
 import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
