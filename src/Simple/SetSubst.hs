@@ -72,6 +72,11 @@ cleanUp (Subst s) = Subst (M.filterWithKey neq s)
     where   m `neq` SingleSVarExpr m' e = not (null e) || m /= m'
             n `neq` _ = True
 
+restrict :: Substitution -> Substitution
+restrict (Subst s) = Subst (M.filterWithKey (\k _ -> isNotHelper k) s)
+    where   isNotHelper (SetVar i)  = True
+            isNotHelper _           = False
+
 ------------------------------------------------
 -- Substitution Application
 ------------------------------------------------
