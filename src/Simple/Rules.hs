@@ -68,6 +68,7 @@ infixr %
 (%) :: Equation -> SolverDS -> SolverDS
 (%) = S.insert
 
+-- | Same as tautology; just for logging the termination.
 termination :: Rule
 termination = R "termination" (\(sol,_,γ) -> [(sol,γ)])
 
