@@ -83,14 +83,19 @@ restrict (Subst s) = Subst (M.filterWithKey (\k _ -> isNotHelper k) s)
 -- Substitution Application
 ------------------------------------------------
 
--- Note: nub is O(n^2);
--- data structure for expressions should be changed to something more efficient
 onExpr :: Substitution -> (Expr -> Expr)
 onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Nothing -> ssve
+    Just (Expr e2) -> Expr (e2++e)
+    Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2++e)
+onExpr σ ssve = ssve
+
+onSetExpr :: Substitution -> (Expr -> Expr)
+onSetExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
+    Nothing -> ssve
     Just (Expr e2) -> Expr (nub $ e2++e)
     Just (SingleSVarExpr m e2) -> SingleSVarExpr m (nub $ e2++e)
-onExpr σ ssve = ssve
+onSetExpr σ ssve = ssve
 
 mapOnImage :: (Expr -> Expr) -> Substitution -> Substitution
 mapOnImage f (Subst mp) = Subst (M.map f mp)
