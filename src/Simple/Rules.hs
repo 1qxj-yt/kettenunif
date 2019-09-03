@@ -127,3 +127,7 @@ biset_application :: Rule
 biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: e,γ) ->
             let E newE = (foldr compose identity sol) `onAny` e
             in  [(SSL ((sv →→ newE):sol), (sv →→ newE) `onSolver` γ)] )
+
+mset_semi_tautology :: Rule
+mset_semi_tautology = R "mset-semi-tautology" (\(sol, E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2), γ) ->
+            [(sol, (E (Expr e1) :=?: E (Expr e2)) % γ)])
