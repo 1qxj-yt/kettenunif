@@ -37,6 +37,7 @@ import Simple.Rules
     , biset_tautology
     , biset_application
     , biset_distribution
+    , mset_semi_tautology
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
