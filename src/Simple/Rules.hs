@@ -16,6 +16,7 @@ module Simple.Rules
     , biset_tautology
     , biset_application
     , biset_distribution
+    , mset_semi_tautology
     ) where
 
 import Simple.UnifProblem
