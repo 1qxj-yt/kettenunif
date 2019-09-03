@@ -108,8 +108,8 @@ ruleFor (E (SingleSVarExpr sv1 e1) :=?: E (SingleSVarExpr sv2 e2))
                 | sv1 == sv2
                     && null e1
                     && null e2  = biset_tautology
-                | null e1       = biset_application
                 | null e2       = orientation
+                | null e1       = biset_application
                 | otherwise     = biset_distribution
 ruleFor (E (SingleSVarExpr sv []) :=?: E e) = set_application
 ruleFor (E e :=?: E (SingleSVarExpr sv e2)) = orientation
