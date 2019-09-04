@@ -44,6 +44,10 @@ v c = (if ($c) isUpper then meta else var) c 0
 
 spec :: Spec
 spec = do
+    describe "QuickCheck" $ do
+        modifyMaxSize (const 10) $ modifyMaxSuccess (const 1000) $
+            it "solves 1000 test cases for bi-mset" $ property $
+                isSound
     describe "solve" $ do
         it "solves {x=Y =. X=y} to [{X→x,Y→y}]" $ do
             solve testProblem1 `shouldBe` [build [v 'X' → v 'x', v 'Y' → v 'y']]
