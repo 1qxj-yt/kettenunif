@@ -71,8 +71,15 @@ onProblem σ = (σ `onSolver`) . probToSolver
 -- Checks
 ------------------------------------------------
 
-check :: Equation -> Bool
-check (e1 :=?: e2) = e1 == e2
+msetEq :: Expr -> Expr -> Bool
+msetEq (Expr e1) (Expr e2)
+    = MS.fromList e1 == MS.fromList e2
+msetEq (SingleSVarExpr sv1 e1) (SingleSVarExpr sv2 e2)
+    = sv1 == sv2 && MS.fromList e1 == MS.fromList e2
+msetEq _ _ = False
+
+check :: UnifProblemEl -> Bool
+check (e1 :=.: e2) = msetEq e1 e2
 
 solves :: Substitution -> UnifProblem -> Bool
-solves σ p = all check (σ `onProblem` p)
+solves σ = all (check . (σ `onEqP`))
