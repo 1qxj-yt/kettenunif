@@ -10,6 +10,7 @@ module Simple.UnifProblem
     ) where
 
 import qualified Data.Set as S
+import qualified Data.MultiSet as MS
 
 import Simple.Expression
     ( Expr
