@@ -1,6 +1,8 @@
 module Simple.AlgorithmSpec(spec) where
 
 import Test.Hspec
+import Test.QuickCheck
+import Test.Hspec.QuickCheck
 import Simple.Algorithm
 
 import Simple.SoundnessAuto.Bi_Mset
