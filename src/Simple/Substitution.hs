@@ -13,6 +13,7 @@ module Simple.Substitution
     , isValid
     -- * Application
     , onAny
+    , onExpr
     ) where
 
 import Simple.Expression
