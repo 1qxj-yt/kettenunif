@@ -26,6 +26,7 @@ dependencies:
 - bytestring
 - haskeline
 - parsec
+- multiset
 
 library:
   source-dirs: src
