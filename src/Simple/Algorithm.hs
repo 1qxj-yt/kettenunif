@@ -106,12 +106,16 @@ ruleFor (B _ :=?: B _)   = decomposition
 ruleFor (E (Expr []) :=?: E (Expr [])) = tautology
 ruleFor (E (Expr e1) :=?: E (Expr e2)) = if length e1 == length e2 then distribution else clash
 ruleFor (E (SingleSVarExpr sv1 e1) :=?: E (SingleSVarExpr sv2 e2))
-                | sv1 == sv2
-                    && null e1
-                    && null e2  = biset_tautology
-                | null e1       = biset_application
-                | null e2       = orientation
-                | otherwise     = biset_distribution
+                | sv1 == sv2    = case (null e1, null e2) of
+                    (True , True ) ->   biset_tautology
+                    (False, True ) ->   orientation
+                    (True , False) ->   clash
+                    (False, False) ->   mset_semi_tautology
+                | otherwise     = case (null e1, null e2) of
+                    (True , True ) ->   biset_application
+                    (False, True ) ->   orientation
+                    (True , False) ->   biset_application
+                    (False, False) ->   biset_distribution
 ruleFor (E (SingleSVarExpr sv []) :=?: E e) = set_application
 ruleFor (E e :=?: E (SingleSVarExpr sv e2)) = orientation
 ruleFor (E (SingleSVarExpr sv e1) :=?: E e) = set_distribution
