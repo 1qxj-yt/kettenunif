@@ -18,6 +18,7 @@ import Simple.Expression
 import Simple.Substitution
     ( Substitution
     , onAny
+    , onExpr
     )
 
 
