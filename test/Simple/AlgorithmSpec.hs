@@ -3,6 +3,7 @@ module Simple.AlgorithmSpec(spec) where
 import Test.Hspec
 import Simple.Algorithm
 
+import Simple.SoundnessAuto.Bi_Mset
 import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
