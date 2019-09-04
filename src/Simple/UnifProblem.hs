@@ -56,6 +56,9 @@ isValidSolver = (== True) . S.findMin . S.map isValidEquation
 onEq :: Substitution -> Equation -> Equation
 onEq σ (t1 :=?: t2) = (σ `onAny` t1) :=?: (σ `onAny` t2)
 
+onEqP :: Substitution -> UnifProblemEl -> UnifProblemEl
+onEqP σ (t1 :=.: t2) = (σ `onExpr` t1) :=.: (σ `onExpr` t2)
+
 onSolver :: Substitution -> SolverDS -> SolverDS
 onSolver σ = S.map (σ `onEq`)
 
