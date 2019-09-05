@@ -47,6 +47,8 @@ v c = (if ($c) isUpper then meta else var) c 0
 spec :: Spec
 spec = do
     describe "QuickCheck" $ do
+        it "solves 100 test cases for bi-mset (IO)" $ do
+            quickCheckWith stdArgs{maxSize=10,maxSuccess=100} isSound
         modifyMaxSize (const 10) $ modifyMaxSuccess (const 100) $
             prop "solves 100 test cases for bi-mset (Hspec)" $
                 isSound
