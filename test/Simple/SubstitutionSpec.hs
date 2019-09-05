@@ -10,6 +10,7 @@ import Simple.Expression
     , SetVar(SetVar)
     , Token(..)
     , isMeta
+    , expr
     )
 
 import Data.Char(isUpper)
