@@ -38,6 +38,11 @@ import Simple.Expression
     , Token(E,B,V)
     , addApos
     )
+import Simple.Binds
+    ( cons
+    , uncons
+    , deleteAt
+    )
 
 import qualified Data.Set as S
 import Data.List(delete)
