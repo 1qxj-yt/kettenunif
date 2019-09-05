@@ -89,8 +89,9 @@ clash :: Rule
 clash = R "clash" (const [])
 
 distribution :: Rule
-distribution = R "distribution" (\(sol,E (Expr (b1:e1s)) :=?: E (Expr e2),γ) ->
-            [(sol, (B b1 :=?: B b2) % (E (Expr e1s) :=?: E (Expr $ delete b2 e2)) % γ) | b2<-e2 ] )
+distribution = R "distribution" (\(sol,E e1 :=?: E e2,γ) -> foldWithIndex (\i b2 ->
+                        [(sol, (B (eHead e1) :=?: B b2) % (E (eTail e1) :=?: E (eDelete i e2)) % γ)]
+                    ) e2)
 
 decomposition :: Rule
 decomposition = R "decomposition"
