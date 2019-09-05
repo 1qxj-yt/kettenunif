@@ -10,6 +10,7 @@ module Simple.Expression
     , eHead
     , eTail
     , eDelete
+    , foldWithIndex
     -- * Variables
     , meta
     , var
