@@ -13,7 +13,7 @@ import qualified Data.Set as S
 import qualified Data.MultiSet as MS
 
 import Simple.Expression
-    ( Expr
+    ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
     )
 import Simple.Substitution
