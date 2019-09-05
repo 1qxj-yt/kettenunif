@@ -97,7 +97,7 @@ instance Show Expr where
 
 
 ------------------------------------------------
--- Canonical Extensions
+-- Canonical Extensions / Folds
 ------------------------------------------------
 
 ωBind :: (Var -> Var) -> (Bind -> Bind)
