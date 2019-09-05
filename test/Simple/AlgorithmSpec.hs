@@ -13,6 +13,8 @@ import Simple.Expression
     , Var, var, meta
     , Token(..)
     , addApos
+    , expr
+    , ssve
     )
 import Simple.UnifProblem
     ( UnifProblem
