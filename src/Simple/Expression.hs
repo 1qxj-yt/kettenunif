@@ -35,6 +35,12 @@ data Token = B Bind | V Var | E Expr deriving (Eq,Ord,Show)
 -- Constructors
 ------------------------------------------------
 
+expr :: [Bind] -> Expr
+expr = Expr . fromList
+
+ssve :: SetVar -> [Bind] -> Expr
+ssve sv = SingleSVarExpr sv . fromList
+
 meta :: Char -> Integer -> Var
 meta c i  = if isUpper c then Meta c i else error "meta variable must be upper case"
 
