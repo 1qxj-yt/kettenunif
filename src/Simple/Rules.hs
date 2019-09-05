@@ -125,9 +125,8 @@ biset_distribution = R "biset-distribution" (\(SSL sol,E (SingleSVarExpr sv1 e1@
             [(SSL sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv1 e1s) :=?: E (SingleSVarExpr sv2 $ delete b2 e2)) % γ) | b2 <- e2])
 
 biset_application :: Rule
-            let E newE = (foldr compose identity sol) `onAny` e
-biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?: e,γ) ->
-            in  [(SSL ((sv →→ newE):sol), (sv →→ newE) `onSolver` γ)] )
+biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?: E e,γ) ->
+                [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
 
 mset_semi_tautology :: Rule
 mset_semi_tautology = R "mset-semi-tautology" (\(sol, E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2), γ) ->
