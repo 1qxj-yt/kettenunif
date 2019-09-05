@@ -21,7 +21,7 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
-- containers # Data.Set
+- containers >= 0.5.8 # Data.Set
 - mtl # Control.Monad.Writer
 - bytestring
 - haskeline
