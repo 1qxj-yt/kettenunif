@@ -60,6 +60,19 @@ isMeta _         = False
 
 
 ------------------------------------------------
+-- Functions
+------------------------------------------------
+
+eHead :: Expr -> Bind
+eHead = bindsToExpr B.head
+
+eTail :: Expr -> Expr
+eTail = bindsToExpr' B.tail
+
+eDelete :: Int -> Expr -> Expr
+eDelete i = bindsToExpr' (B.deleteAt i)
+
+------------------------------------------------
 -- Show Instances
 ------------------------------------------------
 
