@@ -66,8 +66,8 @@ spec = do
                                             build [v 'A'→ v 'z', v 'B' → v 'w', v 'C' → v 'x', v 'D' → v 'y'] ]
     describe "solve with set" $ do
         it "solves {M:[X=a] =. [A=a,B=D]} to [{M→[B=D]|X→A},{M→[A=a]|D→a,X→B}]" $ do
-            solve testProblem5 `shouldBe` [ build [SetVar 0 →→ Expr [v 'B' := v 'D'], v 'X' → v 'A'],
-                                            build [SetVar 0 →→ Expr [v 'A' := v 'a'], v 'D' → v 'a', v 'X' → v 'B'] ]
+            solve testProblem5 `shouldBe` [ build [SetVar 0 →→ expr [v 'B' := v 'D'], v 'X' → v 'A'],
+                                            build [SetVar 0 →→ expr [v 'A' := v 'a'], v 'D' → v 'a', v 'X' → v 'B'] ]
 
 
 
