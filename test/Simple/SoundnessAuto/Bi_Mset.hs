@@ -6,7 +6,6 @@ import Test.QuickCheck
 import Data.Char(isUpper)
 import qualified Data.Set as S
 import qualified Data.MultiSet as MS
-import qualified Data.List(foldl')
 
 import Simple.Substitution(identity,compose,onAny)
 import Simple.Expression
