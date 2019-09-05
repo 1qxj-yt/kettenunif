@@ -45,5 +45,7 @@ instance Arbitrary UnifProblemEl where
         e2 <- arbitrary
         return $ e1 :=.: e2
 
-isSound :: UnifProblem -> Bool
-isSound p = and [ σ `solves` p | σ <- solve p ]
+isSound :: UnifProblem -> Property
+isSound p = let solSet = solve p
+        in  classify (not $ null solSet) "non-trivial" $
+                and [ σ `solves` p | σ <- solve p ]
