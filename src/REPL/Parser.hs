@@ -19,6 +19,7 @@ import Simple.Expression
     , Bind((:=))
     , Var
     , SetVar(SetVar)
+    , expr
     , var
     , meta
     , addApos
