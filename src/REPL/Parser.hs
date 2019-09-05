@@ -107,8 +107,8 @@ bind = do
     v2 <- lexeme variable
     return (v1 := v2)
 
-expr :: Parser Expr
-expr = do
+expression :: Parser Expr
+expression = do
     lexeme (char '[')
     bs <- commaSep bind
     lexeme (char ']')
@@ -125,14 +125,14 @@ singleSetExpr :: Parser Expr
 singleSetExpr = do
     sv <- setVar
     char ':'
-    Expr bs <- expr
+    Expr bs <- expression
     return $ SingleSVarExpr sv bs
 
 problemEl :: Parser UnifProblemEl
 problemEl = do
-    e1 <- lexeme (expr <|> singleSetExpr)
+    e1 <- lexeme (expression <|> singleSetExpr)
     lexeme (string "=.")
-    e2 <- lexeme (expr <|> singleSetExpr)
+    e2 <- lexeme (expression <|> singleSetExpr)
     return (e1 :=.: e2)
 
 problem :: Parser Command
@@ -158,7 +158,7 @@ assocSet :: Parser Substitution
 assocSet = do
     sv <- lexeme setVar
     lexeme (string "→" <|> string "->")
-    e  <- lexeme (expr <|> singleSetExpr)
+    e  <- lexeme (expression <|> singleSetExpr)
     return (sv →→ e)
 
 setComponent :: Parser [Substitution]
@@ -178,7 +178,7 @@ subst = do
 substAppl :: Parser Command
 substAppl = do
     ss <- many1 (lexeme subst)
-    me <- optionMaybe $ lexeme (expr <|> singleSetExpr)
+    me <- optionMaybe $ lexeme (expression <|> singleSetExpr)
     case me of
         Just e -> return (Apply (foldr compose identity ss) e)
         Nothing -> return (Compose ss)
