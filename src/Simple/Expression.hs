@@ -12,6 +12,7 @@ module Simple.Expression
     , ωExpr
     ) where
 
+import Simple.Binds as B
 
 import Data.Char(isUpper,isLower)
 
