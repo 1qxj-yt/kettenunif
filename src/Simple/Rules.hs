@@ -116,7 +116,7 @@ set_distribution :: Rule
 set_distribution = R "set-distribution" (apply distribution)
 
 set_application :: Rule
-set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv []) :=?: E e,γ) ->
+set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?: E e,γ) ->
             [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
 
 -- 'set_orientation' is covered by 'orientation'.
