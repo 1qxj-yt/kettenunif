@@ -4,6 +4,9 @@ module Simple.Expression
     , Var
     , SetVar(SetVar)
     , Token(B,V,E)
+    -- * Expression
+    , expr
+    , ssve
     , meta
     , var
     , isMeta
