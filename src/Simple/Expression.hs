@@ -87,5 +87,6 @@ instance Show Expr where
 ωBind f (v1:=v2) = f v1 := f v2
 
 ωExpr :: (Var -> Var) -> (Expr -> Expr)
-ωExpr f (Expr e) = Expr (map (ωBind f) e)
-ωExpr f (SingleSVarExpr b e) = SingleSVarExpr b (map (ωBind f) e)
+ωExpr f (Expr e) = Expr (fmap (ωBind f) e)
+ωExpr f (SingleSVarExpr b e) = SingleSVarExpr b (fmap (ωBind f) e)
+
