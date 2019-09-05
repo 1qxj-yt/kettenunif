@@ -76,23 +76,23 @@ spec = do
 ------------------------------------------------
 
 testProblem1 :: UnifProblem
-testProblem1 = S.fromList [ Expr [v 'X' := v 'y'] :=.: Expr [v 'x' := v 'Y']]
+testProblem1 = S.fromList [ expr [v 'X' := v 'y'] :=.: expr [v 'x' := v 'Y']]
 
 testProblem2 :: UnifProblem
-testProblem2 = S.fromList [ Expr [v 'x' := v 'x'] :=.: Expr [v 'y' := v 'y']]
+testProblem2 = S.fromList [ expr [v 'x' := v 'x'] :=.: expr [v 'y' := v 'y']]
 
 testProblem3 :: UnifProblem
-testProblem3 = S.fromList [ Expr [v 'X' := v 'Y'] :=.: Expr [v 'Y' := v 'a']]
+testProblem3 = S.fromList [ expr [v 'X' := v 'Y'] :=.: expr [v 'Y' := v 'a']]
 
 testProblem4 :: UnifProblem
-testProblem4 = S.fromList [ Expr [v 'X' := v 'Y'] :=.: Expr [v 'Y' := v 'A']]
+testProblem4 = S.fromList [ expr [v 'X' := v 'Y'] :=.: expr [v 'Y' := v 'A']]
 
 testProblem5 :: UnifProblem
-testProblem5 = S.fromList [ SingleSVarExpr (SetVar 0) [v 'X' := v 'a'] :=.: Expr [v 'A' := v 'a', v 'B' := v 'D'] ]
+testProblem5 = S.fromList [ ssve (SetVar 0) [v 'X' := v 'a'] :=.: expr [v 'A' := v 'a', v 'B' := v 'D'] ]
 
 testProblem6 :: UnifProblem
-testProblem6 = S.singleton $ Expr [v 'A' := v 'B', v 'C' := v 'D'] :=.: Expr [v 'x' := v 'y', v 'z' := v 'w']
+testProblem6 = S.singleton $ expr [v 'A' := v 'B', v 'C' := v 'D'] :=.: expr [v 'x' := v 'y', v 'z' := v 'w']
 
 testProblem7 :: UnifProblem
-testProblem7 = S.singleton $ SingleSVarExpr (SetVar 0) [v 'X' := v 'a']
-                            :=.: SingleSVarExpr (SetVar 0) [v 'c' := v 'd', v 'x' := v 'A']
+testProblem7 = S.singleton $ ssve (SetVar 0) [v 'X' := v 'a']
+                            :=.: ssve (SetVar 0) [v 'c' := v 'd', v 'x' := v 'A']
