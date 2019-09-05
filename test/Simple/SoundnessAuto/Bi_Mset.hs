@@ -45,7 +45,5 @@ instance Arbitrary UnifProblemEl where
         e2 <- arbitrary
         return $ e1 :=.: e2
 
---solvesInSecs s σ p = null σ `trivial` within (inSecs 1) (solves σ p)
-
 isSound :: UnifProblem -> Bool
 isSound p = and [ σ `solves` p | σ <- solve p ]
