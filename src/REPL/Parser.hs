@@ -113,7 +113,7 @@ expression = do
     lexeme (char '[')
     bs <- commaSep bind
     lexeme (char ']')
-    return (Expr bs)
+    return (expr bs)
 
 setVar :: Parser SetVar
 setVar = do
