@@ -10,6 +10,8 @@ import Simple.Expression
     , Var
     , var
     , meta
+    , expr
+    , ssve
     )
 
 import Data.Char(isUpper)
