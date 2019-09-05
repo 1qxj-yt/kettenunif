@@ -90,3 +90,11 @@ instance Show Expr where
 ωExpr f (Expr e) = Expr (fmap (ωBind f) e)
 ωExpr f (SingleSVarExpr b e) = SingleSVarExpr b (fmap (ωBind f) e)
 
+bindsToExpr :: (Binds -> a) -> (Expr -> a)
+bindsToExpr f (Expr bs) = f bs
+bindsToExpr f (SingleSVarExpr _ bs) = f bs
+
+bindsToExpr' :: (Binds -> Binds) -> (Expr -> Expr)
+bindsToExpr' f (Expr bs) = Expr (f bs)
+bindsToExpr' f (SingleSVarExpr sv bs) = SingleSVarExpr sv (f bs)
+
