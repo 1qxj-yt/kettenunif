@@ -9,14 +9,20 @@ import REPL.Lexer
 import Simple.Substitution
     ( Substitution
     , (→)
+    , (→→)
+    , identity
     , build
+    , compose
     )
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Var
+    , SetVar(SetVar)
+    , expr
     , var
     , meta
+    , addApos
     )
 import Simple.UnifProblem
     ( UnifProblem
@@ -31,7 +37,11 @@ import qualified Data.Map as M
 import Data.Char(isUpper)
 
 
-data Command = Command ReplCommand | Solve UnifProblem | Apply Substitution Expr deriving Show
+data Command =    Command ReplCommand
+                | Solve UnifProblem
+                | Apply Substitution Expr
+                | Compose [Substitution]
+                    deriving Show
 data ReplCommand = Quit | SwitchVerbosity deriving Show
 
 
@@ -98,18 +108,32 @@ bind = do
     v2 <- lexeme variable
     return (v1 := v2)
 
-expr :: Parser Expr
-expr = do
+expression :: Parser Expr
+expression = do
     lexeme (char '[')
     bs <- commaSep bind
     lexeme (char ']')
-    return (Expr bs)
+    return (expr bs)
+
+setVar :: Parser SetVar
+setVar = do
+    char 'M'
+    n <- option 0 natural
+    a <- many (char '\'')
+    return (foldr (.) id (map (const addApos) a) $ SetVar n)
+
+singleSetExpr :: Parser Expr
+singleSetExpr = do
+    sv <- setVar
+    char ':'
+    Expr bs <- expression
+    return $ SingleSVarExpr sv bs
 
 problemEl :: Parser UnifProblemEl
 problemEl = do
-    e1 <- lexeme expr
+    e1 <- lexeme (expression <|> singleSetExpr)
     lexeme (string "=.")
-    e2 <- lexeme expr
+    e2 <- lexeme (expression <|> singleSetExpr)
     return (e1 :=.: e2)
 
 problem :: Parser Command
@@ -127,19 +151,35 @@ problem = do
 assocVar :: Parser Substitution
 assocVar = do
     v1 <- lexeme variable
-    lexeme (string "->")
+    lexeme (string "→" <|> string "->")
     v2 <- lexeme variable
     return (v1 → v2)
+
+assocSet :: Parser Substitution
+assocSet = do
+    sv <- lexeme setVar
+    lexeme (string "→" <|> string "->")
+    e  <- lexeme (expression <|> singleSetExpr)
+    return (sv →→ e)
+
+setComponent :: Parser [Substitution]
+setComponent = do
+    ms <- commaSep assocSet
+    lexeme (char '|')
+    return ms
 
 subst :: Parser Substitution
 subst = do
     lexeme (char '{')
+    ms <- option [] setComponent
     as <- commaSep assocVar
     lexeme (char '}')
-    return $ build as
+    return $ build (ms++as)
 
 substAppl :: Parser Command
 substAppl = do
-    s <- lexeme subst
-    e <- lexeme expr
-    return (Apply s e)
+    ss <- many1 (lexeme subst)
+    me <- optionMaybe $ lexeme (expression <|> singleSetExpr)
+    case me of
+        Just e -> return (Apply (foldr compose identity ss) e)
+        Nothing -> return (Compose ss)

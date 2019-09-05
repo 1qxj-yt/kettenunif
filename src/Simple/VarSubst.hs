@@ -1,54 +1,67 @@
-module Extended.Substitution
+module Simple.VarSubst
     ( Substitution
     -- * Construction
     , (→)
     , identity
-    , build
     -- * Operations
+    , extend
     , compose
-    , equivalent
+    , build
     -- * Checks
+    , isIdentity
     , isValid
+    , equivalent
     -- * Application
-    , onAny
+    , onVar
+    , onBind
+    , onExpr
     ) where
 
-import Extended.Expression
+import Simple.Expression
     ( Expr
-    , Bind((:=))
+    , Bind
     , Var
     , Token(E,B,V)
     , isMeta
+    , ωBind
+    , ωExpr
     )
 
-import Data.List(find,nub,intercalate,groupBy)
+import Data.List(intercalate)
 import qualified Data.Map as M
 import qualified Data.Set as S
+
 
 ------------------------------------------------
 -- Data Types
 ------------------------------------------------
 
-data Substitution = Subst {mp :: M.Map Var Var} deriving Eq
+data Substitution = Subst {mp :: M.Map Var Var} deriving (Eq,Ord)
 
 instance Show Substitution where
-    show (Subst mp) = '{': (intercalate "," $ map showAsc (M.assocs mp)) ++ "}"
-        where showAsc (v1,v2) = show v1++"→"++(show v2)
+    show (Subst mp)
+        | M.null mp = "id"
+        | otherwise = intercalate "," (map showAsc (M.assocs mp))
+            where showAsc (v1,v2) = show v1++"→"++(show v2)
 
 -- Constructor
 -- | Single mapping.
 infixl →
 (→) :: Var -> Var -> Substitution
 v1 → v2 = if isMeta v1
-    then Subst (M.singleton v1 v2)
+    then Subst $ M.singleton v1 v2
     else error "substitution origin is non-meta"
 
 identity :: Substitution
-identity = Subst M.empty -- == build []
+identity = Subst M.empty
+
+isIdentity :: Substitution -> Bool
+isIdentity σ = M.null (mp σ)
 
 isValid :: Substitution -> Bool
 isValid σ = let origins = M.keys (mp σ)
-              in  all isMeta origins
+                    in  all isMeta origins
+
 
 ------------------------------------------------
 -- Operations
@@ -69,12 +82,10 @@ build = foldr extend (Subst $ M.empty)
 --
 -- > (B→C) `compose` (A→B) == (A→C,B→C)
 -- > (X→a) `compose` (Y→b) == (X→a,Y→b)
--- > (X→a) `compose` (X→b) == error
+-- > (X→a) `compose` (X→b) == (X→b)
 -- > (X→a) `compose` (X→a) == (X→a)
 compose :: Substitution -> Substitution -> Substitution
-compose sl sr =
-        let newr = Subst $ M.map (sl `onVar`) (mp sr)
-        in  extend sl newr
+compose sl sr = cleanUp $ Subst $ M.union (M.map (sl `onVar`) (mp sr)) (mp sl)
 
 equivalent :: Substitution -> Substitution -> Bool
 equivalent σ1 σ2 =
@@ -102,6 +113,9 @@ findEquatingPermAux = (Subst <$>) . sequence
             .   M.fromListWith (\a1 a2 -> if a1 == a2 then a1 else Nothing)
             .   (map (\(k,a) -> (k,Just a)))
 
+-- | Removes entries of the form \(x\mapsto y\) with \(x==y\)
+cleanUp :: Substitution -> Substitution
+cleanUp (Subst s) = Subst (M.filterWithKey (/=) s)
 
 ------------------------------------------------
 -- Substitution Application
@@ -113,10 +127,10 @@ onVar σ v1 = case M.lookup v1 (mp σ) of
     Just v2 -> v2
 
 onBind :: Substitution -> (Bind -> Bind)
-onBind σ (v1:=v2) = σ `onVar` v1 := (σ `onVar` v2)
+onBind σ = ωBind (onVar σ)
 
 onExpr :: Substitution -> (Expr -> Expr)
-onExpr σ = map (σ `onBind`)
+onExpr σ = ωExpr (onVar σ)
 
 onAny :: Substitution -> Token -> Token
 onAny σ t = case t of

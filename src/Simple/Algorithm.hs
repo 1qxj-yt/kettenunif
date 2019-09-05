@@ -1,10 +1,10 @@
 module Simple.Algorithm
     ( solve
-    , solveVerbose
+    , generalSolver
     ) where
 
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
     , isMeta
     )
@@ -12,7 +12,7 @@ import Simple.Substitution
     ( Substitution
     , identity
     , compose
-    , build
+    , restrict
     )
 import Simple.UnifProblem
     ( UnifProblem
@@ -25,63 +25,62 @@ import Simple.Rules
     , Input
     , Output
     , SSList(SSL)
+    , termination
     , tautology
     , clash
     , distribution
     , decomposition
     , application
     , orientation
+    , set_distribution
+    , set_application
+    , biset_tautology
+    , biset_application
+    , biset_distribution
+    , mset_semi_tautology
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
-import Control.Monad.Writer
+import Control.Monad.Identity
 import Data.List(intercalate)
 
-type StepInfo = (Int,Input,Rule)
 
-------------------------------------------------
--- Silent Solver
-------------------------------------------------
 
 solve :: UnifProblem -> [Substitution]
-solve prob = map sslToSubst . fst $ runSolverWriter prob
+solve =  map sslToSubst. (\(Identity x) -> x) . run
 
 sslToSubst :: SSList -> Substitution
-sslToSubst (SSL list) = foldr compose identity list
+sslToSubst (SSL list) = restrict $ foldr compose identity list
 
-------------------------------------------------
--- Verbose Solver
-------------------------------------------------
+run :: UnifProblem -> Identity [SSList]
+run = generalSolver (\_ _ -> return ()) (\_ _ _ -> return ()) id ()
 
-solveVerbose :: UnifProblem -> String
-solveVerbose prob = intercalate "\n" $  map printInfo . snd $ runSolverWriter prob
-
-printInfo :: StepInfo -> String
-printInfo (n,(SSL sol,eq,γ),rule) =
-    let indent = replicate n ' '
-    in  indent ++ "(" ++ show (build sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
-            ++ indent ++ name rule
 
 ------------------------------------------------
 -- General Solver
 ------------------------------------------------
 
-runSolverWriter :: UnifProblem -> ([SSList], [StepInfo])
-runSolverWriter prob = runWriter $ solveGeneral 0 (SSL [identity], probToSolver prob)
+generalSolver :: Monad m => (a -> SSList -> m ()) -> (a -> Input -> Rule -> m ())
+                        -> (a -> a) -> a -> UnifProblem -> m [SSList]
+generalSolver t r u a = generalSolverRec t r u a . ini
+    where
+        ini :: UnifProblem -> (SSList, SolverDS)
+        ini prob = (SSL [identity], probToSolver prob)
 
-solveGeneral :: Int -> Output -> Writer [StepInfo] [SSList]
-solveGeneral n (sol,γ)
-    | S.null γ = return [sol]
-    | otherwise=
+generalSolverRec :: Monad m => (a -> SSList -> m ()) -> (a -> Input -> Rule -> m ())
+                        -> (a -> a) -> a -> Output -> m [SSList]
+generalSolverRec onTerm onRule update args (sol,γ)
+    | S.null γ = do
+        onTerm args sol
+        return [sol]
+    | otherwise =
         let (eq,γ') = S.deleteFindMin γ
             rule    = ruleFor eq
             nextLs  = apply rule (sol, eq, γ')
-
             input  = (sol, eq, γ')
         in do
-            tell [(n,input,rule)]
-            concat <$> sequence [solveGeneral (succ n) next | next <- nextLs ]
-
+            onRule args input rule
+            concat <$> sequence [generalSolverRec onTerm onRule update (update args) next | next <- nextLs ]
 
 ------------------------------------------------
 -- Selecting the Right Rule
@@ -89,8 +88,24 @@ solveGeneral n (sol,γ)
 
 ruleFor :: Equation -> Rule
 ruleFor (B _ :=?: B _)   = decomposition
-ruleFor (E (Expr []) :=?: E (Expr [])) = tautology
-ruleFor (E (Expr e1) :=?: E (Expr e2)) = if length e1 == length e2 then distribution else clash
+ruleFor (E (Expr e1) :=?: E (Expr e2)) = case (null e1, null e2) of
+                    (True , True ) -> tautology
+                    _ -> if length e1 == length e2 then distribution else clash
+ruleFor (E (SingleSVarExpr sv1 e1) :=?: E (SingleSVarExpr sv2 e2))
+                | sv1 == sv2    = case (null e1, null e2) of
+                    (True , True ) ->   biset_tautology
+                    (False, True ) ->   orientation
+                    (True , False) ->   clash
+                    (False, False) ->   mset_semi_tautology
+                | otherwise     = case (null e1, null e2) of
+                    (True , True ) ->   biset_application
+                    (False, True ) ->   orientation
+                    (True , False) ->   biset_application
+                    (False, False) ->   biset_distribution
+ruleFor (E e :=?: E (SingleSVarExpr sv e2)) = orientation
+ruleFor (E (SingleSVarExpr sv e1) :=?: E e)
+    | null e1   = set_application
+    | otherwise = set_distribution
 ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
     | otherwise = case (isMeta v1, isMeta v2) of

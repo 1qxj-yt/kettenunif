@@ -7,8 +7,10 @@ import Simple.Expression
     ( Expr(Expr)
     , Bind((:=))
     , Var, var, meta
+    , SetVar(SetVar)
     , Token(..)
     , isMeta
+    , expr
     )
 
 import Data.Char(isUpper)
@@ -38,8 +40,6 @@ spec = do
     describe "(→)" $ do
         it "does not allow invalid substitution [x→a] to be created" $ do
             (print (v 'x' → v 'a')) `shouldThrow` anyErrorCall
-        it "constructs substitution [X→a]" $ do
-            (show (v 'X' → v 'a')) `shouldBe` "{X→a}"
 
     -- Build
     describe "build" $ do
@@ -54,10 +54,21 @@ spec = do
             compose (v 'Y' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'a']
         it "{X→a}.{Y→b} === {X→a,Y→b}" $ do
             compose (v 'X' → v 'a') (v 'Y' → v 'b') `shouldBe` build [v 'X' → v 'a', v 'Y' → v 'b']
-        it "{X→a}.{X→b} === error" $ do
-            print (compose (v 'X' → v 'a') (v 'X' → v 'b')) `shouldThrow` anyErrorCall
+        it "{X→a}.{X→b} === {X→b}" $ do
+            compose (v 'X' → v 'a') (v 'X' → v 'b') `shouldBe` build [v 'X' → v 'b']
         it "{X→a}.{X→a} === {X→a}" $ do
             compose (v 'X' → v 'a') (v 'X' → v 'a') `shouldBe` build [v 'X' → v 'a']
+        it "{X→Y,Y→X}^2 === id" $ do
+            let s = build [v 'X' → v 'Y', v 'Y' → v 'X']
+            compose s s `shouldBe` identity
+        it "{M→[X=y] | X→a}.id === {M→[X=y] | X→a}" $ do
+            let s = build [SetVar 0 →→ expr [v 'X' := v 'a'], v 'X' → v 'a']
+            compose s identity `shouldBe` s
+        it "{A->B}.{M1->[Y=b]|Y->A} === {M1->[Y=b]|A->B,Y->B}" $ do
+            let a = build [v 'A' → v 'B']
+                b = build [SetVar 1 →→ expr [v 'Y' := v 'b'], v 'Y' → v 'A']
+                s = build [SetVar 1 →→ expr [v 'Y' := v 'b'], v 'A' → v 'B', v 'Y' → v 'B']
+            compose a b `shouldBe` s
 
     -- Equivalence
     describe "equivalent" $ do
@@ -141,4 +152,4 @@ transposeCBA :: Substitution
 transposeCBA = build [v 'A' → v 'B', v 'C' → v 'A', v 'B' → v 'C']
 
 exprAB_BB_CB :: Token
-exprAB_BB_CB = E (Expr [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B'])
+exprAB_BB_CB = E (expr [v 'A' := v 'B', v 'B' := v 'B', v 'C' := v 'B'])
