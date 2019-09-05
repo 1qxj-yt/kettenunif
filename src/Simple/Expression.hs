@@ -10,6 +10,7 @@ module Simple.Expression
     , eHead
     , eTail
     , eDelete
+    -- * Variables
     , meta
     , var
     , isMeta
