@@ -28,11 +28,14 @@ import Simple.Substitution
 ------------------------------------------------
 
 type UnifProblem  = S.Set UnifProblemEl
-data UnifProblemEl = Expr :=.: Expr deriving (Eq,Ord,Show)
+data UnifProblemEl = Expr :=.: Expr deriving (Eq,Ord)
 
 type SolverDS = S.Set Equation
 data Equation = Token :=?: Token deriving (Eq,Ord,Show)
 
+
+instance Show UnifProblemEl where
+    show (e1 :=.: e2) = show e1 ++ " =. " ++ show e2
 
 probToSolver :: UnifProblem -> SolverDS
 probToSolver = S.map probToSolver'
