@@ -36,7 +36,7 @@ instance Arbitrary Expr where
         sv <- arbitrary
         frequency [
             (1, return $ expr e),
-            (3, return $ ssve sv e)
+            (1, return $ ssve sv e)
             ]
 
 instance Arbitrary UnifProblemEl where
