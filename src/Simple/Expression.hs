@@ -7,6 +7,9 @@ module Simple.Expression
     -- * Expression
     , expr
     , ssve
+    , eHead
+    , eTail
+    , eDelete
     , meta
     , var
     , isMeta
