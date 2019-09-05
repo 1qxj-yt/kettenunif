@@ -2,8 +2,8 @@ module REPL.Main
     ( repl
     ) where
 
+import REPL.Solvers(silent,verbose,counting)
 import Simple.UnifProblem(UnifProblem)
-import Simple.Algorithm(solve,solveVerbose)
 import Simple.Expression(Token(E))
 import Simple.Substitution(identity,compose,restrict,onAny)
 
@@ -11,15 +11,17 @@ import System.Console.Haskeline
 
 import REPL.Parser
 
-data Verbosity = Verbose | Silent deriving (Eq, Show)
+data Verbosity = Verbose | Count | Silent deriving (Eq, Show)
 
 toggle :: Verbosity -> Verbosity
+toggle Silent = Count
+toggle Count = Verbose
 toggle Verbose = Silent
-toggle Silent = Verbose
 
 solveVS :: Verbosity -> (UnifProblem -> String)
-solveVS Verbose = solveVerbose
-solveVS Silent = show . solve
+solveVS Verbose = verbose
+solveVS Silent = show . silent
+solveVS Count  = counting
 
 repl :: IO ()
 repl = do

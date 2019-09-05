@@ -1,6 +1,6 @@
 module Simple.Algorithm
     ( solve
-    , solveVerbose
+    , generalSolver
     ) where
 
 import Simple.Expression
@@ -41,61 +41,46 @@ import Simple.Rules
     )
 
 import qualified Data.Set as S(null,deleteFindMin)
-import Control.Monad.Writer
+import Control.Monad.Identity
 import Data.List(intercalate)
 
-type StepInfo = (Int,Input,Rule)
 
-------------------------------------------------
--- Silent Solver
-------------------------------------------------
 
 solve :: UnifProblem -> [Substitution]
-solve prob = map sslToSubst . fst $ runSolverWriter prob
+solve =  map sslToSubst. (\(Identity x) -> x) . run
 
 sslToSubst :: SSList -> Substitution
 sslToSubst (SSL list) = restrict $ foldr compose identity list
 
-------------------------------------------------
--- Verbose Solver
-------------------------------------------------
+run :: UnifProblem -> Identity [SSList]
+run = generalSolver (\_ _ -> return ()) (\_ _ _ -> return ()) id ()
 
-solveVerbose :: UnifProblem -> String
-solveVerbose prob = let (rs,lg) = runSolverWriter prob
-        in intercalate "\n" (map printInfo lg)
-            ++ '\n':show (map (\(SSL l) -> foldr compose identity l) rs)
-
-printInfo :: StepInfo -> String
-printInfo (n,(SSL sol,eq,γ),rule) =
-    let indent = replicate (2*n) ' '
-    in  case name rule of
-            "termination" -> indent ++ "** " ++ show (foldr compose identity sol) ++ " **"
-            str ->
-                indent ++ "(" ++ show (foldr compose identity sol) ++", "++ show eq ++" ∪ Γ)" ++ "\n"
-                ++ indent ++ name rule
 
 ------------------------------------------------
 -- General Solver
 ------------------------------------------------
 
-runSolverWriter :: UnifProblem -> ([SSList], [StepInfo])
-runSolverWriter prob = runWriter $ solveGeneral 0 (SSL [identity], probToSolver prob)
+generalSolver :: Monad m => (a -> SSList -> m ()) -> (a -> Input -> Rule -> m ())
+                        -> (a -> a) -> a -> UnifProblem -> m [SSList]
+generalSolver t r u a = generalSolverRec t r u a . ini
+    where
+        ini :: UnifProblem -> (SSList, SolverDS)
+        ini prob = (SSL [identity], probToSolver prob)
 
-solveGeneral :: Int -> Output -> Writer [StepInfo] [SSList]
-solveGeneral n (sol,γ)
+generalSolverRec :: Monad m => (a -> SSList -> m ()) -> (a -> Input -> Rule -> m ())
+                        -> (a -> a) -> a -> Output -> m [SSList]
+generalSolverRec onTerm onRule update args (sol,γ)
     | S.null γ = do
-        tell [(n,(sol,E (Expr []) :=?: E (Expr []) ,γ), termination)]
+        onTerm args sol
         return [sol]
-    | otherwise=
+    | otherwise =
         let (eq,γ') = S.deleteFindMin γ
             rule    = ruleFor eq
             nextLs  = apply rule (sol, eq, γ')
-
             input  = (sol, eq, γ')
         in do
-            tell [(n,input,rule)]
-            concat <$> sequence [solveGeneral (succ n) next | next <- nextLs ]
-
+            onRule args input rule
+            concat <$> sequence [generalSolverRec onTerm onRule update (update args) next | next <- nextLs ]
 
 ------------------------------------------------
 -- Selecting the Right Rule
