@@ -49,5 +49,3 @@ instance Arbitrary UnifProblemEl where
 
 isSound :: UnifProblem -> Bool
 isSound p = and [ σ `solves` p | σ <- solve p ]
-
-inSecs = (1000000*)
