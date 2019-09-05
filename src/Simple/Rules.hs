@@ -119,7 +119,8 @@ set_application :: Rule
 set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?: E e,γ) ->
             [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
 
--- 'set_orientation' is covered by 'orientation'.
+set_orientation :: Rule
+set_orientation = R "set-orientation" (apply orientation)
 
 biset_tautology :: Rule
 biset_tautology = R "biset-tautology" (\(sol,E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2),γ) ->
