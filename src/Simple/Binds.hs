@@ -29,7 +29,7 @@ instance (Eq a, Ord a) => Eq (Multiset a) where
     MS e1 == MS e2 = MS.fromList (toList e1) == MS.fromList (toList e2)
 
 instance Ord a => Ord (Multiset a) where
-    compare (MS e1) (MS e2) = compare e1 e2
+    compare (MS e1) (MS e2) = compare (length e1) (length e2) `mappend` compare e1 e2
 
 instance Show a => Show (Multiset a) where
     show (MS e) = drop (Prelude.length "fromList ") (show e)
