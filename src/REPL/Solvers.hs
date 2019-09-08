@@ -60,8 +60,9 @@ solveLogger = generalSolver
 ------------------------------------------------
 
 counting :: UnifProblem -> String
-counting prob = let ((_,num),str) = runWriter $ runStateT (solveCountSW prob) 0
-            in str ++ '[':show num++"]"
+counting prob = let ((sol,num),str) = runWriter $ runStateT (solveCountSW prob) 0
+                    setSize = Set.size $ Set.fromList (map sslToSubst sol)
+            in str ++ ' ':'[':show setSize ++"/"++show num++"=" ++ show (div (setSize * 100) $ fromInteger num) ++ "%]"
 
 solveCountSW :: UnifProblem -> StateT Integer (Writer String) [SSList]
 solveCountSW = generalSolver
