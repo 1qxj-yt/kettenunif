@@ -39,6 +39,22 @@ data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 data Token = B Bind | V Var | E Expr deriving (Eq,Ord,Show)
 
 
+instance Show Bind where
+    show (s := t) = show s++"="++show t
+
+instance Show Var where
+    show (Meta c i) = c:if i==0 then [] else show i
+    show (Var  c i) = c:if i==0 then [] else show i
+
+instance Show SetVar where
+    show (SetVar i) = 'M':if i==0 then [] else show i
+    show (HSetVar a i) = show (SetVar i) ++ replicate a '\''
+
+instance Show Expr where
+    show (Expr e) = show e
+    show (SingleSVarExpr sv e) = show sv++":"++show e
+
+
 ------------------------------------------------
 -- Constructors
 ------------------------------------------------
@@ -76,25 +92,6 @@ eTail = bindsToExpr' B.tail
 
 eDelete :: Int -> Expr -> Expr
 eDelete i = bindsToExpr' (B.deleteAt i)
-
-------------------------------------------------
--- Show Instances
-------------------------------------------------
-
-instance Show Bind where
-    show (s := t) = show s++"="++show t
-
-instance Show Var where
-    show (Meta c i) = c:if i==0 then [] else show i
-    show (Var  c i) = c:if i==0 then [] else show i
-
-instance Show SetVar where
-    show (SetVar i) = 'M':if i==0 then [] else show i
-    show (HSetVar a i) = show (SetVar i) ++ replicate a '\''
-
-instance Show Expr where
-    show (Expr e) = show e
-    show (SingleSVarExpr sv e) = show sv++":"++show e
 
 
 ------------------------------------------------
