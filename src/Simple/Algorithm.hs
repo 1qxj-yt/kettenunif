@@ -113,3 +113,31 @@ ruleFor (V v1 :=?: V v2)
         (True , False) -> application
         (False, True ) -> orientation
         (True , True ) -> application
+
+ruleForSet :: Equation -> Rule
+ruleForSet (B _ :=?: B _)   = decomposition
+ruleForSet (E (Expr e1) :=?: E (Expr e2)) = case (null e1, null e2) of
+                    (True , True ) -> tautology
+                    _ -> if length e1 == length e2 then distribution else clash
+ruleForSet (E (SingleSVarExpr sv1 e1) :=?: E (SingleSVarExpr sv2 e2))
+                | sv1 == sv2    = case (null e1, null e2) of
+                    (True , True ) ->   biset_tautology
+                    (False, True ) ->   orientation
+                    (True , False) ->   biset_application
+                    (False, False) ->   biset_distribution
+                | otherwise     = case (null e1, null e2) of
+                    (True , True ) ->   biset_application
+                    (False, True ) ->   orientation
+                    (True , False) ->   biset_application
+                    (False, False) ->   biset_distribution
+ruleForSet (E e :=?: E (SingleSVarExpr sv e2)) = orientation
+ruleForSet (E (SingleSVarExpr sv e1) :=?: E e)
+    | null e1   = set_application
+    | otherwise = set_distribution
+ruleForSet (V v1 :=?: V v2)
+    | v1 == v2  = tautology
+    | otherwise = case (isMeta v1, isMeta v2) of
+        (False, False) -> clash
+        (True , False) -> application
+        (False, True ) -> orientation
+        (True , True ) -> application
