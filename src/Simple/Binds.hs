@@ -26,7 +26,7 @@ newtype Multiset a = MS (Seq.Seq a)
 ------------------------------------------------
 
 instance (Eq a, Ord a) => Eq (Multiset a) where
-    MS e1 == MS e2 = MS.fromList (toList e1) == MS.fromList (toList e2)
+    MS e1 == MS e2 = Seq.unstableSort e1 == Seq.unstableSort e2
 
 instance Ord a => Ord (Multiset a) where
     compare (MS e1) (MS e2) = compare (length e1) (length e2) `mappend` compare e1 e2
