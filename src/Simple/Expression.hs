@@ -36,7 +36,7 @@ data SetVar = SetVar Integer | HSetVar {apos :: Int, id :: Integer} deriving (Eq
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 
-data Token = B Bind | V Var | E Expr deriving (Eq,Ord,Show)
+data Token = V Var | B Bind | E Expr deriving (Eq,Ord,Show)
 
 
 instance Show Bind where
