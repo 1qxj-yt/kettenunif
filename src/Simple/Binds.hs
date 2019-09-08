@@ -14,7 +14,6 @@ module Simple.Binds
     ) where
 
 import qualified Data.Sequence as Seq
-import qualified Data.MultiSet as MS
 import Data.Foldable(toList)
 
 
