@@ -12,6 +12,7 @@ import Simple.Substitution(Substitution,compose,identity,restrict)
 import Control.Monad.Writer
 import Control.Monad.State
 import Data.List(intercalate)
+import qualified Data.Set as Set
 
 
 ------------------------------------------------
