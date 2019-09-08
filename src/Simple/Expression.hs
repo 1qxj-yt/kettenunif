@@ -1,5 +1,6 @@
 module Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
+    , Binds
     , Bind((:=))
     , Var
     , SetVar(SetVar)
