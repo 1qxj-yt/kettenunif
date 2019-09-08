@@ -21,6 +21,9 @@ import Data.List(intercalate)
 silent :: UnifProblem -> [Substitution]
 silent = solve
 
+sslToSubst :: SSList -> Substitution
+sslToSubst (SSL l) = foldr compose identity l
+
 ------------------------------------------------
 -- Verbose Solver
 ------------------------------------------------
