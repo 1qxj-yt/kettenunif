@@ -43,8 +43,8 @@ instance Foldable Set where
 -- Functions
 ------------------------------------------------
 
-fromList :: [a] -> Set a
-fromList = S
+fromList :: Eq a => [a] -> Set a
+fromList = S . nub
 
 deleteAt :: Int -> Set a -> Set a
 deleteAt i (S s) = let (ini,iE:til) = splitAt i s
