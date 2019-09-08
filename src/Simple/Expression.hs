@@ -54,6 +54,13 @@ instance Show Expr where
     show (Expr e) = show e
     show (SingleSVarExpr sv e) = show sv++":"++show e
 
+instance Ord Expr where
+    compare (Expr e) (Expr e') = compare e e'
+    compare (Expr _) (SingleSVarExpr _ _) = LT
+    compare (SingleSVarExpr _ _) (Expr _) = GT
+    compare (SingleSVarExpr s e) (SingleSVarExpr s' e') =
+        compare e e' `mappend` compare s s'
+
 
 ------------------------------------------------
 -- Constructors
