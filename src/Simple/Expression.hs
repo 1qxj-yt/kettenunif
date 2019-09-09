@@ -8,6 +8,7 @@ module Simple.Expression
     -- * Expression
     , expr
     , ssve
+    , setExpr
     , eHead
     , eTail
     , eDelete
