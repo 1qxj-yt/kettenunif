@@ -24,6 +24,9 @@ import Simple.Expression
     , foldWithIndexSet
     )
 
+import Simple.Binds as B
+        ( head )
+
 import Data.List(intercalate, nub)
 import qualified Data.Map as M
 import qualified Data.Set as S
