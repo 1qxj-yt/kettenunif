@@ -88,7 +88,12 @@ onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Nothing -> ssve
     Just (Expr e2) -> Expr (e2 `mappend` e)
     Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2 `mappend` e)
-onExpr σ ssve = ssve
+onExpr σ ssve@(Expr _) = ssve
+onExpr σ se = setExpr [] (foldWithIndex (\_ b -> [b]) se)
+    `mappend` foldWithIndexSet (\_ sv -> case M.lookup sv (mp σ) of
+        Nothing -> setExpr [sv] []
+        Just e' -> e'
+    ) se
 
 mapOnImage :: (Expr -> Expr) -> Substitution -> Substitution
 mapOnImage f (Subst mp) = Subst (M.map f mp)
