@@ -130,6 +130,25 @@ singleSetExpr = do
     Expr bs <- expression
     return $ SingleSVarExpr sv bs
 
+setVars :: Parser [SetVar]
+setVars = do
+    svs <- semiSep setVar
+    return svs
+
+binds :: Parser [Bind]
+binds = do
+    lexeme (char '[')
+    bs <- commaSep bind
+    lexeme (char ']')
+    return bs
+
+setExpression :: Parser Expr
+setExpression = do
+    vs <- setVars
+    char ':'
+    bs <- binds
+    return $ setExpr vs bs
+
 problemEl :: Parser UnifProblemEl
 problemEl = do
     e1 <- lexeme (expression <|> singleSetExpr)
