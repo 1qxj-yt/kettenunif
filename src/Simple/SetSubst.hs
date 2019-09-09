@@ -19,6 +19,9 @@ import Simple.Expression
     , Bind
     , Var
     , SetVar(SetVar)
+    , setExpr
+    , foldWithIndex
+    , foldWithIndexSet
     )
 
 import Data.List(intercalate, nub)
