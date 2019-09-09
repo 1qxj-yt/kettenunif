@@ -13,6 +13,7 @@ module Simple.Expression
     , eTail
     , eDelete
     , foldWithIndex
+    , foldWithIndexSet
     -- * Variables
     , meta
     , var
