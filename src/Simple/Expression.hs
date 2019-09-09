@@ -128,18 +128,22 @@ eDelete i = bindsToExpr' (B.deleteAt i)
 ωExpr :: (Var -> Var) -> (Expr -> Expr)
 ωExpr f (Expr e) = Expr (fmap (ωBind f) e)
 ωExpr f (SingleSVarExpr b e) = SingleSVarExpr b (fmap (ωBind f) e)
+ωExpr f (SetExpr s e) = SetExpr s (fmap (ωBind f) e)
 
 bindsToExpr :: (Binds -> a) -> (Expr -> a)
 bindsToExpr f (Expr bs) = f bs
 bindsToExpr f (SingleSVarExpr _ bs) = f bs
+bindsToExpr f (SetExpr _ bs) = f bs
 
 bindsToExpr' :: (Binds -> Binds) -> (Expr -> Expr)
 bindsToExpr' f (Expr bs) = Expr (f bs)
 bindsToExpr' f (SingleSVarExpr sv bs) = SingleSVarExpr sv (f bs)
+bindsToExpr' f (SetExpr sv bs) = SetExpr sv (f bs)
 
 foldWithIndex :: Monoid m => (Int -> Bind -> m) -> Expr -> m
 foldWithIndex f (Expr e) = foldMapWithIndex f e
 foldWithIndex f (SingleSVarExpr _ e) = foldMapWithIndex f e
+foldWithIndex f (SetExpr _ e) = foldMapWithIndex f e
 
 foldWithIndexSet :: Monoid m => (Int -> SetVar -> m) -> Expr -> m
 foldWithIndexSet f (SetExpr s _) = foldMapWithIndex f s
