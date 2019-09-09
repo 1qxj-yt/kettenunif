@@ -66,6 +66,8 @@ instance Ord Expr where
     compare (SingleSVarExpr _ _) (Expr _) = GT
     compare (SingleSVarExpr s e) (SingleSVarExpr s' e') =
         compare e e' `mappend` compare s s'
+    compare (SetExpr s e) (SetExpr s' e') =
+        compare e e' `mappend` compare s s'
 
 
 ------------------------------------------------
