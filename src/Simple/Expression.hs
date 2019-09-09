@@ -81,6 +81,9 @@ instance Monoid Expr where
 expr :: [Bind] -> Expr
 expr = Expr . fromList
 
+setExpr :: [SetVar] -> [Bind] -> Expr
+setExpr s e = SetExpr (fromList s) (fromList e)
+
 ssve :: SetVar -> [Bind] -> Expr
 ssve sv = SingleSVarExpr sv . fromList
 
