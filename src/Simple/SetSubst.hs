@@ -74,7 +74,12 @@ compose sl sr = cleanUp $ Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 cleanUp :: Substitution -> Substitution
 cleanUp (Subst s) = Subst (M.filterWithKey neq s)
     where   m `neq` SingleSVarExpr m' e = not (null e) || m /= m'
-            n `neq` _ = True
+            n `neq` (Expr _) = True
+            m `neq` se =
+                getAny (foldWithIndex (\i b -> Any True) se) -- not (null e)
+                ||
+                getAny (foldWithIndexSet (\i m' -> Any (i < 1 || m /= m')) se)
+                -- if length m' < 1 then True else m /= (B.head m')
 
 -- | Restricts substitution to non-helper variables.
 restrict :: Substitution -> Substitution
