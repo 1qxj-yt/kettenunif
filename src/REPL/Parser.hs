@@ -151,9 +151,9 @@ setExpression = do
 
 problemEl :: Parser UnifProblemEl
 problemEl = do
-    e1 <- lexeme (expression <|> singleSetExpr)
+    e1 <- lexeme (setExpression)
     lexeme (string "=.")
-    e2 <- lexeme (expression <|> singleSetExpr)
+    e2 <- lexeme (setExpression)
     return (e1 :=.: e2)
 
 problem :: Parser Command
@@ -179,7 +179,7 @@ assocSet :: Parser Substitution
 assocSet = do
     sv <- lexeme setVar
     lexeme (string "→" <|> string "->")
-    e  <- lexeme (expression <|> singleSetExpr)
+    e  <- lexeme (setExpression)
     return (sv →→ e)
 
 setComponent :: Parser [Substitution]
@@ -199,7 +199,7 @@ subst = do
 substAppl :: Parser Command
 substAppl = do
     ss <- many1 (lexeme subst)
-    me <- optionMaybe $ lexeme (expression <|> singleSetExpr)
+    me <- optionMaybe $ lexeme (setExpression)
     case me of
         Just e -> return (Apply (foldr compose identity ss) e)
         Nothing -> return (Compose ss)
