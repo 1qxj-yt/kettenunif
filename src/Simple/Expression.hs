@@ -60,7 +60,7 @@ instance Show Expr where
     show (Expr e) = show e
     show (SingleSVarExpr sv e) = show sv++":"++show e
     show (SetExpr s e) = case (null s, null e) of
-        (  _  , True ) -> show s
+        (  _  , True ) -> intercalate ";" (toList $ fmap show s)
         (True , False) -> show e
         (False, False) -> show s ++ ":" ++ show e
 
