@@ -30,6 +30,7 @@ import Simple.Binds as B
 import Data.List(intercalate, nub)
 import qualified Data.Map as M
 import qualified Data.Set as S
+import Data.Monoid(Any(Any),getAny)
 
 ------------------------------------------------
 -- Data Types
