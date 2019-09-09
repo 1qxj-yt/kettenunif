@@ -62,7 +62,7 @@ instance Show Expr where
     show (SetExpr s e) = case (null s, null e) of
         (  _  , True ) -> intercalate ";" (toList $ fmap show s)
         (True , False) -> show e
-        (False, False) -> show s ++ ":" ++ show e
+        (False, False) -> intercalate ";" (toList $ fmap show s) ++ ":" ++ show e
 
 instance Ord Expr where
     compare (Expr e) (Expr e') = compare e e'
