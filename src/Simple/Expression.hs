@@ -69,6 +69,10 @@ instance Ord Expr where
     compare (SetExpr s e) (SetExpr s' e') =
         compare e e' `mappend` compare s s'
 
+instance Monoid Expr where
+    mempty = SetExpr mempty mempty
+    mappend (SetExpr s e) (SetExpr s' e') = SetExpr (mappend s s') (mappend e e')
+
 
 ------------------------------------------------
 -- Constructors
