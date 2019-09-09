@@ -29,7 +29,8 @@ import Data.Char(isUpper,isLower)
 -- Data
 ------------------------------------------------
 
-data Expr = Expr Binds | SingleSVarExpr SetVar Binds deriving (Eq)
+data Expr = Expr Binds | SingleSVarExpr SetVar Binds | SetExpr SetVars Binds  deriving (Eq)
+type SetVars = Multiset SetVar
 type Binds = Multiset Bind
 
 data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
