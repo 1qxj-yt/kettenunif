@@ -1,6 +1,7 @@
 module REPL.Lexer
     ( brackets
     , commaSep
+    , semiSep
     , natural
     , lexeme
     , whiteSpace
@@ -35,6 +36,7 @@ style = Lang.emptyDef
 
 brackets = Tok.brackets lexer
 commaSep = Tok.commaSep lexer
+semiSep = Tok.semiSep lexer
 natural = Tok.natural lexer
 lexeme = Tok.lexeme lexer
 whiteSpace = Tok.whiteSpace lexer
