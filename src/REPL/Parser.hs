@@ -144,8 +144,10 @@ binds = do
 
 setExpression :: Parser Expr
 setExpression = do
-    vs <- setVars
-    char ':'
+    vs <- option [] $ do
+        vs <- setVars
+        char ':'
+        return vs
     bs <- binds
     return $ setExpr vs bs
 
