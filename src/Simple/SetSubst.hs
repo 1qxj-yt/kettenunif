@@ -82,7 +82,7 @@ cleanUp (Subst s) = Subst (M.filterWithKey neq s)
             m `neq` se =
                 getAny (foldWithIndex (\i b -> Any True) se) -- not (null e)
                 ||
-                getAny (foldWithIndexSet (\i m' -> Any (i < 1 || m /= m')) se)
+                getAny (foldWithIndexSet (\i m' -> Any (i >= 1 || m /= m')) se)
                 -- if length m' < 1 then True else m /= (B.head m')
 
 -- | Restricts substitution to non-helper variables.
