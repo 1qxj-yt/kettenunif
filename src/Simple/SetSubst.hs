@@ -84,6 +84,8 @@ cleanUp (Subst s) = Subst (M.filterWithKey neq s)
             m `neq` se =
                 getAny (foldWithIndex (\i b -> Any True) se) -- not (null e)
                 ||
+                getAll (foldWithIndexSet (\_ _ -> All False) se) -- null sv
+                ||
                 getAny (foldWithIndexSet (\i m' -> Any (i >= 1 || m /= m')) se)
                 -- if length m' < 1 then True else m /= (B.head m')
 
