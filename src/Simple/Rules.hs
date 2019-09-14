@@ -121,6 +121,20 @@ x_semi_tautology = R "x-semi-tautology" (\(sol, E e1 :=?: E e2, γ) ->
         let (e1',e2') = clean e1 e2
         in  [(sol, (E e1' :=?: E e2') % γ)] )
 
+x_distribution :: Rule
+x_distribution = R "x-distribution" $ (\(SSL sol, E e1 :=?: E e2, γ) ->
+                    let b1 = eHead e1 in
+                    foldWithIndex (\i b2 ->
+                        [(SSL sol, (B b1 :=?: B b2) % (E (eTail e1) :=?: E (eDelete i e2)) % γ)]
+                    ) e2
+                    `mappend`
+                    foldWithIndexSet (\i ni ->
+                        let ni' = addApos ni
+                            τ = (ni →→ setExpr [ni'] [b1])
+                        in  [(SSL (τ:sol), τ `onSolver` ((E (eTail e1) :=?: E (eConsS ni' $ eDeleteS i e2)) % γ))]
+                    ) e2
+                    )
+
 -- | Note: Includes set_clash
 set_distribution :: Rule
 set_distribution = R "set-distribution" (apply distribution)
