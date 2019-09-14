@@ -165,6 +165,12 @@ bindsToExpr' f (Expr bs) = Expr (f bs)
 bindsToExpr' f (SingleSVarExpr sv bs) = SingleSVarExpr sv (f bs)
 bindsToExpr' f (SetExpr sv bs) = SetExpr sv (f bs)
 
+bindsToExprS :: (SetVars -> a) -> (Expr -> a)
+bindsToExprS f (SetExpr sv bs) = f sv
+
+bindsToExprS' :: (SetVars -> SetVars) -> (Expr -> Expr)
+bindsToExprS' f (SetExpr sv bs) = SetExpr (f sv) bs
+
 foldWithIndex :: Monoid m => (Int -> Bind -> m) -> Expr -> m
 foldWithIndex f (Expr e) = foldMapWithIndex f e
 foldWithIndex f (SingleSVarExpr _ e) = foldMapWithIndex f e
