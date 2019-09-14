@@ -24,6 +24,7 @@ import qualified Data.IntSet as IS
 import qualified Data.IntMap as IM
 import Data.Monoid(All(All),getAll)
 import Data.List(nubBy)
+import Data.Maybe(fromJust)
 
 newtype Multiset a = MS (Seq.Seq a)
 
