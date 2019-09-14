@@ -115,10 +115,22 @@ isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
 isMeta _         = False
 
+combine :: SetVar -> SetVar -> SetVar
+combine = TSetVar 0
+
 
 ------------------------------------------------
 -- Functions
 ------------------------------------------------
+
+eConsS :: SetVar -> Expr -> Expr
+eConsS s = bindsToExprS' (B.cons s)
+
+eNull :: Expr -> Bool
+eNull = bindsToExpr null
+
+eNullS :: Expr -> Bool
+eNullS = bindsToExprS null
 
 eHead :: Expr -> Bind
 eHead = bindsToExpr B.head
