@@ -20,6 +20,7 @@ import Data.Foldable(toList)
 
 import qualified Data.MultiSet as DMS
 import qualified Data.Set as S
+import qualified Data.IntSet as IS
 import Data.Monoid(All(All),getAll)
 
 newtype Multiset a = MS (Seq.Seq a)
