@@ -96,6 +96,7 @@ generalSolverRec onTerm onRule update args (sol,γ)
 
 ruleFor :: Equation -> Rule
 ruleFor (B _ :=?: B _)   = decomposition
+{-
 ruleFor (E (Expr e1) :=?: E (Expr e2)) = case (null e1, null e2) of
                     (True , True ) -> tautology
                     _ -> if length e1 == length e2 then distribution else clash
@@ -114,6 +115,18 @@ ruleFor (E e :=?: E (SingleSVarExpr sv e2)) = orientation
 ruleFor (E (SingleSVarExpr sv e1) :=?: E e)
     | null e1   = set_application
     | otherwise = set_distribution
+-}
+
+ruleFor (E e1 :=?: E e2)
+    | not (disjointS e1 e2) = x_semi_tautology
+    | otherwise             = case (eNull e1, eNull e2) of
+                    (True , True ) -> x_application
+                    (False, True ) -> orientation
+                    (True , False) -> if eNullS e1
+                                        then clash
+                                        else x_application
+                    (False, False) -> x_distribution
+
 ruleFor (V v1 :=?: V v2)
     | v1 == v2  = tautology
     | otherwise = case (isMeta v1, isMeta v2) of
@@ -122,6 +135,7 @@ ruleFor (V v1 :=?: V v2)
         (False, True ) -> orientation
         (True , True ) -> application
 
+{-
 ruleForSet :: Equation -> Rule
 ruleForSet (B _ :=?: B _)   = decomposition
 ruleForSet (E (Expr e1) :=?: E (Expr e2)) = case (null e1, null e2) of
@@ -149,3 +163,4 @@ ruleForSet (V v1 :=?: V v2)
         (True , False) -> application
         (False, True ) -> orientation
         (True , True ) -> application
+-}
