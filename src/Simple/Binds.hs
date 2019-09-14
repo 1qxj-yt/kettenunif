@@ -18,6 +18,7 @@ import qualified Data.Sequence as Seq
 import Data.Foldable(toList)
 
 import qualified Data.MultiSet as DMS
+import qualified Data.Set as S
 
 newtype Multiset a = MS (Seq.Seq a)
 
