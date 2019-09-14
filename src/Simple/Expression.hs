@@ -109,6 +109,7 @@ var  c i  = if isLower c then Var  c i else error "variable must be lower case"
 addApos :: SetVar -> SetVar
 addApos (SetVar i) = HSetVar 1 i
 addApos (HSetVar a i) = HSetVar (a+1) i
+addApos (TSetVar a l r) = TSetVar (a+1) l r
 
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
