@@ -40,11 +40,14 @@ import Simple.Expression
     , foldWithIndex
     , foldWithIndexSet
     , eConsS
+    , ePartitionTo
+    , ePartitionWithRestTo
     , eHead
     , eTail
     , eDelete
     , eDeleteS
     , clean
+    , combine
     , addApos
     )
 import Simple.Binds
