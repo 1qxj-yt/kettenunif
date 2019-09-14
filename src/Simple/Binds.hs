@@ -85,3 +85,23 @@ disjoint e1 e2 = let (MS l,MS r) = if length e1 < length e2 then (e1,e2) else (e
 
 data Args a b = A { msSeqM :: Seq.Seq b, dmsM :: DMS.MultiSet b
                   , dmsE :: DMS.MultiSet a}
+
+partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [Int -> Multiset a]
+partitions m e = partitionsRec (A (ripMS m) (toDMS m) (toDMS e)) IS.empty (length e) e
+    where
+        ripMS (MS m) = m
+        toDMS (MS l) = DMS.fromList (toList l)
+        partitionsRec :: (Show a,Show b,Ord a,Ord b) =>
+            Args a b -> IS.IntSet -> Int -> Multiset a -> [Int -> Multiset a]
+        partitionsRec _ _ _ e@(MS Seq.Empty)  = [const e]
+        partitionsRec args u l (MS e) = concat [
+                            let (eL,eR) = Seq.splitAt i e
+                                Just targetVar = msSeqM args Seq.!? (target-1)
+                                tV_occurence = DMS.occur targetVar (dmsM args)
+                                exprRepeated = Seq.cycleTaking (length eR * tV_occurence) eR
+                                notDiscard = toDMS (MS exprRepeated) `DMS.isSubsetOf` dmsE args
+                            in  if notDiscard then
+                                    map (\f n -> if n==target then MS eR else f n)
+                                        (partitionsRec args (IS.insert target u) i (MS eL))
+                                else {-traceShow (exprRepeated,e)-} []
+                        | i<-[0..(l-1)], target<-[1..(length m)], target `IS.notMember` u ]
