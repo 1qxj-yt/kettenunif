@@ -142,6 +142,9 @@ eTail = bindsToExpr' B.tail
 eDelete :: Int -> Expr -> Expr
 eDelete i = bindsToExpr' (B.deleteAt i)
 
+eDeleteS :: Int -> Expr -> Expr
+eDeleteS i = bindsToExprS' (B.deleteAt i)
+
 clean :: Expr -> Expr -> (Expr, Expr)
 clean (SetExpr s1 e1) (SetExpr s2 e2) =
     (SetExpr (s1 `B.diff` s2) e1, SetExpr (s2 `B.diff` s1) e2)
