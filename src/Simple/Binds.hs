@@ -6,6 +6,7 @@ module Simple.Binds
     -- * Tranformation
     , deleteAt
     , diff
+    , disjoint
     -- * Decomposition
     , uncons
     , Simple.Binds.head
