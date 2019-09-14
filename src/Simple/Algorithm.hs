@@ -35,6 +35,11 @@ import Simple.Rules
     , decomposition
     , application
     , orientation
+
+    , x_semi_tautology
+    , x_distribution
+    , x_application
+
     , set_distribution
     , set_application
     , biset_tautology
