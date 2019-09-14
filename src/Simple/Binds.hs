@@ -108,3 +108,42 @@ partitions m e = partitionsRec (A (ripMS m) (toDMS m) (toDMS e)) IS.empty (lengt
                                         (partitionsRec args (IS.insert target u) i (MS eL))
                                 else {-traceShow (exprRepeated,e)-} []
                         | i<-[0..(l-1)], target<-[1..(length m)], target `IS.notMember` u ]
+
+partitionsWithRest :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [(b -> Multiset a, Multiset a)]
+partitionsWithRest ms es = do
+        let dmsM = toDMS ms
+        let ms'  = nub' ms
+        let fullToNub = let MS s = ms'
+                            in IM.fromList $ Seq.foldMapWithIndex (\i (ix,_) -> [(ix,i+1)]) s
+        χ <- partitions ms' es
+        --let args = [(m',DMS.occur m' dmsM, χ(fromJust $ IM.lookup ix fullToNub) ) | (ix,m') <- toList ms']
+        (dmsF,dmsR) <- applyRepPtWR $ do
+            (ix,m') <- toList ms'
+            return ( m',DMS.occur m' dmsM, χ(fromJust $ IM.lookup ix fullToNub) )
+        return (fromList . toList . dmsF, fromList $ DMS.toList dmsR)
+    where
+        toOccList (MS m) = DMS.toOccurList . DMS.fromList $ toList m
+        toDMS (MS m) = DMS.fromList $ toList m
+        nub' :: Eq c => Multiset c -> Multiset (Int,c)
+        nub' =  fromList . nubBy (\(_,l) (_,r) -> l==r) . zip [1..] . toList
+
+applyRepPtWR :: (Ord a, Eq b) => [(b,Int,Multiset a)] -> [(b -> DMS.MultiSet a,DMS.MultiSet a)]
+applyRepPtWR [] = [(const DMS.empty, DMS.empty)]
+applyRepPtWR ((m,occ,e):xs) = [
+            (\n -> if m == n then result else f n, r `DMS.union` rest)
+         | (f,r) <- applyRepPtWR xs, (result,rest) <- repPartWR occ (toOccList e) ]
+    where
+        toOccList (MS m) = DMS.toOccurList . DMS.fromList $ toList m
+
+-- Repetitive partition with rest.
+repPartWR :: Ord a => Int -> [(a,Int)] -> [(DMS.MultiSet a,DMS.MultiSet a)]
+repPartWR n [] = [(DMS.empty, DMS.empty)]
+repPartWR n ((a,oc):xs) =
+        let divCeil n m = let (d,r) = divMod n m in if r > 0 then d+1 else d
+            minOcc = oc `divCeil` n
+        in do
+            oc'<-[minOcc..oc]
+            let newXS = if oc' > 0 then DMS.fromOccurList [(a,oc')] else DMS.empty
+            (xs,r) <- repPartWR n xs
+            let newR  = if oc'*n > oc then DMS.fromOccurList [(a,oc'*n - oc)] else DMS.empty
+            return (xs `DMS.union` newXS, r `DMS.union` newR)
