@@ -16,6 +16,8 @@ module Simple.Expression
     , eTail
     , eDelete
     , eDeleteS
+    , clean
+    , disjointS
     , foldWithIndex
     , foldWithIndexSet
     -- * Variables
