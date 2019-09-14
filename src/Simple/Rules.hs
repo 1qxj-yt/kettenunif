@@ -158,6 +158,11 @@ x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
         in  (SSL (μ:ν:sol), {-(if eNullS nfrak && eNull r then id else (((ν `onAny` E nfrak) :=?: E r) %) )-}
                 ((μ `mappend` ν) `onSolver` γ) ) | (χ,r) <- e2 `ePartitionWithRestTo` e1, χ' <- r `ePartitionTo` e2] )
 
+
+------------------------------------------------
+-- Single Set Extension
+------------------------------------------------
+
 -- | Note: Includes set_clash
 set_distribution :: Rule
 set_distribution = R "set-distribution" (apply distribution)
