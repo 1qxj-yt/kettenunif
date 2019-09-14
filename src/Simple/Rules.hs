@@ -138,6 +138,26 @@ x_distribution = R "x-distribution" $ (\(SSL sol, E e1 :=?: E e2, γ) ->
                     ) e2
                     )
 
+x_application :: Rule
+x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
+        let μ  = foldWithIndexSet (\_ mi ->
+                    (mi →→ ( setExpr
+                        (foldWithIndexSet (\_ ni ->
+                            [combine mi ni]
+                        ) e2) []
+                        `mappend` χ(mi) )
+                    ) ) e1
+            ν  = foldWithIndexSet (\j ni ->
+                    (ni →→ ( setExpr
+                        (foldWithIndexSet (\_ mi ->
+                            [combine mi ni]
+                        ) e1) []
+                        `mappend` χ'(j+1))
+                    ) ) e2
+            --nfrak = foldWithIndexSet (\_ ni -> setExpr [ni] []) e2
+        in  (SSL (μ:ν:sol), {-(if eNullS nfrak && eNull r then id else (((ν `onAny` E nfrak) :=?: E r) %) )-}
+                ((μ `mappend` ν) `onSolver` γ) ) | (χ,r) <- e2 `ePartitionWithRestTo` e1, χ' <- r `ePartitionTo` e2] )
+
 -- | Note: Includes set_clash
 set_distribution :: Rule
 set_distribution = R "set-distribution" (apply distribution)
