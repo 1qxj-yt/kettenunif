@@ -115,6 +115,9 @@ isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
 isMeta _         = False
 
+combine :: SetVar -> SetVar -> SetVar
+combine = TSetVar 0
+
 
 ------------------------------------------------
 -- Functions
