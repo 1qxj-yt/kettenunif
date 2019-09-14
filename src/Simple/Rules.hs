@@ -36,10 +36,14 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Token(E,B,V)
+    , setExpr
     , foldWithIndex
+    , foldWithIndexSet
+    , eConsS
     , eHead
     , eTail
     , eDelete
+    , eDeleteS
     , clean
     , addApos
     )
