@@ -48,6 +48,12 @@ data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 data Token = V Var | B Bind | E Expr deriving (Eq,Ord,Show)
 
 
+instance Eq SetVar where
+    SetVar i == SetVar j = i == j
+    HSetVar a i == HSetVar b j = a==b && i==j
+    TSetVar i l r == TSetVar j m s = i==j && (l==m && r==s) || (l==s && r==m)
+    _ == _ = False
+
 instance Show Bind where
     show (s := t) = show s++"="++show t
 
