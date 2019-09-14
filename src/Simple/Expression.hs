@@ -19,6 +19,7 @@ module Simple.Expression
     , var
     , isMeta
     , addApos
+    , combine
     , ωBind
     , ωExpr
     ) where
