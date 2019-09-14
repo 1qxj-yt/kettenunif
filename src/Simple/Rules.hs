@@ -53,7 +53,6 @@ import Simple.Expression
 import Simple.Binds
     ( cons
     , uncons
-    , deleteAt
     )
 
 import qualified Data.Set as S
