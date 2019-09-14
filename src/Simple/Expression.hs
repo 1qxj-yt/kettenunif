@@ -37,6 +37,7 @@ import Simple.Binds as B
 import Data.Char(isUpper,isLower)
 import Data.List(intercalate)
 import Data.Foldable(toList)
+import Control.Arrow((***))
 
 ------------------------------------------------
 -- Data
