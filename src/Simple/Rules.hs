@@ -40,6 +40,7 @@ import Simple.Expression
     , eHead
     , eTail
     , eDelete
+    , clean
     , addApos
     )
 import Simple.Binds
@@ -110,6 +111,11 @@ orientation = R "orientation" (\(sol, x:=?:y, γ) ->
 ------------------------------------------------
 -- Set Extension
 ------------------------------------------------
+
+x_semi_tautology :: Rule
+x_semi_tautology = R "x-semi-tautology" (\(sol, E e1 :=?: E e2, γ) ->
+        let (e1',e2') = clean e1 e2
+        in  [(sol, (E e1' :=?: E e2') % γ)] )
 
 -- | Note: Includes set_clash
 set_distribution :: Rule
