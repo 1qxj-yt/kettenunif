@@ -11,6 +11,11 @@ module Simple.Rules
     , decomposition
     , application
     , orientation
+    -- * Set
+    , x_semi_tautology
+    , x_distribution
+    , x_application
+    -- * SingleSet
     , set_distribution
     , set_application
     , biset_tautology
