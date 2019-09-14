@@ -75,3 +75,7 @@ foldMapWithIndex f (MS s) = Seq.foldMapWithIndex f s
 diff :: (Eq a,Ord a) => Multiset a -> Multiset a -> Multiset a
 diff (MS e1) (MS e2) = fromList $ toList $ make e1 DMS.\\ make e2
     where make = DMS.fromList . toList
+
+disjoint :: Ord a => Multiset a -> Multiset a -> Bool
+disjoint e1 e2 = let (MS l,MS r) = if length e1 < length e2 then (e1,e2) else (e2,e1)
+    in getAll $ foldMap (All . (`S.notMember` (S.fromList $ toList r))) (S.fromList $ toList l)
