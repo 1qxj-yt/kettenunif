@@ -7,6 +7,9 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
     , isMeta
+    , eNull
+    , eNullS
+    , disjointS
     )
 import Simple.Substitution
     ( Substitution
