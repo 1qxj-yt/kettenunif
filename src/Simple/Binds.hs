@@ -8,6 +8,7 @@ module Simple.Binds
     , diff
     , disjoint
     , partitions
+    , partitionsWithRest
     -- * Decomposition
     , uncons
     , Simple.Binds.head
