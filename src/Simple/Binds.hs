@@ -16,6 +16,7 @@ module Simple.Binds
 import qualified Data.Sequence as Seq
 import Data.Foldable(toList)
 
+import qualified Data.MultiSet as DMS
 
 newtype Multiset a = MS (Seq.Seq a)
 
