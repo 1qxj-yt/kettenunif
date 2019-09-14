@@ -80,3 +80,7 @@ diff (MS e1) (MS e2) = fromList $ toList $ make e1 DMS.\\ make e2
 disjoint :: Ord a => Multiset a -> Multiset a -> Bool
 disjoint e1 e2 = let (MS l,MS r) = if length e1 < length e2 then (e1,e2) else (e2,e1)
     in getAll $ foldMap (All . (`S.notMember` (S.fromList $ toList r))) (S.fromList $ toList l)
+
+
+data Args a b = A { msSeqM :: Seq.Seq b, dmsM :: DMS.MultiSet b
+                  , dmsE :: DMS.MultiSet a}
