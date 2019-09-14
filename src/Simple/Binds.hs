@@ -68,3 +68,7 @@ tail (MS (_ Seq.:<| bs)) = MS bs
 
 foldMapWithIndex :: Monoid m => (Int -> a -> m) -> Multiset a -> m
 foldMapWithIndex f (MS s) = Seq.foldMapWithIndex f s
+
+diff :: (Eq a,Ord a) => Multiset a -> Multiset a -> Multiset a
+diff (MS e1) (MS e2) = fromList $ toList $ make e1 DMS.\\ make e2
+    where make = DMS.fromList . toList
