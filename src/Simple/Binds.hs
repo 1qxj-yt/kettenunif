@@ -7,6 +7,7 @@ module Simple.Binds
     , deleteAt
     , diff
     , disjoint
+    , partitions
     -- * Decomposition
     , uncons
     , Simple.Binds.head
