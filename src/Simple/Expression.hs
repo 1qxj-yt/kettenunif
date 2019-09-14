@@ -9,9 +9,13 @@ module Simple.Expression
     , expr
     , ssve
     , setExpr
+    , eConsS
+    , eNull
+    , eNullS
     , eHead
     , eTail
     , eDelete
+    , eDeleteS
     , foldWithIndex
     , foldWithIndexSet
     -- * Variables
