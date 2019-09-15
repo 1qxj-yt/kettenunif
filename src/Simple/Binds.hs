@@ -92,14 +92,14 @@ data Args a b = A { msSeqM :: Seq.Seq b, dmsM :: DMS.MultiSet b
                   , dmsE :: DMS.MultiSet a}
 
 partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [Int -> Multiset a]
-partitions m e = partitionsRec (A (ripMS m) (toDMS m) (toDMS e)) IS.empty (length e) e
+partitions m e = partitionsRec (A (ripMS m) (toDMS m) (toDMS e)) IS.empty e
     where
         ripMS (MS m) = m
         toDMS (MS l) = DMS.fromList (toList l)
         partitionsRec :: (Show a,Show b,Ord a,Ord b) =>
-            Args a b -> IS.IntSet -> Int -> Multiset a -> [Int -> Multiset a]
-        partitionsRec _ _ _ e@(MS Seq.Empty)  = [const e]
-        partitionsRec args u l (MS e) = concat [
+            Args a b -> IS.IntSet -> Multiset a -> [Int -> Multiset a]
+        partitionsRec _ _ e@(MS Seq.Empty)  = [const e]
+        partitionsRec args u (MS e) = concat [
                             let (eL,eR) = Seq.splitAt i e
                                 Just targetVar = msSeqM args Seq.!? (target-1)
                                 tV_occurence = DMS.occur targetVar (dmsM args)
@@ -107,9 +107,9 @@ partitions m e = partitionsRec (A (ripMS m) (toDMS m) (toDMS e)) IS.empty (lengt
                                 notDiscard = toDMS (MS exprRepeated) `DMS.isSubsetOf` dmsE args
                             in  if notDiscard then
                                     map (\f n -> if n==target then MS eR else f n)
-                                        (partitionsRec args (IS.insert target u) i (MS eL))
+                                        (partitionsRec args (IS.insert target u) (MS eL))
                                 else {-traceShow (exprRepeated,e)-} []
-                        | i<-[0..(l-1)], target<-[1..(length m)], target `IS.notMember` u ]
+                        | i<-[0..(length e-1)], target<-[1..(length m)], target `IS.notMember` u ]
 
 partitionsWithRest :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [(b -> Multiset a, Multiset a)]
 partitionsWithRest ms es = do
