@@ -26,7 +26,7 @@ solveVS Count  = counting
 repl :: IO ()
 repl = do
     putStrLn "Welcome!"
-    putStrLn "Type an unifcation problem, :v to toggle verbosity or :q to quit."
+    putStrLn "Type a unifcation problem, :v to toggle verbosity or :q to quit."
     runInputT defaultSettings (loop Silent)
     where
         loop :: Verbosity -> InputT IO ()
