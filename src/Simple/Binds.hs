@@ -23,10 +23,9 @@ import Data.Foldable(toList)
 import qualified Data.MultiSet as DMS
 import qualified Data.Set as S
 import qualified Data.IntSet as IS
-import qualified Data.IntMap as IM
 import Data.Monoid(All(All),getAll)
 import Data.List(nubBy)
-import Data.Maybe(fromJust)
+import Control.Arrow((***))
 
 newtype Multiset a = MS (Seq.Seq a)
 
@@ -88,64 +87,88 @@ disjoint e1 e2 = let (MS l,MS r) = if length e1 < length e2 then (e1,e2) else (e
     in getAll $ foldMap (All . (`S.notMember` (S.fromList $ toList r))) (S.fromList $ toList l)
 
 
-data Args a b = A { msSeqM :: Seq.Seq b, dmsM :: DMS.MultiSet b
-                  , dmsE :: DMS.MultiSet a}
+------------------------------------------------
+-- Partitions
+------------------------------------------------
 
-partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [Int -> Multiset a]
-partitions m e = partitionsRec (A (ripMS m) (toDMS m) (toDMS e)) IS.empty e
+-- | Distinct partition.
+-- dPart m e partitions e onto m, where m is assumed to be distinct.
+dPart :: (Show a, Show b, Eq b) => Multiset b -> Multiset a -> [b -> Multiset a]
+dPart = dPartRec IS.empty
     where
-        ripMS (MS m) = m
-        toDMS (MS l) = DMS.fromList (toList l)
-        partitionsRec :: (Show a,Show b,Ord a,Ord b) =>
-            Args a b -> IS.IntSet -> Multiset a -> [Int -> Multiset a]
-        partitionsRec _ _ e@(MS Seq.Empty)  = [const e]
-        partitionsRec args u (MS e) = concat [
-                            let (eL,eR) = Seq.splitAt i e
-                                Just targetVar = msSeqM args Seq.!? (target-1)
-                                tV_occurence = DMS.occur targetVar (dmsM args)
-                                exprRepeated = Seq.cycleTaking (length eR * tV_occurence) eR
-                                notDiscard = toDMS (MS exprRepeated) `DMS.isSubsetOf` dmsE args
-                            in  if notDiscard then
-                                    map (\f n -> if n==target then MS eR else f n)
-                                        (partitionsRec args (IS.insert target u) (MS eL))
-                                else {-traceShow (exprRepeated,e)-} []
-                        | i<-[0..(length e-1)], target<-[1..(length m)], target `IS.notMember` u ]
+    dPartRec :: Eq b => IS.IntSet -> Multiset b -> Multiset a -> [b -> Multiset a]
+    dPartRec used (MS m) (MS Seq.Empty) = [mempty]
+    dPartRec used (MS m) (MS e) = do
+        target <- [1..(length m)]
+        if target `IS.member` used then []
+            else do
+                i <- [0..(length e)]
+                let (eL,eR) = Seq.splitAt i e
+                f <- dPartRec (IS.insert target used) (MS m) (MS eL)
+                let Just targetVar = m Seq.!? (target-1)
+                return (\var -> if var==targetVar then MS eR else f var)
+
+-- | Simple partition.
+partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [b -> Multiset a]
+partitions m e = map fst $ applyStrat simpleRep m e
 
 partitionsWithRest :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [(b -> Multiset a, Multiset a)]
-partitionsWithRest ms es = do
-        let dmsM = toDMS ms
-        let ms'  = nub' ms
-        let fullToNub = let MS s = ms'
-                            in IM.fromList $ Seq.foldMapWithIndex (\i (ix,_) -> [(ix,i+1)]) s
-        χ <- partitions ms' es
-        --let args = [(m',DMS.occur m' dmsM, χ(fromJust $ IM.lookup ix fullToNub) ) | (ix,m') <- toList ms']
-        (dmsF,dmsR) <- applyRepPtWR $ do
-            (ix,m') <- toList ms'
-            return ( m',DMS.occur m' dmsM, χ(fromJust $ IM.lookup ix fullToNub) )
-        return (fromList . toList . dmsF, fromList $ DMS.toList dmsR)
-    where
-        toOccList (MS m) = DMS.toOccurList . DMS.fromList $ toList m
-        toDMS (MS m) = DMS.fromList $ toList m
-        nub' :: Eq c => Multiset c -> Multiset (Int,c)
-        nub' =  fromList . nubBy (\(_,l) (_,r) -> l==r) . zip [1..] . toList
+partitionsWithRest = applyStrat repWithRest
 
-applyRepPtWR :: (Ord a, Eq b) => [(b,Int,Multiset a)] -> [(b -> DMS.MultiSet a,DMS.MultiSet a)]
-applyRepPtWR [] = [(const DMS.empty, DMS.empty)]
-applyRepPtWR ((m,occ,e):xs) = [
-            (\n -> if m == n then result else f n, r `DMS.union` rest)
-         | (f,r) <- applyRepPtWR xs, (result,rest) <- repPartWR occ (toOccList e) ]
-    where
-        toOccList (MS m) = DMS.toOccurList . DMS.fromList $ toList m
+-- ### Transformations ### --
 
--- Repetitive partition with rest.
-repPartWR :: Ord a => Int -> [(a,Int)] -> [(DMS.MultiSet a,DMS.MultiSet a)]
-repPartWR n [] = [(DMS.empty, DMS.empty)]
-repPartWR n ((a,oc):xs) =
-        let divCeil n m = let (d,r) = divMod n m in if r > 0 then d+1 else d
-            minOcc = oc `divCeil` n
-        in do
-            oc'<-[minOcc..oc]
-            let newXS = if oc' > 0 then DMS.fromOccurList [(a,oc')] else DMS.empty
-            (xs,r) <- repPartWR n xs
-            let newR  = if oc'*n > oc then DMS.fromOccurList [(a,oc'*n - oc)] else DMS.empty
-            return (xs `DMS.union` newXS, r `DMS.union` newR)
+toOccList :: Ord a => Multiset a -> [(a, DMS.Occur)]
+toOccList (MS m) = DMS.toOccurList . DMS.fromList $ toList m
+
+toDMS :: Ord a => Multiset a -> DMS.MultiSet a
+toDMS = DMS.fromList . toList
+
+fromDMS :: DMS.MultiSet a -> Multiset a
+fromDMS = fromList . DMS.toList
+
+-- ### Repetition Strategy ### --
+
+type RepStrategy a = (Int, Multiset a) -> [(Multiset a, Multiset a)]
+
+applyStrat :: (Show a, Show b, Ord b) => RepStrategy a -> (Multiset b -> Multiset a -> [(b -> Multiset a, Multiset a)])
+applyStrat strat ms es =
+    let nub' :: Eq c => Multiset c -> Multiset (Int,c)
+        nub' = fromList . nubBy (\(_,l) (_,r) -> l==r) . zip [1..] . toList
+        ms'  = nub' ms
+        dmsM = toDMS ms
+    in do
+        ζ <- dPart ms' es
+        applyStratRec strat $ do
+            (i,m) <- toList ms'
+            let oc = DMS.occur m dmsM
+            return (m, oc, ζ(i,m))
+    where
+    applyStratRec :: (Eq b) => RepStrategy a -> [(b,DMS.Occur,Multiset a)] -> [(b -> Multiset a, Multiset a)]
+    applyStratRec strat [] = [(mempty,mempty)]
+    applyStratRec strat ((m,oc,e):xs) = [
+            (\v -> if m==v then result else f v, r `mappend` rest)
+        | (f,r) <- applyStratRec strat xs, (result,rest) <- strat (oc,e)]
+
+-- ### Concrete Strategies ### --
+
+simpleRep :: (Show a, Ord a) => RepStrategy a
+simpleRep (n,ms) =
+    let divMaybe n m = let (d,r) = divMod n m in if r == 0 then Just d else Nothing
+    in  case traverse (`divMaybe` n) (DMS.toMap $ toDMS ms) of
+            Nothing -> []
+            Just mp -> [(fromDMS $ DMS.fromMap mp, mempty)]
+
+repWithRest :: Ord a => RepStrategy a
+repWithRest (n,ms) = map (fromDMS *** fromDMS) (repWithRestAux (n,toOccList ms))
+    where
+        repWithRestAux :: Ord a => (Int, [(a, DMS.Occur)]) -> [(DMS.MultiSet a, DMS.MultiSet a)]
+        repWithRestAux (n,[]) = [(mempty, mempty)]
+        repWithRestAux (n,(a,oc):xs) =
+                let divCeil n m = let (d,r) = divMod n m in if r > 0 then d+1 else d
+                    minOcc = oc `divCeil` n
+                in do
+                    oc'<-[minOcc..oc]
+                    let newXS = if oc' > 0 then DMS.fromOccurList [(a,oc')] else DMS.empty
+                    (xsRec,rRec) <- repWithRestAux (n,xs)
+                    let newR  = if oc'*n > oc then DMS.fromOccurList [(a,oc'*n - oc)] else DMS.empty
+                    return (xsRec `DMS.union` newXS, rRec `DMS.union` newR)

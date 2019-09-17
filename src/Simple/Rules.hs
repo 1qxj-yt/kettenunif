@@ -151,12 +151,12 @@ x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
                         ) e2) []
                         `mappend` χ(mi) )
                     ) ) e1
-            ν  = foldWithIndexSet (\j ni ->
+            ν  = foldWithIndexSet (\_ ni ->
                     (ni →→ ( setExpr
                         (foldWithIndexSet (\_ mi ->
                             [combine mi ni]
                         ) e1) []
-                        `mappend` χ'(j+1))
+                        `mappend` χ'(ni))
                     ) ) e2
             --nfrak = foldWithIndexSet (\_ ni -> setExpr [ni] []) e2
         in  (SSL (μ:ν:sol), {-(if eNullS nfrak && eNull r then id else (((ν `onAny` E nfrak) :=?: E r) %) )-}

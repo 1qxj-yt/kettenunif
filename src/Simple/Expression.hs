@@ -163,7 +163,7 @@ disjointS (SingleSVarExpr s1 _) (SingleSVarExpr s2 _) = s1 /= s2
 disjointS (SetExpr s1 e1) (SetExpr s2 e2) = disjoint s1 s2
 disjointS _ _ = True
 
-ePartitionTo :: Expr -> Expr -> [Int -> Expr]
+ePartitionTo :: Expr -> Expr -> [SetVar -> Expr]
 (SetExpr _ e) `ePartitionTo` (SetExpr m _)
     = map (SetExpr mempty .) (partitions m e)
 
