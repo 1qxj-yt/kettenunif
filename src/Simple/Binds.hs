@@ -94,19 +94,12 @@ disjoint e1 e2 = let (MS l,MS r) = if length e1 < length e2 then (e1,e2) else (e
 -- | Distinct partition.
 -- dPart m e partitions e onto m, where m is assumed to be distinct.
 dPart :: (Show a, Show b, Eq b) => Multiset b -> Multiset a -> [b -> Multiset a]
-dPart = dPartRec IS.empty
-    where
-    dPartRec :: Eq b => IS.IntSet -> Multiset b -> Multiset a -> [b -> Multiset a]
-    dPartRec used (MS m) (MS Seq.Empty) = [mempty]
-    dPartRec used (MS m) (MS e) = do
-        target <- [1..(length m)]
-        if target `IS.member` used then []
-            else do
-                i <- [0..(length e)]
-                let (eL,eR) = Seq.splitAt i e
-                f <- dPartRec (IS.insert target used) (MS m) (MS eL)
-                let Just targetVar = m Seq.!? (target-1)
-                return (\var -> if var==targetVar then MS eR else f var)
+dPart (MS ms) (MS Seq.Empty) = [mempty]
+dPart (MS ms) (MS (b Seq.:<| es)) = do
+        f <- dPart (MS ms) (MS es)
+        m <- toList ms
+        let MS res = f m
+        return $ \var -> if var==m then MS (b Seq.<| res) else f var
 
 -- | Simple partition.
 partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [b -> Multiset a]
