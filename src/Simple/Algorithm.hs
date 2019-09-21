@@ -55,7 +55,7 @@ import Data.List(intercalate)
 
 
 solve :: UnifProblem -> [Substitution]
-solve =  map sslToSubst. (\(Identity x) -> x) . run
+solve = map sslToSubst. (\(Identity x) -> x) . run
 
 sslToSubst :: SSList -> Substitution
 sslToSubst (SSL list) = restrict $ foldr compose identity list
