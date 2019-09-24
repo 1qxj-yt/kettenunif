@@ -218,6 +218,9 @@ foldWithIndexSet f (SetExpr s _) = foldMapWithIndex f s
 -- Chain Operations
 ------------------------------------------------
 
+chainList :: SetVar -> Binds -> [Expr]
+chainList c = findChains (from c, to c) . toMap
+
 toMap :: Binds -> M.Map Var [Var]
 toMap = M.fromListWith (++) . map (\(k := a) -> (k,[a])) . toList
 
