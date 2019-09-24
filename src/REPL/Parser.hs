@@ -18,7 +18,7 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Var
-    , SetVar(SetVar)
+    , SetVar(SetVar,ChVar)
     , setExpr
     , expr
     , var
