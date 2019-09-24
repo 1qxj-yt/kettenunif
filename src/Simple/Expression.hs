@@ -3,7 +3,7 @@ module Simple.Expression
     , Binds
     , Bind((:=))
     , Var
-    , SetVar(SetVar)
+    , SetVar(SetVar,ChVar)
     , Token(B,V,E)
     -- * Expression
     , expr
