@@ -52,6 +52,7 @@ data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
 data SetVar = SetVar Integer
             | HSetVar {apos :: Int, id :: Integer}
             | TSetVar {apos :: Int, left :: SetVar, right :: SetVar}
+            | ChVar   {apos :: Int, id :: Integer, from :: Var, to :: Var}
                                                 deriving (Ord)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
@@ -63,6 +64,7 @@ instance Eq SetVar where
     SetVar i == SetVar j = i == j
     HSetVar a i == HSetVar b j = a==b && i==j
     TSetVar i l r == TSetVar j m s = i==j && (l==m && r==s) || (l==s && r==m)
+    ChVar a i l r == ChVar b j m s = a==b && i==j && l==m && r==s
     _ == _ = False
 
 instance Show Bind where
@@ -76,6 +78,7 @@ instance Show SetVar where
     show (SetVar i) = 'M':if i==0 then [] else show i
     show (HSetVar a i) = show (SetVar i) ++ replicate a '\''
     show (TSetVar a l r) = 'T':show (l,r) ++ replicate a '\''
+    show (ChVar a i l r) = 'C':'h':show i ++ show (l,r)++ replicate a '\''
 
 instance Show Expr where
     show (Expr e) = show e
@@ -121,6 +124,7 @@ addApos :: SetVar -> SetVar
 addApos (SetVar i) = HSetVar 1 i
 addApos (HSetVar a i) = HSetVar (a+1) i
 addApos (TSetVar a l r) = TSetVar (a+1) l r
+addApos (ChVar a i l r) = ChVar (a+1) i l r
 
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
