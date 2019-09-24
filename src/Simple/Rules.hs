@@ -198,3 +198,12 @@ biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?
 mset_semi_tautology :: Rule
 mset_semi_tautology = R "mset-semi-tautology" (\(sol, E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2), γ) ->
             [(sol, (E (Expr e1) :=?: E (Expr e2)) % γ)])
+
+
+------------------------------------------------
+-- Single Chain Extension
+------------------------------------------------
+
+sch_application :: Rule
+sch_application = R "sch-application" (\(SSL sol, E (SingleSVarExpr c _) :=?: E (SingleSVarExpr _ e), γ ) ->
+            [ (SSL (σ:sol), σ `onSolver` γ) | e' <- chainList c e, let σ = (c →→ e') ] )
