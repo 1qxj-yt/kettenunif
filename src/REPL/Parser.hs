@@ -116,6 +116,18 @@ expression = do
     lexeme (char ']')
     return (expr bs)
 
+chainVar :: Parser SetVar
+chainVar = do
+    string "Ch"
+    n <- option 0 natural
+    char '('
+    v1 <- variable
+    char ','
+    v2 <- variable
+    char ')'
+    a <- many (char '\'')
+    return $ ChVar (length a) n v1 v2
+
 setVar :: Parser SetVar
 setVar = do
     char 'M'
