@@ -35,9 +35,10 @@ module Simple.Expression
 import Simple.Binds as B
 
 import Data.Char(isUpper,isLower)
-import Data.List(intercalate)
+import Data.List(intercalate,delete)
 import Data.Foldable(toList)
 import Control.Arrow((***))
+import qualified Data.Map.Strict as M
 
 ------------------------------------------------
 -- Data
@@ -207,3 +208,26 @@ foldWithIndex f (SetExpr _ e) = foldMapWithIndex f e
 
 foldWithIndexSet :: Monoid m => (Int -> SetVar -> m) -> Expr -> m
 foldWithIndexSet f (SetExpr s _) = foldMapWithIndex f s
+
+
+------------------------------------------------
+-- Chain Operations
+------------------------------------------------
+
+toMap :: Binds -> M.Map Var [Var]
+toMap = M.fromListWith (++) . map (\(k := a) -> (k,[a])) . toList
+
+findChains :: (Var,Var) -> M.Map Var [Var] -> [Expr]
+findChains (k,a) mp = --traceShow mp $
+    case M.lookup k mp of
+        Nothing -> []
+        Just as -> do
+            a' <- as
+            let mp' = M.update (\as ->
+                        if length as == 1 then Nothing else Just (delete a' as)
+                    ) k mp
+            if M.null mp' && a==a' then return $ expr [k:=a']
+                else do
+                    let rcMp = findChains (a',a) mp'
+                    Expr rc <- rcMp
+                    return $ Expr $ B.cons (k:=a') rc
