@@ -12,6 +12,7 @@ import Simple.Substitution(Substitution,compose,identity,restrict)
 import Control.Monad.Writer
 import Control.Monad.State
 import Data.List(intercalate)
+import qualified Data.Set as Set
 
 
 ------------------------------------------------
@@ -20,6 +21,9 @@ import Data.List(intercalate)
 
 silent :: UnifProblem -> [Substitution]
 silent = solve
+
+sslToSubst :: SSList -> Substitution
+sslToSubst (SSL l) = foldr compose identity l
 
 ------------------------------------------------
 -- Verbose Solver
@@ -56,8 +60,11 @@ solveLogger = generalSolver
 ------------------------------------------------
 
 counting :: UnifProblem -> String
-counting prob = let ((_,num),str) = runWriter $ runStateT (solveCountSW prob) 0
-            in str ++ '[':show num++"]"
+counting prob = let ((sol,num),str) = runWriter $ runStateT (solveCountSW prob) 0
+                    setSize = Set.size $ Set.fromList (map sslToSubst sol)
+            in str ++ ' ':
+                '[':show setSize ++"/"++show num++"="
+                ++ ( if num==0 then " - " else show (div (setSize * 100) $ fromInteger num) ) ++ "%]"
 
 solveCountSW :: UnifProblem -> StateT Integer (Writer String) [SSList]
 solveCountSW = generalSolver

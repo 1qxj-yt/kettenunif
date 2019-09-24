@@ -18,7 +18,8 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Var
-    , SetVar(SetVar)
+    , SetVar(SetVar,ChVar)
+    , setExpr
     , expr
     , var
     , meta
@@ -115,6 +116,18 @@ expression = do
     lexeme (char ']')
     return (expr bs)
 
+chainVar :: Parser SetVar
+chainVar = do
+    string "Ch"
+    n <- option 0 natural
+    char '('
+    v1 <- variable
+    char ','
+    v2 <- variable
+    char ')'
+    a <- many (char '\'')
+    return $ ChVar (length a) n v1 v2
+
 setVar :: Parser SetVar
 setVar = do
     char 'M'
@@ -129,11 +142,32 @@ singleSetExpr = do
     Expr bs <- expression
     return $ SingleSVarExpr sv bs
 
+setVars :: Parser [SetVar]
+setVars = do
+    svs <- semiSep setVar
+    return svs
+
+binds :: Parser [Bind]
+binds = do
+    lexeme (char '[')
+    bs <- commaSep bind
+    lexeme (char ']')
+    return bs
+
+setExpression :: Parser Expr
+setExpression = do
+    vs <- option [] $ do
+        vs <- setVars
+        char ':'
+        return vs
+    bs <- binds
+    return $ setExpr vs bs
+
 problemEl :: Parser UnifProblemEl
 problemEl = do
-    e1 <- lexeme (expression <|> singleSetExpr)
+    e1 <- lexeme (setExpression)
     lexeme (string "=.")
-    e2 <- lexeme (expression <|> singleSetExpr)
+    e2 <- lexeme (setExpression)
     return (e1 :=.: e2)
 
 problem :: Parser Command
@@ -159,7 +193,7 @@ assocSet :: Parser Substitution
 assocSet = do
     sv <- lexeme setVar
     lexeme (string "→" <|> string "->")
-    e  <- lexeme (expression <|> singleSetExpr)
+    e  <- lexeme (setExpression)
     return (sv →→ e)
 
 setComponent :: Parser [Substitution]
@@ -179,7 +213,7 @@ subst = do
 substAppl :: Parser Command
 substAppl = do
     ss <- many1 (lexeme subst)
-    me <- optionMaybe $ lexeme (expression <|> singleSetExpr)
+    me <- optionMaybe $ lexeme (setExpression)
     case me of
         Just e -> return (Apply (foldr compose identity ss) e)
         Nothing -> return (Compose ss)

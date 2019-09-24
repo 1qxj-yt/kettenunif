@@ -19,11 +19,20 @@ import Simple.Expression
     , Bind
     , Var
     , SetVar(SetVar)
+    , setExpr
+    , foldWithIndex
+    , foldWithIndexSet
     )
+
+import Simple.Binds as B
+        ( head )
 
 import Data.List(intercalate, nub)
 import qualified Data.Map as M
 import qualified Data.Set as S
+import Data.Monoid
+    ( Any(Any), getAny
+    , All(All), getAll)
 
 ------------------------------------------------
 -- Data Types
@@ -71,7 +80,14 @@ compose sl sr = cleanUp $ Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 cleanUp :: Substitution -> Substitution
 cleanUp (Subst s) = Subst (M.filterWithKey neq s)
     where   m `neq` SingleSVarExpr m' e = not (null e) || m /= m'
-            n `neq` _ = True
+            n `neq` (Expr _) = True
+            m `neq` se =
+                getAny (foldWithIndex (\i b -> Any True) se) -- not (null e)
+                ||
+                getAll (foldWithIndexSet (\_ _ -> All False) se) -- null sv
+                ||
+                getAny (foldWithIndexSet (\i m' -> Any (i >= 1 || m /= m')) se)
+                -- if length m' < 1 then True else m /= (B.head m')
 
 -- | Restricts substitution to non-helper variables.
 restrict :: Substitution -> Substitution
@@ -88,7 +104,12 @@ onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Nothing -> ssve
     Just (Expr e2) -> Expr (e2 `mappend` e)
     Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2 `mappend` e)
-onExpr σ ssve = ssve
+onExpr σ ssve@(Expr _) = ssve
+onExpr σ se = setExpr [] (foldWithIndex (\_ b -> [b]) se)
+    `mappend` foldWithIndexSet (\_ sv -> case M.lookup sv (mp σ) of
+        Nothing -> setExpr [sv] []
+        Just e' -> e'
+    ) se
 
 mapOnImage :: (Expr -> Expr) -> Substitution -> Substitution
 mapOnImage f (Subst mp) = Subst (M.map f mp)

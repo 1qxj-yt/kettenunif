@@ -43,6 +43,10 @@ instance Show Substitution where
         | Set.isIdentity setC && Var.isIdentity varC = "id"
         | otherwise = '{': (show setC) ++ ('|': (show varC) ++ "}")
 
+instance Monoid Substitution where
+    mempty = identity
+    mappend = compose
+
 -- Constructor
 -- | Single variable mapping.
 infixl →

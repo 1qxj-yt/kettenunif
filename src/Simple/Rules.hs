@@ -11,6 +11,11 @@ module Simple.Rules
     , decomposition
     , application
     , orientation
+    -- * Set
+    , x_semi_tautology
+    , x_distribution
+    , x_application
+    -- * SingleSet
     , set_distribution
     , set_application
     , biset_tautology
@@ -36,16 +41,23 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Token(E,B,V)
+    , setExpr
     , foldWithIndex
+    , foldWithIndexSet
+    , eConsS
+    , ePartitionTo
+    , ePartitionWithRestTo
     , eHead
     , eTail
     , eDelete
+    , eDeleteS
+    , clean
+    , combine
     , addApos
     )
 import Simple.Binds
     ( cons
     , uncons
-    , deleteAt
     )
 
 import qualified Data.Set as S
@@ -109,6 +121,50 @@ orientation = R "orientation" (\(sol, x:=?:y, γ) ->
 
 ------------------------------------------------
 -- Set Extension
+------------------------------------------------
+
+x_semi_tautology :: Rule
+x_semi_tautology = R "x-semi-tautology" (\(sol, E e1 :=?: E e2, γ) ->
+        let (e1',e2') = clean e1 e2
+        in  [(sol, (E e1' :=?: E e2') % γ)] )
+
+x_distribution :: Rule
+x_distribution = R "x-distribution" $ (\(SSL sol, E e1 :=?: E e2, γ) ->
+                    let b1 = eHead e1 in
+                    foldWithIndex (\i b2 ->
+                        [(SSL sol, (B b1 :=?: B b2) % (E (eTail e1) :=?: E (eDelete i e2)) % γ)]
+                    ) e2
+                    `mappend`
+                    foldWithIndexSet (\i ni ->
+                        let ni' = addApos ni
+                            τ = (ni →→ setExpr [ni'] [b1])
+                        in  [(SSL (τ:sol), τ `onSolver` ((E (eTail e1) :=?: E (eConsS ni' $ eDeleteS i e2)) % γ))]
+                    ) e2
+                    )
+
+x_application :: Rule
+x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
+        let μ  = foldWithIndexSet (\_ mi ->
+                    (mi →→ ( setExpr
+                        (foldWithIndexSet (\_ ni ->
+                            [combine mi ni]
+                        ) e2) []
+                        `mappend` χ(mi) )
+                    ) ) e1
+            ν  = foldWithIndexSet (\_ ni ->
+                    (ni →→ ( setExpr
+                        (foldWithIndexSet (\_ mi ->
+                            [combine mi ni]
+                        ) e1) []
+                        `mappend` χ'(ni))
+                    ) ) e2
+            --nfrak = foldWithIndexSet (\_ ni -> setExpr [ni] []) e2
+        in  (SSL (μ:ν:sol), {-(if eNullS nfrak && eNull r then id else (((ν `onAny` E nfrak) :=?: E r) %) )-}
+                ((μ `mappend` ν) `onSolver` γ) ) | (χ,r) <- e2 `ePartitionWithRestTo` e1, χ' <- r `ePartitionTo` e2] )
+
+
+------------------------------------------------
+-- Single Set Extension
 ------------------------------------------------
 
 -- | Note: Includes set_clash
