@@ -4,7 +4,6 @@ module Simple.Rules
     , Output
     , SSList(SSL)
     -- * Rules
-    , termination
     , tautology
     , clash
     , distribution
@@ -89,10 +88,6 @@ instance Show SSList where
 infixr %
 (%) :: Equation -> SolverDS -> SolverDS
 (%) = S.insert
-
--- | Same as tautology; just for logging the termination.
-termination :: Rule
-termination = R "termination" (\(sol,_,γ) -> [(sol,γ)])
 
 tautology :: Rule
 tautology = R "tautology" (\(sol,_,γ) -> [(sol,γ)])
