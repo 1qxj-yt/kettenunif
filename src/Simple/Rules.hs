@@ -53,6 +53,7 @@ import Simple.Expression
     , clean
     , combine
     , addApos
+    , chainList
     )
 import Simple.Binds
     ( cons
