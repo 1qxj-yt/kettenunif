@@ -43,9 +43,12 @@ instance Foldable Set where
 -- Functions
 ------------------------------------------------
 
+-- | Makes a list from a list which might contain duplicates.
 fromList :: Eq a => [a] -> Set a
 fromList = S . nub
 
+-- | @deleteAt i e@ returns e with its (i+1)-th element deleted.
+-- Returns original set if index is out of bounds.
 deleteAt :: Int -> Set a -> Set a
 deleteAt i (S s) = let (ini,iE:til) = splitAt i s
             in S (ini ++ til)
