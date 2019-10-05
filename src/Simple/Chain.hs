@@ -162,9 +162,6 @@ data ChainResult = CR {
             }
             deriving Show
 
-filterMeta :: Binds -> [Var]
-filterMeta = toList . S.filter isMeta . foldMap (\(v1:=v2) -> S.fromList [v1,v2])
-
 chainList :: SetVar -> Binds -> [ChainResult]
 chainList c bs = let    perm = permutations (molecules bs) -- permute all molecules
                         validC = filter ((/= Nothing) . runMachine . map molType) perm -- filter valid chains
