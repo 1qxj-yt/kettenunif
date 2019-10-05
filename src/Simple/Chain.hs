@@ -124,9 +124,12 @@ instantiable c xs =
     where
     sel :: Var -> Var -> Maybe [(Var, Var)]
     sel x y
-        | isMeta x = Just [(x,y)]
-        | isMeta y = Just [(y,x)]
+        | isMeta x && newInCh y = Just [(x,y)]
+        | isMeta y && newInCh x = Just [(y,x)]
         | otherwise = Nothing
+
+    newInCh :: Var -> Bool
+    newInCh v = all (null . Seq.filter (== v)) xs
 
 
 -- | Glue two molecules together into one.
