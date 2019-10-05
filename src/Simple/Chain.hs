@@ -102,7 +102,7 @@ transitionTable (Just R) trans
 transitionTable Nothing _   = Nothing
 
 runMachine :: [MolType] -> ChainState
-runMachine (c:cs) = let ini = Just $ if c == LL || c == NN then L else R
+runMachine (c:cs) = let ini = Just $ if c `elem` [LL,NN] then L else R
     in foldl transitionTable ini cs
 
 
