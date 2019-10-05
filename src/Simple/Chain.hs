@@ -168,7 +168,6 @@ filterMeta = toList . S.filter isMeta . foldMap (\(v1:=v2) -> S.fromList [v1,v2]
 chainList :: SetVar -> Binds -> [ChainResult] -- [[Seq.Seq Var]]
 chainList c bs = let    perm = permutations (molecules bs) -- permute all molecules
                         validC = filter ((/= Nothing) . runMachine . map molType) perm -- filter valid chains
-                        res  = filter ((/= Nothing) . instantiable c)  validC
                 in do
                     ch <- validC
                     case instantiable c ch of
