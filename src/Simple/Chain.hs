@@ -146,10 +146,7 @@ bond (s:t:ss) = let (s', asoc) = singleBond s t
     in second (case asoc of Nothing -> id ; Just vv -> (vv:)) $
             bond (s':ss)
 
--- Converts a list of molecules into bindings.
---chain :: [Seq.Seq Var] -> Binds
---chain = foldMap chainAux
---    where
+-- | Converts a list of molecules into bindings.
 chain :: Seq.Seq Var -> Binds
 chain Seq.Empty              = mempty
 chain (t Seq.:<| Seq.Empty)  = mempty
