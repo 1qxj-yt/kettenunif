@@ -68,9 +68,6 @@ molecules bs = moleculesAux bs []
             else first (s:) (maybeAppendRight x y ss)
 
 
-data LeftOrRight  = L | R deriving (Eq,Show)
-
-type ChainState = Maybe LeftOrRight
 data MolType =      LL -- X=…=a; left-hand side is meta
                 |   RR -- a=…=X; right-hand side is meta
                 |   BB -- X=…=Y; both sides are meta
@@ -88,6 +85,11 @@ molType sq
                     (True ,False) -> LL
                     (False,True ) -> RR
                     (False,False) -> NN
+
+
+-- | States of the automaton.
+data LeftOrRight  = L | R deriving (Eq,Show)
+type ChainState = Maybe LeftOrRight
 
 transitionTable :: ChainState -> MolType -> ChainState
 transitionTable (Just L) trans
