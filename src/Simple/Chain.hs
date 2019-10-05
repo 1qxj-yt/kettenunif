@@ -19,6 +19,7 @@ import qualified Data.Set as S
 import qualified Data.Sequence as Seq
 import Control.Arrow((***),first,second)
 import Data.List(permutations)
+import Data.Maybe(fromMaybe)
 
 import Debug.Trace
 
