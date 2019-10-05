@@ -158,7 +158,7 @@ chain (s Seq.:<| (t Seq.:<| ss)) = B.cons (s:=t) $ chain (t Seq.:<| ss)
 data ChainResult = CR {
                 expression :: Expr,
                 asocs :: [(Var,Var)],
-                metas :: [Var]
+                varlist :: [Var]
             }
             deriving Show
 
