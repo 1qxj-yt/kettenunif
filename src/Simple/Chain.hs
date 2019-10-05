@@ -173,9 +173,13 @@ chainList c bs = let    perm = permutations (molecules bs) -- permute all molecu
                     ch <- validC
                     case instantiable c ch of
                         Nothing -> []
-                        Just firstNLastAsocs -> do
+                        Just outerAsocs -> do
                             let (sq, innerAsocs) = bond ch
-                            let resBinds = chain sq
+                                ((h Seq.:<| inn) Seq.:|> l) = sq
+                                nh = fromMaybe h (lookup h outerAsocs)
+                                nl = fromMaybe l (lookup l outerAsocs)
+                                nsq = (nh Seq.:<| inn) Seq.:|> nl
+                                resBinds = chain nsq
                             return $ CR (Expr resBinds)
-                                        (firstNLastAsocs ++ innerAsocs)
-                                        (filterMeta resBinds)
+                                        (outerAsocs ++ innerAsocs)
+                                        (toList nsq)
