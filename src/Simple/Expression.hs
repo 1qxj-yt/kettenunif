@@ -31,6 +31,8 @@ module Simple.Expression
     , ωBind
     , ωExpr
     , chainList
+    , from
+    , to
     ) where
 
 import Simple.Binds as B
