@@ -108,7 +108,7 @@ runMachine (c:cs) = let ini = Just $ if c `elem` [LL,NN] then L else R
     in foldl transitionTable ini cs
 
 
--- | Assumes @xs@ to be non-empty.
+-- | Assumes @xs@ to be non-empty (and all molecules to be longer than two).
 -- Return Nothing if c cannot be instantiated to xs.
 -- Otherwise, it returns the list of new variable associations.
 instantiable :: SetVar -> [Seq.Seq Var] -> Maybe [(Var,Var)]
