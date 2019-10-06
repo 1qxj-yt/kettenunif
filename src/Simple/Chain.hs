@@ -130,8 +130,14 @@ instantiable c xs =
         | isMeta y && newInCh x = Just [(y,x)]
         | otherwise = Nothing
 
+    stripHead :: [Seq.Seq Var] -> [Seq.Seq Var]
+    stripHead ((_ Seq.:<| sq):rs) = sq:rs
+    stripLast :: [Seq.Seq Var] -> [Seq.Seq Var]
+    stripLast ss = let (rs Seq.:|> _) = last ss
+                in init ss ++ [rs]
     newInCh :: Var -> Bool
-    newInCh v = all (null . Seq.filter (== v)) xs
+    newInCh v = let inner = stripLast $ stripHead xs
+                in  all (null . Seq.filter (== v)) inner
 
 
 -- | Glue two molecules together into one.
