@@ -3,12 +3,13 @@ module Simple.Chain
     ) where
 
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr
     , Binds
     , Bind((:=))
     , Var
     , SetVar(ChVar)
     , isMeta
+    , expr
     , from, to
     , var, meta
     )
@@ -151,10 +152,10 @@ bond (s:t:ss) = let (s', asoc) = singleBond s t
             bond (s':ss)
 
 -- | Converts a list of molecules into bindings.
-chain :: Seq.Seq Var -> Binds
+chain :: Seq.Seq Var -> [Bind]
 chain Seq.Empty              = mempty
 chain (t Seq.:<| Seq.Empty)  = mempty
-chain (s Seq.:<| (t Seq.:<| ss)) = B.cons (s:=t) $ chain (t Seq.:<| ss)
+chain (s Seq.:<| (t Seq.:<| ss)) = (s:=t) : chain (t Seq.:<| ss)
 
 
 
@@ -180,6 +181,6 @@ chainList c bs = let    perm = permutations (molecules bs) -- permute all molecu
                                 nl = fromMaybe l (lookup l outerAsocs)
                                 nsq = (nh Seq.:<| inn) Seq.:|> nl
                                 resBinds = chain nsq
-                            return $ CR (Expr resBinds)
+                            return $ CR (expr resBinds)
                                         (outerAsocs ++ innerAsocs)
                                         (toList nsq)
