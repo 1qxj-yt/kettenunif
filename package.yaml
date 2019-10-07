@@ -23,7 +23,6 @@ dependencies:
 - base >= 4.7 && < 5
 - containers >= 0.5.8 # Data.Set
 - mtl # Control.Monad.Writer
-- bytestring
 - haskeline
 - parsec
 - multiset
