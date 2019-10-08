@@ -43,6 +43,7 @@ import Simple.Expression
     , Bind((:=))
     , Token(E,B,V)
     , Var
+    , decompose
     , setExpr
     , foldWithIndex
     , foldWithIndexSet
