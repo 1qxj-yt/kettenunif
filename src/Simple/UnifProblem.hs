@@ -24,6 +24,7 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
     , Var
+    , isMeta
     )
 import Simple.Substitution
     ( Substitution
