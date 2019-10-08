@@ -143,9 +143,7 @@ singleSetExpr = do
     return $ SingleSVarExpr sv bs
 
 setVars :: Parser [SetVar]
-setVars = do
-    svs <- semiSep setVar
-    return svs
+setVars = semiSep setVar
 
 binds :: Parser [Bind]
 binds = do
