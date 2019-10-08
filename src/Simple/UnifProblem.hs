@@ -64,6 +64,14 @@ selectEq :: SolverDS -> (Equation, SolverDS)
 selectEq ds = let (eq,eqs) = S.deleteFindMin (equations ds)
             in (eq, ds{equations=eqs} )
 
+canTerminate :: SolverDS -> Bool
+canTerminate ds = S.null (equations ds) && not (daContainsDups ds)
+
+daContainsDups :: SolverDS -> Bool
+daContainsDups = not . S.null . S.filter (not.isDistinct) . duplicateAvoidance
+
+isDistinct :: MS.MultiSet a -> Bool
+isDistinct ms = MS.distinctSize ms == MS.size ms
 
 ------------------------------------------------
 -- Substitution Application
