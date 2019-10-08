@@ -7,6 +7,9 @@ module Simple.UnifProblem
     , onSolver
     , onProblem
     , solves
+    -- * SolverDS Records
+    , equations
+    , duplicateAvoidance
     ) where
 
 import qualified Data.Set as S
