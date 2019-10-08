@@ -69,7 +69,7 @@ generalSolverRec onTerm onRule update args (sol,γ)
     | otherwise =
         let (eq,γ') = selectEq γ
             rule    = fullMSet eq
-            nextLs  = apply rule (sol, eq, γ')
+            nextLs  = apply rule (sol, eq, cleanUpDA γ')
             input  = (sol, eq, γ')
         in do
             onRule args input rule
