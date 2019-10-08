@@ -14,6 +14,7 @@ import Simple.UnifProblem
     , SolverDS
     , probToSolver
     , selectEq
+    , canTerminate
     )
 import Simple.Rules
     ( Rule(apply)
