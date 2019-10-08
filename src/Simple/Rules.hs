@@ -61,6 +61,8 @@ import Simple.Binds
     , uncons
     )
 
+import Simple.Chain
+
 import qualified Data.Set as S
 import Data.List(delete)
 
