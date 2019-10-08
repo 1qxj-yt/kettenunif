@@ -37,10 +37,9 @@ module Simple.Expression
 import Simple.Binds as B
 
 import Data.Char(isUpper,isLower)
-import Data.List(intercalate,delete)
+import Data.List(intercalate)
 import Data.Foldable(toList)
 import Control.Arrow((***))
-import qualified Data.Map.Strict as M
 
 ------------------------------------------------
 -- Data
