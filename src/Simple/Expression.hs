@@ -30,7 +30,6 @@ module Simple.Expression
     , combine
     , ωBind
     , ωExpr
-    , chainList
     , from
     , to
     ) where
