@@ -42,6 +42,7 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind((:=))
     , Token(E,B,V)
+    , Var
     , setExpr
     , foldWithIndex
     , foldWithIndexSet
@@ -65,6 +66,7 @@ import Simple.Chain
 
 import qualified Data.Set as S
 import Data.List(delete)
+import qualified Data.MultiSet as MS
 
 ------------------------------------------------
 -- Data Types
