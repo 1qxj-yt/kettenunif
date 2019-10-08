@@ -15,6 +15,7 @@ module Simple.UnifProblem
     -- * Duplicate Avoidance
     , canTerminate
     , daContainsDups
+    , cleanUpDA
     ) where
 
 import qualified Data.Set as S
