@@ -61,6 +61,7 @@ import Simple.Expression
 import Simple.Binds as B
     ( cons
     , uncons
+    , head
     )
 
 import Simple.Chain
