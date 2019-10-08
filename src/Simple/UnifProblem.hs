@@ -78,6 +78,15 @@ daContainsDups = not . S.null . S.filter (not.isDistinct) . duplicateAvoidance
 isDistinct :: MS.MultiSet a -> Bool
 isDistinct ms = MS.distinctSize ms == MS.size ms
 
+cleanUpDA :: SolverDS -> SolverDS
+cleanUpDA ds = ds { duplicateAvoidance =
+            S.filter (\ms -> not (allGround ms && isDistinct ms)) (duplicateAvoidance ds)
+        }
+
+allGround :: MS.MultiSet Var -> Bool
+allGround = all (not . isMeta)
+
+
 ------------------------------------------------
 -- Substitution Application
 ------------------------------------------------
