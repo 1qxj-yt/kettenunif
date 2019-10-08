@@ -98,6 +98,9 @@ onEq σ (t1 :=?: t2) = (σ `onAny` t1) :=?: (σ `onAny` t2)
 onEqP :: Substitution -> UnifProblemEl -> UnifProblemEl
 onEqP σ (t1 :=.: t2) = (σ `onExpr` t1) :=.: (σ `onExpr` t2)
 
+onDA :: Substitution -> MS.MultiSet Var -> MS.MultiSet Var
+onDA σ = MS.map ((\(V v) -> v) . (σ `onAny`) . V)
+
 onSolver :: Substitution -> SolverDS -> SolverDS
 onSolver σ ds = ds {equations = S.map (σ `onEq`) (equations ds)}
 
