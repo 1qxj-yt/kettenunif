@@ -30,7 +30,9 @@ import Simple.Substitution
 type UnifProblem  = S.Set UnifProblemEl
 data UnifProblemEl = Expr :=.: Expr deriving (Eq,Ord)
 
-type SolverDS = S.Set Equation
+data SolverDS = SDS {
+        equations :: S.Set Equation
+    }
 data Equation = Token :=?: Token deriving (Eq,Ord,Show)
 
 
@@ -38,7 +40,7 @@ instance Show UnifProblemEl where
     show (e1 :=.: e2) = show e1 ++ " =. " ++ show e2
 
 probToSolver :: UnifProblem -> SolverDS
-probToSolver = S.map probToSolver'
+probToSolver = ($ S.empty) . SDS . S.map probToSolver'
     where
         probToSolver' :: UnifProblemEl -> Equation
         probToSolver' (e1 :=.: e2) = E e1 :=?: E e2
@@ -50,7 +52,7 @@ isValidEquation (V _ :=?: V _) = True
 isValidEquation _ = False
 
 isValidSolver :: SolverDS -> Bool
-isValidSolver = (== True) . S.findMin . S.map isValidEquation
+isValidSolver = (== True) . S.findMin . S.map isValidEquation . equations
 
 
 ------------------------------------------------
@@ -64,7 +66,7 @@ onEqP :: Substitution -> UnifProblemEl -> UnifProblemEl
 onEqP σ (t1 :=.: t2) = (σ `onExpr` t1) :=.: (σ `onExpr` t2)
 
 onSolver :: Substitution -> SolverDS -> SolverDS
-onSolver σ = S.map (σ `onEq`)
+onSolver σ ds = ds {equations = S.map (σ `onEq`) (equations ds)}
 
 onProblem :: Substitution -> UnifProblem -> SolverDS
 onProblem σ = (σ `onSolver`) . probToSolver
