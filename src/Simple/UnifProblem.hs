@@ -20,6 +20,7 @@ import qualified Data.MultiSet as MS
 import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
+    , Var
     )
 import Simple.Substitution
     ( Substitution
