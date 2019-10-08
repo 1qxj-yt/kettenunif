@@ -1,5 +1,13 @@
 module Simple.Chain
     (
+    -- * Check
+    ladderDistinct
+    -- * Retrieval
+    , chainList
+    -- * Result
+    , chainExpr
+    , asocs
+    , varlist
     ) where
 
 import Simple.Expression
