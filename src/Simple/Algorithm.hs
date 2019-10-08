@@ -13,6 +13,7 @@ import Simple.UnifProblem
     ( UnifProblem
     , SolverDS
     , probToSolver
+    , selectEq
     )
 import Simple.Rules
     ( Rule(apply)
