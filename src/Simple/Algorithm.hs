@@ -64,6 +64,7 @@ generalSolverRec onTerm onRule update args (sol,γ)
     | canTerminate γ = do
         onTerm args sol
         return [sol]
+    | daContainsDups γ = return []
     | otherwise =
         let (eq,γ') = selectEq γ
             rule    = fullMSet eq
