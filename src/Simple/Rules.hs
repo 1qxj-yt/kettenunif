@@ -88,7 +88,7 @@ instance Show SSList where
 
 infixr %
 (%) :: Equation -> SolverDS -> SolverDS
-(%) = S.insert
+(%) eq ds = ds { equations = S.insert eq (equations ds) }
 
 tautology :: Rule
 tautology = R "tautology" (\(sol,_,γ) -> [(sol,γ)])
