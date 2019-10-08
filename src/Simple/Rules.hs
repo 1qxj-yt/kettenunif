@@ -27,6 +27,8 @@ import Simple.UnifProblem
     ( SolverDS
     , Equation((:=?:))
     , onSolver
+    , equations
+    , duplicateAvoidance
     )
 import Simple.Substitution
     ( Substitution
