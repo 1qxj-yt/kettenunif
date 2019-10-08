@@ -7,6 +7,8 @@ module Simple.UnifProblem
     , onSolver
     , onProblem
     , solves
+    -- * Equation Operations
+    , selectEq
     -- * SolverDS Records
     , equations
     , duplicateAvoidance
@@ -57,6 +59,10 @@ isValidEquation _ = False
 
 isValidSolver :: SolverDS -> Bool
 isValidSolver = (== True) . S.findMin . S.map isValidEquation . equations
+
+selectEq :: SolverDS -> (Equation, SolverDS)
+selectEq ds = let (eq,eqs) = S.deleteFindMin (equations ds)
+            in (eq, ds{equations=eqs} )
 
 
 ------------------------------------------------
