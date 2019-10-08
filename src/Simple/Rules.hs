@@ -58,7 +58,7 @@ import Simple.Expression
     , combine
     , addApos
     )
-import Simple.Binds
+import Simple.Binds as B
     ( cons
     , uncons
     )
