@@ -32,6 +32,7 @@ data UnifProblemEl = Expr :=.: Expr deriving (Eq,Ord)
 
 data SolverDS = SDS {
         equations :: S.Set Equation
+      , duplicateAvoidance :: S.Set (MS.MultiSet Var)
     }
 data Equation = Token :=?: Token deriving (Eq,Ord,Show)
 
