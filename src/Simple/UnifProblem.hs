@@ -102,7 +102,10 @@ onDA :: Substitution -> MS.MultiSet Var -> MS.MultiSet Var
 onDA σ = MS.map ((\(V v) -> v) . (σ `onAny`) . V)
 
 onSolver :: Substitution -> SolverDS -> SolverDS
-onSolver σ ds = ds {equations = S.map (σ `onEq`) (equations ds)}
+onSolver σ ds = ds {
+        equations = S.map (σ `onEq`) (equations ds)
+      , duplicateAvoidance = S.map (σ `onDA`) (duplicateAvoidance ds)
+    }
 
 onProblem :: Substitution -> UnifProblem -> SolverDS
 onProblem σ = (σ `onSolver`) . probToSolver
