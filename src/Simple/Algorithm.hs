@@ -40,6 +40,14 @@ run = generalSolver (\_ _ -> return ()) (\_ _ _ -> return ()) id ()
 -- General Solver
 ------------------------------------------------
 
+-- | @generalSolver onTerm onRule updater args problem@ returns a list of
+-- Single Substitution Lists in a monad @m@, solving the @problem@.
+-- @args@ is an argument of arbitrary type, which is updated by
+-- @updater@ on every recursion step.
+-- @onRule@ is called on every rule application with the updated argument @a@,
+-- the Input provided to the Rule as well as the Rule itself.
+-- @onTerm@ is called on termination with the updateded argument @a@ and the
+-- result SSList.
 generalSolver :: Monad m => (a -> SSList -> m ()) -> (a -> Input -> Rule -> m ())
                         -> (a -> a) -> a -> UnifProblem -> m [SSList]
 generalSolver t r u a = generalSolverRec t r u a . ini
