@@ -41,6 +41,28 @@ fullMSet (E e1 :=?: E e2)
                     (False, False) -> x_distribution
 
 
+singleChain :: RuleSwitch
+singleChain (B _ :=?: B _)   = decomposition
+singleChain (V v1 :=?: V v2)
+    | v1 == v2  = tautology
+    | otherwise = case (isMeta v1, isMeta v2) of
+        (False, False) -> clash
+        (True , False) -> application
+        (False, True ) -> orientation
+        (True , True ) -> application
+singleChain (E e1 :=?: E e2) = let  (v1,b1) = decompose e1
+                                    (v2,b2) = decompose e2
+        in  case (null v1, null v2) of
+                (True , True ) -> case (null b1, null b2) of
+                    (True, True) -> tautology
+                    _ -> if length b1 == length b2 then distribution else clash
+                (True , False) -> orientation
+                (False, True ) -> if null b1
+                                then if null b2 then clash else sch_application
+                                else set_distribution
+singleChain els = error (show els)
+
+
 singleMSet :: RuleSwitch
 singleMSet (B _ :=?: B _)   = decomposition
 singleMSet (E (Expr e1) :=?: E (Expr e2)) = case (null e1, null e2) of
