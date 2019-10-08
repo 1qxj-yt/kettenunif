@@ -63,7 +63,7 @@ generalSolverRec onTerm onRule update args (sol,γ)
         onTerm args sol
         return [sol]
     | otherwise =
-        let (eq,γ') = S.deleteFindMin γ
+        let (eq,γ') = selectEq γ
             rule    = fullMSet eq
             nextLs  = apply rule (sol, eq, γ')
             input  = (sol, eq, γ')
