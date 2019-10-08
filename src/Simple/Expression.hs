@@ -5,6 +5,8 @@ module Simple.Expression
     , Var
     , SetVar(SetVar,ChVar)
     , Token(B,V,E)
+    -- * Decomposition
+    , decompose
     -- * Expression
     , expr
     , ssve
