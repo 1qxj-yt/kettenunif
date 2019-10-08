@@ -16,6 +16,7 @@ import Simple.UnifProblem
     , selectEq
     , canTerminate
     , daContainsDups
+    , cleanUpDA
     )
 import Simple.Rules
     ( Rule(apply)
