@@ -21,6 +21,8 @@ module Simple.Rules
     , biset_application
     , biset_distribution
     , mset_semi_tautology
+    -- * Single Chain
+    , sch_application
     ) where
 
 import Simple.UnifProblem
