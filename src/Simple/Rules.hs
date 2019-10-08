@@ -95,6 +95,11 @@ infixr %
 (%) :: Equation -> SolverDS -> SolverDS
 (%) eq ds = ds { equations = S.insert eq (equations ds) }
 
+infixr %*
+(%*) :: MS.MultiSet Var -> SolverDS -> SolverDS
+(%*) da ds = ds { duplicateAvoidance = S.insert da (duplicateAvoidance ds) }
+
+
 tautology :: Rule
 tautology = R "tautology" (\(sol,_,γ) -> [(sol,γ)])
 
