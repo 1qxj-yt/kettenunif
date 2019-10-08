@@ -217,5 +217,11 @@ mset_semi_tautology = R "mset-semi-tautology" (\(sol, E (SingleSVarExpr _ e1) :=
 ------------------------------------------------
 
 sch_application :: Rule
-sch_application = R "sch-application" (\(SSL sol, E (SingleSVarExpr c _) :=?: E (SingleSVarExpr _ e), γ ) ->
-            [ (SSL (σ:sol), σ `onSolver` γ) | e' <- chainList c e, let σ = (c →→ e') ] )
+sch_application = R "sch-application" (\(SSL sol, E e1 :=?: E e2, γ ) ->
+            let c = B.head $ fst $ decompose e1; e = snd $ decompose e2 in
+            [ (SSL (τ:σ:sol), da %* ((compose τ σ) `onSolver` γ)) |
+                                    ladderDistinct e,
+                                    chnRes <- chainList c e,
+                                    let τ = foldMap (uncurry (→)) (asocs chnRes)  ,
+                                    let σ = (c →→ chainExpr chnRes),
+                                    let da = MS.fromList $ varlist chnRes ] )
