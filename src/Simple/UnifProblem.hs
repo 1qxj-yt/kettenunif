@@ -12,6 +12,9 @@ module Simple.UnifProblem
     -- * SolverDS Records
     , equations
     , duplicateAvoidance
+    -- * Duplicate Avoidance
+    , canTerminate
+    , daContainsDups
     ) where
 
 import qualified Data.Set as S
