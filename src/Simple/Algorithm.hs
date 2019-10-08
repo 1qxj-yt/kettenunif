@@ -60,7 +60,7 @@ generalSolver t r u a = generalSolverRec t r u a . ini
 generalSolverRec :: Monad m => (a -> SSList -> m ()) -> (a -> Input -> Rule -> m ())
                         -> (a -> a) -> a -> Output -> m [SSList]
 generalSolverRec onTerm onRule update args (sol,γ)
-    | S.null γ = do
+    | canTerminate γ = do
         onTerm args sol
         return [sol]
     | otherwise =
