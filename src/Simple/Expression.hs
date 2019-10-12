@@ -67,7 +67,7 @@ instance Eq SetVar where
     SetVar i == SetVar j = i == j
     HSetVar a i == HSetVar b j = a==b && i==j
     TSetVar i l r == TSetVar j m s = i==j && (l==m && r==s) || (l==s && r==m)
-    ChVar a i l r == ChVar b j m s = a==b && i==j && l==m && r==s
+    ChVar a i l r == ChVar b j m s = a==b && i==j
     _ == _ = False
 
 instance Show Bind where
