@@ -56,7 +56,6 @@ data SetVar = SetVar Integer
             | HSetVar {apos :: Int, id :: Integer}
             | TSetVar {apos :: Int, left :: SetVar, right :: SetVar}
             | ChVar   {apos :: Int, id :: Integer, from :: Var, to :: Var}
-                                                deriving (Ord)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 
@@ -69,6 +68,25 @@ instance Eq SetVar where
     TSetVar i l r == TSetVar j m s = i==j && (l==m && r==s) || (l==s && r==m)
     ChVar a i l r == ChVar b j m s = a==b && i==j
     _ == _ = False
+
+instance Ord SetVar where
+    compare (SetVar i) (SetVar j) = compare i j
+    compare SetVar{} _ = LT
+
+    compare (HSetVar a i) (HSetVar b j) = LT
+    compare HSetVar{} TSetVar{} = LT
+
+    compare (TSetVar i l r) (TSetVar j m s) = compare i j `mappend` compare (min l r) (min m s) `mappend` compare (max l r) (max m s)
+
+    compare (ChVar a i l r) (ChVar b j m s) = compare a b `mappend` compare i j
+    compare _ ChVar{} = LT
+
+    compare l r = opposite (compare r l)
+        where
+        opposite LT = GT
+        opposite GT = LT
+        opposite EQ = EQ
+
 
 instance Show Bind where
     show (s := t) = show s++"="++show t
