@@ -23,7 +23,7 @@ minimalSSV = SingleSVarExpr (SetVar 0) mempty
 minIsSmaller :: UnifProblemEl -> Expr -> Property
 minIsSmaller p e =
     leftIsSSV p ==>
-        E minimalSSV :=?: E e <= S.findMin (probToSolver $ S.singleton p)
+        E minimalSSV :=?: E e <= S.findMin (equations (probToSolver $ S.singleton p))
 
 shorterIsSmaller :: UnifProblemEl -> UnifProblemEl -> Property
 shorterIsSmaller p1 p2 =
