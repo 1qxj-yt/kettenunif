@@ -195,6 +195,6 @@ chainList c bs = let    perm = permutations (molecules bs) -- permute all molecu
                                 nl = fromMaybe l (lookup l outerAsocs)
                                 nsq = (nh Seq.:<| inn) Seq.:|> nl
                                 resBinds = chain nsq
-                            return $ CR (expr resBinds)
+                            return $ CR (setExpr [] resBinds)
                                         (outerAsocs ++ innerAsocs)
                                         (toList nsq)
