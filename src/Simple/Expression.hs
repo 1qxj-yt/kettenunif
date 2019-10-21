@@ -34,6 +34,7 @@ module Simple.Expression
     , ωExpr
     , from
     , to
+    , punch
     ) where
 
 import Simple.Binds as B
