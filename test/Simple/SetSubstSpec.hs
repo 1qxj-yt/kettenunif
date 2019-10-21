@@ -42,3 +42,10 @@ spec = do
         it "{M -> [c=d]} (M:[c=d,X=a]) === [c=d,c=d,X=a]" $ do
             (SetVar 0 → (expr [v 'c' := v 'd'])) `onExpr` (ssve (SetVar 0) [v 'c' := v 'd', v 'X' := v 'a'])
                 `shouldBe` expr [v 'c' := v 'd', v 'c' := v 'd', v 'X' := v 'a']
+    describe "compose" $ do
+        it "{M1 → M2:[] |} {M0 → M1:[] |} === {M0 → M2:[], M1 → M2:[]|}" $ do
+            (SetVar 1 → (setExpr [SetVar 2] [])) `compose` (SetVar 0 → (setExpr [SetVar 1] []))
+                `shouldBe` (   (SetVar 1 → (setExpr [SetVar 2] [])) `compose`   (SetVar 0 → (setExpr [SetVar 2] []))    )
+        it "{M1 → M2:[] |} {M0 → M1:[] |} === {M0 → M2:[], M1 → M2:[]|}" $ do
+            (addApos (SetVar 1) → (setExpr [SetVar 2] [])) `compose` (SetVar 0 → (setExpr [addApos $ SetVar 1] []))
+                `shouldBe` (   (addApos (SetVar 1) → (setExpr [SetVar 2] [])) `compose` (SetVar 0 → (setExpr [SetVar 2] []))    )
