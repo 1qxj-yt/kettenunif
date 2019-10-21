@@ -58,6 +58,11 @@ data SetVar = SetVar Integer
             | TSetVar {apos :: Int, left :: SetVar, right :: SetVar}
             | ChVar   {apos :: Int, id :: Integer, appl :: Maybe (Var,Var)}
 
+from, to :: SetVar -> Var
+from ChVar{appl = Just (f,s)} = f
+to   ChVar{appl = Just (f,s)} = s
+
+
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 
 data Token = V Var | B Bind | E Expr deriving (Eq,Ord,Show)
