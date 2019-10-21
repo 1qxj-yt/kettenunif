@@ -205,6 +205,15 @@ ePartitionWithRestTo :: Expr -> Expr -> [(SetVar -> Expr, Expr)]
 (SetExpr _ e) `ePartitionWithRestTo` (SetExpr m _)
     =  map ((SetExpr mempty .) Control.Arrow.*** SetExpr mempty) (partitionsWithRest m e)
 
+-- | @punch (a,b) [x=x',...,z=z'] = [a=x',...,z=b]@.
+punch :: (Var,Var) -> Binds -> Binds
+punch (f,t) xs
+    | length xs < 1 = error ("Empty bind list -- nothing to punch:" ++ show xs)
+    | length xs == 1 = fromList [f := t]
+punch (f,t) xs = let    (_ := h) = B.head xs
+                        (l := _) = B.last xs
+                in f := h `B.cons` B.init (B.tail xs) `mappend` fromList [l := t]
+
 
 ------------------------------------------------
 -- Canonical Extensions / Folds
