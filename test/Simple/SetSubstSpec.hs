@@ -12,6 +12,8 @@ import Simple.Expression
     , meta
     , expr
     , ssve
+    , setExpr
+    , addApos
     )
 
 import Data.Char(isUpper)
