@@ -25,6 +25,7 @@ import Simple.Expression
     , isMeta
     , ωBind
     , ωExpr
+    , ωChainArg
     )
 
 import Data.List(intercalate)
