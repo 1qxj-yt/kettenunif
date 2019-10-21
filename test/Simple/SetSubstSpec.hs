@@ -34,11 +34,11 @@ spec = do
     -- Substitution
     describe "substitution" $ do
         it "{M0 → [Y=b]} (M0:[X=a]) === [Y=b,X=a]" $ do
-            (SetVar 0 → (expr [v 'Y' := v 'b'])) `onExpr` (ssve (SetVar 0) [v 'X' := v 'a'])
+            (SetVar 0 → (expr [v 'Y' := v 'b'])) `onExpr` (setExpr [SetVar 0] [v 'X' := v 'a'])
                 `shouldBe` expr [v 'Y' := v 'b', v 'X' := v 'a']
         it "{M0 → M1:[Y=b]} (M0:[X=a]) === M1:[Y=b,X=a]" $ do
-            (SetVar 0 → (ssve (SetVar 1) [v 'Y' := v 'b'])) `onExpr` (ssve (SetVar 0) [v 'X' := v 'a'])
-                `shouldBe` ssve (SetVar 1) [v 'Y' := v 'b', v 'X' := v 'a']
+            (SetVar 0 → (setExpr [SetVar 1] [v 'Y' := v 'b'])) `onExpr` (setExpr [SetVar 0] [v 'X' := v 'a'])
+                `shouldBe` setExpr [SetVar 1] [v 'Y' := v 'b', v 'X' := v 'a']
         it "{M -> [c=d]} (M:[c=d,X=a]) === [c=d,c=d,X=a]" $ do
-            (SetVar 0 → (expr [v 'c' := v 'd'])) `onExpr` (ssve (SetVar 0) [v 'c' := v 'd', v 'X' := v 'a'])
+            (SetVar 0 → (expr [v 'c' := v 'd'])) `onExpr` (setExpr [SetVar 0] [v 'c' := v 'd', v 'X' := v 'a'])
                 `shouldBe` expr [v 'c' := v 'd', v 'c' := v 'd', v 'X' := v 'a']
