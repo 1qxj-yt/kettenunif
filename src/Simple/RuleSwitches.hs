@@ -1,5 +1,6 @@
 module Simple.RuleSwitches
     ( fullMSet
+    , singleChain
     ) where
 
 import Simple.Rules
