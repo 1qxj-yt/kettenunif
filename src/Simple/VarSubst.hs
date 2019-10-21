@@ -131,7 +131,7 @@ onBind :: Substitution -> (Bind -> Bind)
 onBind σ = ωBind (onVar σ)
 
 onExpr :: Substitution -> (Expr -> Expr)
-onExpr σ = ωExpr (onVar σ)
+onExpr σ = ωExpr (onVar σ) . ωChainArg (onVar σ)
 
 onAny :: Substitution -> Token -> Token
 onAny σ t = case t of
