@@ -56,7 +56,7 @@ data Bind = Var := Var deriving (Eq,Ord) -- Ordering needed for S.Set
 data SetVar = SetVar Integer
             | HSetVar {apos :: Int, id :: Integer}
             | TSetVar {apos :: Int, left :: SetVar, right :: SetVar}
-            | ChVar   {apos :: Int, id :: Integer, from :: Var, to :: Var}
+            | ChVar   {apos :: Int, id :: Integer, appl :: Maybe (Var,Var)}
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
 
