@@ -111,11 +111,16 @@ onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
     Just (Expr e2) -> Expr (e2 `mappend` e)
     Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2 `mappend` e)
 onExpr σ ssve@(Expr _) = ssve
-onExpr σ se = setExpr [] (foldWithIndex (\_ b -> [b]) se)
-    `mappend` foldWithIndexSet (\_ sv -> case M.lookup sv (mp σ) of
-        Nothing -> setExpr [sv] []
-        Just e' -> e'
-    ) se
+onExpr σ se = setExpr [] (foldWithIndex (\_ b -> [b]) se) -- binds
+    `mappend`   foldWithIndexSet (\_ sv ->
+                    case M.lookup sv (mp σ) of
+                        Nothing -> setExpr [sv] []
+                        Just e' -> if isChain sv then chainSubst sv e' else e'
+                ) se
+
+chainSubst :: SetVar -> Expr -> Expr
+chainSubst chVar e = let (sv,ee) = decompose e
+    in setExpr' sv $ punch (from chVar, to chVar) ee
 
 mapOnImage :: (Expr -> Expr) -> Substitution -> Substitution
 mapOnImage f (Subst mp) = Subst (M.map f mp)
