@@ -20,8 +20,13 @@ import Simple.Expression
     , Var
     , SetVar(SetVar,ChVar)
     , setExpr
+    , setExpr'
     , foldWithIndex
     , foldWithIndexSet
+    , decompose
+    , from, to
+    , punch
+    , isChain
     )
 
 import Simple.Binds as B
