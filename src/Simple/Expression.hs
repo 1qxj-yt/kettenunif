@@ -72,7 +72,7 @@ instance Eq SetVar where
     SetVar i == SetVar j = i == j
     HSetVar a i == HSetVar b j = a==b && i==j
     TSetVar i l r == TSetVar j m s = i==j && (l==m && r==s) || (l==s && r==m)
-    ChVar a i l r == ChVar b j m s = a==b && i==j
+    ChVar a i lr == ChVar b j ms = a==b && i==j
     _ == _ = False
 
 instance Ord SetVar where
@@ -84,7 +84,7 @@ instance Ord SetVar where
 
     compare (TSetVar i l r) (TSetVar j m s) = compare i j `mappend` compare (min l r) (min m s) `mappend` compare (max l r) (max m s)
 
-    compare (ChVar a i l r) (ChVar b j m s) = compare a b `mappend` compare i j
+    compare (ChVar a i lr) (ChVar b j ms) = compare a b `mappend` compare i j
     compare _ ChVar{} = LT
 
     compare l r = opposite (compare r l)
@@ -105,7 +105,8 @@ instance Show SetVar where
     show (SetVar i) = 'M':if i==0 then [] else show i
     show (HSetVar a i) = show (SetVar i) ++ replicate a '\''
     show (TSetVar a l r) = 'T':show (l,r) ++ replicate a '\''
-    show (ChVar a i l r) = 'C':'h':show i ++ show (l,r)++ replicate a '\''
+    show (ChVar a i Nothing) = 'C':'h':show i ++ replicate a '\''
+    show (ChVar a i (Just lr)) = 'C':'h':show i ++ show lr ++ replicate a '\''
 
 instance Show Expr where
     show (Expr e) = show e
