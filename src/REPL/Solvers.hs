@@ -7,7 +7,7 @@ module REPL.Solvers
 import Simple.Algorithm(solve,generalSolver)
 import Simple.UnifProblem(UnifProblem)
 import Simple.Rules(SSList(SSL),Input,Output,Rule,name)
-import Simple.Substitution(Substitution,compose,identity,restrict)
+import Simple.Substitution(Substitution,compose,identity)
 
 import Control.Monad.Writer
 import Control.Monad.State
