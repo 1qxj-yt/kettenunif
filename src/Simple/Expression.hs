@@ -83,7 +83,7 @@ instance Ord SetVar where
     compare (SetVar i) (SetVar j) = compare i j
     compare SetVar{} _ = LT
 
-    compare (HSetVar a i) (HSetVar b j) = LT
+    compare (HSetVar a i) (HSetVar b j) = compare a b `mappend` compare i j
     compare HSetVar{} TSetVar{} = LT
 
     compare (TSetVar i l r) (TSetVar j m s) = compare i j `mappend` compare (min l r) (min m s) `mappend` compare (max l r) (max m s)
