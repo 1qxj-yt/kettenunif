@@ -33,6 +33,7 @@ module Simple.Expression
     , combine
     , ωBind
     , ωExpr
+    -- * chain
     , ωChainArg
     , from
     , to
