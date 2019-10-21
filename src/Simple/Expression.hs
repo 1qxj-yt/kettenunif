@@ -33,6 +33,7 @@ module Simple.Expression
     , combine
     , ωBind
     , ωExpr
+    , ωChainArg
     , from
     , to
     , punch
