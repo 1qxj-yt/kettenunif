@@ -152,7 +152,7 @@ addApos :: SetVar -> SetVar
 addApos (SetVar i) = HSetVar 1 i
 addApos (HSetVar a i) = HSetVar (a+1) i
 addApos (TSetVar a l r) = TSetVar (a+1) l r
-addApos (ChVar a i l r) = ChVar (a+1) i l r
+addApos (ChVar a i lr) = ChVar (a+1) i lr
 
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
