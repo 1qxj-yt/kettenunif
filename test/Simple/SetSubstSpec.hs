@@ -11,7 +11,6 @@ import Simple.Expression
     , var
     , meta
     , expr
-    , ssve
     , setExpr
     , addApos
     )
