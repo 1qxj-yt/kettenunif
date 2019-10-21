@@ -158,6 +158,10 @@ isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
 isMeta _         = False
 
+isChain :: SetVar -> Bool
+isChain ChVar{} = True
+isChain _       = False
+
 combine :: SetVar -> SetVar -> SetVar
 combine = TSetVar 0
 
