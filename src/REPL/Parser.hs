@@ -126,7 +126,7 @@ chainVar = do
     v2 <- variable
     char ')'
     a <- many (char '\'')
-    return $ ChVar (length a) n v1 v2
+    return $ ChVar (length a) n (Just (v1, v2))
 
 setVar :: Parser SetVar
 setVar = do
