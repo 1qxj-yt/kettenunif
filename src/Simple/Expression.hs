@@ -11,6 +11,7 @@ module Simple.Expression
     , expr
     , ssve
     , setExpr
+    , setExpr'
     , eConsS
     , eNull
     , eNullS
