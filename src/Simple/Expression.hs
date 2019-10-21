@@ -140,6 +140,9 @@ expr = Expr . fromList
 setExpr :: [SetVar] -> [Bind] -> Expr
 setExpr s e = SetExpr (fromList s) (fromList e)
 
+setExpr' :: SetVars -> Binds -> Expr
+setExpr' = SetExpr
+
 ssve :: SetVar -> [Bind] -> Expr
 ssve sv = SingleSVarExpr sv . fromList
 
