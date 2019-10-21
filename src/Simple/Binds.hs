@@ -72,8 +72,14 @@ uncons (MS (b Seq.:<| bs)) = (b, MS bs)
 head :: Multiset a -> a
 head (MS (b Seq.:<|  _)) = b
 
+last :: Multiset a -> a
+last (MS (_ Seq.:|>  b)) = b
+
 tail :: Multiset a -> Multiset a
 tail (MS (_ Seq.:<| bs)) = MS bs
+
+init :: Multiset a -> Multiset a
+init (MS (bs Seq.:|> _)) = MS bs
 
 foldMapWithIndex :: Monoid m => (Int -> a -> m) -> Multiset a -> m
 foldMapWithIndex f (MS s) = Seq.foldMapWithIndex f s
