@@ -16,6 +16,7 @@ import Simple.Expression
     , Bind((:=))
     , Var
     , SetVar(ChVar)
+    , setExpr
     , isMeta
     , from, to
     , var, meta
