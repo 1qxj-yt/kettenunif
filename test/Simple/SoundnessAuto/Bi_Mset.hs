@@ -33,11 +33,9 @@ instance Arbitrary Expr where
     arbitrary = do
         n <- choose (0,5)
         e <- vectorOf n arbitrary
-        sv <- arbitrary
-        frequency [
-            (1, return $ expr e),
-            (1, return $ ssve sv e)
-            ]
+        n <- choose (0,3)
+        sv <- vectorOf n arbitrary
+        return $ setExpr sv e
 
 instance Arbitrary UnifProblemEl where
     arbitrary = do
