@@ -35,6 +35,7 @@ module Simple.Expression
     , from
     , to
     , punch
+    , isChain
     ) where
 
 import Simple.Binds as B
