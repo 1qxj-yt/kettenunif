@@ -243,6 +243,12 @@ punch (f,t) xs = let    (_ := h) = B.head xs
 ωExpr f (SingleSVarExpr b e) = SingleSVarExpr b (fmap (ωBind f) e)
 ωExpr f (SetExpr s e) = SetExpr s (fmap (ωBind f) e)
 
+onChainArg :: (Var -> Var) -> (SetVar -> SetVar)
+onChainArg f ch = ch {  appl = fmap (f *** f) (appl ch)   }
+
+ωChainArg :: (Var -> Var) -> (Expr -> Expr)
+ωChainArg f = bindsToExprS' (fmap $ onChainArg f)
+
 bindsToExpr :: (Binds -> a) -> (Expr -> a)
 bindsToExpr f (Expr bs) = f bs
 bindsToExpr f (SingleSVarExpr _ bs) = f bs
