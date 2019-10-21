@@ -12,7 +12,9 @@ module Simple.Binds
     -- * Decomposition
     , uncons
     , Simple.Binds.head
+    , Simple.Binds.last
     , Simple.Binds.tail
+    , Simple.Binds.init
     -- * Folds
     , foldMapWithIndex
     ) where
