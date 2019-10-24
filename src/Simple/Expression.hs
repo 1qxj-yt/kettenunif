@@ -246,7 +246,9 @@ punch (f,t) xs = let    (_ := h) = B.head xs
 ωExpr f (SetExpr s e) = SetExpr s (fmap (ωBind f) e)
 
 onChainArg :: (Var -> Var) -> (SetVar -> SetVar)
-onChainArg f ch = ch {  appl = fmap (f *** f) (appl ch)   }
+onChainArg f ch
+    | isChain ch = ch {  appl = fmap (f *** f) (appl ch)   }
+    | otherwise  = ch
 
 ωChainArg :: (Var -> Var) -> (Expr -> Expr)
 ωChainArg f = bindsToExprS' (fmap $ onChainArg f)
