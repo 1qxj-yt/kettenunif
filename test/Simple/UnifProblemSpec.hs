@@ -18,21 +18,21 @@ spec =
         prop "same as above (with hspec internal QuickCheck)" minIsSmaller
         prop "smaller is shorter" shorterIsSmaller
 
-minimalSSV = SingleSVarExpr (SetVar 0) mempty
+minimalSSV = setExpr [SetVar 0] []
 
 minIsSmaller :: UnifProblemEl -> Expr -> Property
 minIsSmaller p e =
-    leftIsSSV p ==>
+    leftHasSetVars p ==>
         E minimalSSV :=?: E e <= S.findMin (equations (probToSolver $ S.singleton p))
 
 shorterIsSmaller :: UnifProblemEl -> UnifProblemEl -> Property
 shorterIsSmaller p1 p2 =
-    leftIsSSV p1 && leftIsSSV p2 && length (bindsOf $ left p1) < length (bindsOf $ left p2) ==>
+    leftHasSetVars p1 && leftHasSetVars p2 && length (bindsOf $ left p1) < length (bindsOf $ left p2) ==>
         p1 <= p2
 
-leftIsSSV :: UnifProblemEl -> Bool
-leftIsSSV (SingleSVarExpr _ _ :=.: _)   = True
-leftIsSSV _                             = False
+leftHasSetVars :: UnifProblemEl -> Bool
+leftHasSetVars (SingleSVarExpr _ _ :=.: _)   = True
+leftHasSetVars (e :=.: _) = let (svs,bs) = decompose e in not (null svs)
 
 left :: UnifProblemEl -> Expr
 left (e :=.: _) = e
@@ -41,3 +41,4 @@ left (e :=.: _) = e
 bindsOf :: Expr -> Binds
 bindsOf (SingleSVarExpr _ b) = b
 bindsOf (Expr b) = b
+bindsOf e = snd $ decompose e
