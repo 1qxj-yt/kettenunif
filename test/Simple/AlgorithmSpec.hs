@@ -7,14 +7,14 @@ import Simple.Algorithm
 
 import Simple.SoundnessAuto.Bi_Mset
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr
     , Bind((:=))
     , SetVar(SetVar)
     , Var, var, meta
     , Token(..)
     , addApos
     , expr
-    , ssve
+    , setExpr
     )
 import Simple.UnifProblem
     ( UnifProblem
