@@ -31,7 +31,7 @@ instance Arbitrary SetVar where
 
 instance Arbitrary Expr where
     arbitrary = do
-        n <- choose (0,5)
+        n <- choose (0,3)
         e <- vectorOf n arbitrary
         n <- choose (0,3)
         sv <- vectorOf n arbitrary
