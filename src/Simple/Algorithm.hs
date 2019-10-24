@@ -68,7 +68,7 @@ generalSolverRec onTerm onRule update args (sol,γ)
     | daContainsDups γ = return []
     | otherwise =
         let (eq,γ') = selectEq γ
-            rule    = fullMSet eq
+            rule    = singleChain eq
             nextLs  = apply rule (sol, eq, cleanUpDA γ')
             input  = (sol, eq, γ')
         in do
