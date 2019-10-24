@@ -109,7 +109,7 @@ instance Monoid Expr where
 ------------------------------------------------
 
 expr :: [Bind] -> Expr
-expr = Expr . fromList
+expr = SetExpr mempty . fromList
 
 setExpr :: [SetVar] -> [Bind] -> Expr
 setExpr s e = SetExpr (fromList s) (fromList e)
