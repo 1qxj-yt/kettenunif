@@ -161,8 +161,12 @@ setExpression = do
         vs <- setVars
         char ':'
         return vs
+    cs <- option [] $ do
+        cs <- chainVars
+        char ':'
+        return cs
     bs <- binds
-    return $ setExpr vs bs
+    return $ setExpr (vs `mappend` cs) bs
 
 problemEl :: Parser UnifProblemEl
 problemEl = do
@@ -192,7 +196,7 @@ assocVar = do
 
 assocSet :: Parser Substitution
 assocSet = do
-    sv <- lexeme setVar
+    sv <- lexeme (setVar <|> chainVar)
     lexeme (string "→" <|> string "->")
     e  <- lexeme (setExpression)
     return (sv →→ e)
