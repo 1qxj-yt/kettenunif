@@ -18,7 +18,7 @@ import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Bind
     , Var
-    , SetVar(SetVar,ChVar)
+    , SetVar(SetVar)
     , setExpr
     , foldWithIndex
     , foldWithIndexSet
