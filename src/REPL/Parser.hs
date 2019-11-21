@@ -145,9 +145,6 @@ singleSetExpr = do
 setVars :: Parser [SetVar]
 setVars = semiSep setVar
 
-chainVars :: Parser [SetVar]
-chainVars = semiSep chainVar
-
 binds :: Parser [Bind]
 binds = do
     lexeme (char '[')
