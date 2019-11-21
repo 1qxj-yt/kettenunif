@@ -93,7 +93,6 @@ cleanUp (Subst s) = Subst (M.filterWithKey neq s)
 restrict :: Substitution -> Substitution
 restrict (Subst s) = Subst (M.filterWithKey (\k _ -> isNotHelper k) s)
     where   isNotHelper (SetVar i)  = True
-            isNotHelper (ChVar a i f t) = a == 0
             isNotHelper _           = False
 
 ------------------------------------------------
