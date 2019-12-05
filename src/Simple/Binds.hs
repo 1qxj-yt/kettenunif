@@ -131,16 +131,18 @@ applyStrat strat ms es =
         dmsM = toDMS ms
     in do
         ζ <- dPart ms' es
-        applyStratRec strat $ do
+        applyStratF strat $ do
             (i,m) <- toList ms'
             let oc = DMS.occur m dmsM
             return (m, oc, ζ(i,m))
     where
-    applyStratRec :: (Eq b) => RepStrategy a -> [(b,DMS.Occur,Multiset a)] -> [(b -> Multiset a, Multiset a)]
-    applyStratRec strat [] = [(mempty,mempty)]
-    applyStratRec strat ((m,oc,e):xs) = [
-            (\v -> if m==v then result else f v, r `mappend` rest)
-        | (f,r) <- applyStratRec strat xs, (result,rest) <- strat (oc,e)]
+    applyStratF :: (Eq b) => RepStrategy a -> [(b,DMS.Occur,Multiset a)] -> [(b -> Multiset a, Multiset a)]
+    applyStratF strat = foldr (\(m,oc,e) ->
+                            concatMap (\(f,r) ->
+                                [ (\v -> if m==v then result else f v, r `mappend` rest)
+                                    | (result,rest) <- strat (oc,e) ]
+                            )
+                        ) [(mempty,mempty)]
 
 -- ### Concrete Strategies ### --
 
