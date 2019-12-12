@@ -188,7 +188,7 @@ problem = do
 
 assocVar :: Parser Substitution
 assocVar = do
-    v1 <- lexeme variable
+    v1 <- lexeme metaVariable
     lexeme (string "→" <|> string "->")
     v2 <- lexeme variable
     return (v1 → v2)
