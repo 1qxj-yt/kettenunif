@@ -96,6 +96,12 @@ replCommand = do
 v :: Char -> Integer -> Var
 v c = (if ($c) isUpper then meta else var) c
 
+metaVariable :: Parser Var
+metaVariable = do
+    x <- upper
+    n <- option 0 natural
+    return (v x n)
+
 variable :: Parser Var
 variable = do
     x <- letter
