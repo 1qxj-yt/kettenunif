@@ -71,6 +71,8 @@ spec = do
             solve testProblem5 `shouldBe` [ build [SetVar 0 →→ expr [v 'B' := v 'D'], v 'X' → v 'A'],
                                             build [SetVar 0 →→ expr [v 'A' := v 'a'], v 'D' → v 'a', v 'X' → v 'B'] ]
 
+        it "solves {M;M:[] =. [A=a,a=a]} to [{M→[a=a]|A→a}]" $ do
+            solve testProblem8 `shouldBe` [ build [SetVar 0 →→ expr [v 'a' := v 'a'], v 'A' → v 'a'] ]
 
 
 ------------------------------------------------
@@ -98,3 +100,7 @@ testProblem6 = S.singleton $ expr [v 'A' := v 'B', v 'C' := v 'D'] :=.: expr [v 
 testProblem7 :: UnifProblem
 testProblem7 = S.singleton $ setExpr [SetVar 0] [v 'X' := v 'a']
                             :=.: setExpr [SetVar 0] [v 'c' := v 'd', v 'x' := v 'A']
+
+testProblem8 :: UnifProblem
+testProblem8 = S.singleton $ setExpr [SetVar 0, SetVar 0] []
+                            :=.: setExpr [] [v 'A' := v 'a', v 'a' := v 'a']
