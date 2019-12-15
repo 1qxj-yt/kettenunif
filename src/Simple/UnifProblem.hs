@@ -7,6 +7,7 @@ module Simple.UnifProblem
     , onSolver
     , onProblem
     , solves
+    , isBlockEq
     ) where
 
 import qualified Data.Set as S
