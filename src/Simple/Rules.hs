@@ -65,6 +65,8 @@ import Simple.Expression
 import Simple.Binds
     ( cons
     , uncons
+    , dPart
+    , fromList
     )
 
 import qualified Data.Set as S
