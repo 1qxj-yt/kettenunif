@@ -210,6 +210,8 @@ x_app_acceleration = R "x-app-acceleration" (\(SSL sol, E e1 :=?: E e2, γ) ->
         τ = (m →→ e1)
     in  [ (SSL (τ:sol), τ `onSolver` γ) ])
 
+
+
 x_emp_application :: Rule
 x_emp_application = R "x-emp-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
         let μ  = foldWithIndexSet (\_ mi ->
