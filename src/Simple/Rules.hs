@@ -137,6 +137,20 @@ x_distribution = R "x-distribution" $ (\(SSL sol, E e1 :=?: E e2, γ) ->
                     ) e2
                     )
 
+x_partition :: Rule
+x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
+    let (ns,e) = decompose e2
+        (ms,_) = decompose e1
+        mss    = partition ms
+        (ms',ns') = unzip $ map (\(m,_,n) -> (m,n)) mss
+    in  [ (SSL sol,
+                 foldr (%)
+                    ((E (setExpr ns' []) :=?: E (setExprRare ns mempty)) % γ)
+                    [ E (setExpr (replicate c m) [])
+                                :=?: E (setExprRare (fromList [n']) (ζ m))
+                        | (m,c,n') <- mss ] )
+            | ζ <- dPart (fromList ms') e ])
+
 x_rep_application :: Rule
 x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
     let (ms,_) = decompose e1
