@@ -14,9 +14,12 @@ module Simple.Expression
     , eConsS
     , eNull
     , eNullS
+    , eLength
+    , eLengthS
     , ePartitionTo
     , ePartitionWithRestTo
     , eHead
+    , eHeadS
     , eTail
     , eDelete
     , eDeleteS
