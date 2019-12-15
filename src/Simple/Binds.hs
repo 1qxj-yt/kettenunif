@@ -9,6 +9,7 @@ module Simple.Binds
     , disjoint
     , partitions
     , partitionsWithRest
+    , toOccList
     -- * Decomposition
     , uncons
     , Simple.Binds.head
