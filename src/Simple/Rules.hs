@@ -55,6 +55,8 @@ import Simple.Expression
     , clean
     , combine
     , addApos
+    , decompose
+    , partition
     )
 import Simple.Binds
     ( cons
