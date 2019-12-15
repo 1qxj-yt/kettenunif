@@ -31,11 +31,17 @@ type UnifProblem  = S.Set UnifProblemEl
 data UnifProblemEl = Expr :=.: Expr deriving (Eq,Ord)
 
 type SolverDS = S.Set Equation
-data Equation = Token :=?: Token deriving (Eq,Ord,Show)
+data Equation = Token :=?: Token deriving (Eq,Show)
 
 
 instance Show UnifProblemEl where
     show (e1 :=.: e2) = show e1 ++ " =. " ++ show e2
+
+instance Ord Equation where
+    compare eq1 eq2
+        | isBlockEq eq1 && not (isBlockEq eq2) = LT
+        | not (isBlockEq eq1) && isBlockEq eq2 = GT
+    compare (t1 :=?: t2) (s1 :=?: s2) = compare t1 s1 `mappend` compare t2 s2
 
 probToSolver :: UnifProblem -> SolverDS
 probToSolver = S.map probToSolver'
