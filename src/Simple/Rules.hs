@@ -207,21 +207,29 @@ x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
     let (ms,_) = decompose e1
         mss    = partition ms
         [(m,c,_)] = mss
-    in  if eLength e2 == 0
-        then
+    in  case eLength e2 of
+        0 ->
             let τm = (m →→ setExpr [stopRec m] [])
                 n = eHeadS e2
                 τn = (n →→ mempty)
             in  [(SSL (τm:τn:sol), τm `onSolver` (τn `onSolver` γ) )]
-        else
-    let m' = (if eLength e2 == 1 then stopRec else addApos) m
-        b1 = eHead e2
-        -- τ = (m →→ setExpr (if eLength e2 == 1 then [] else [m']) [b1])
-        τ = (m →→ setExpr [m'] [b1])
-    in  [ (SSL (τ:sol),
-                (E (setExpr (if eLength e2 == 1 then [] else replicate c m') (replicate (c-1) b1))
-                    :=?: E (eTail e2)) % (τ `onSolver` γ)
-            )])
+        1 ->
+            let b1 = eHead e2
+                τ = (m →→ setExpr [stopRec m] [b1])
+                n = eHeadS e2
+                τn = (n →→ setExpr [] (replicate (c-1) b1))
+            in  [ (SSL (τ:τn:sol), τ `onSolver` (τn `onSolver` γ)
+                    )]
+        _ ->
+            let m' = addApos m
+                b1 = eHead e2
+                -- τ = (m →→ setExpr (if eLength e2 == 1 then [] else [m']) [b1])
+                τ = (m →→ setExpr [m'] [b1])
+            in  [ (SSL (τ:sol),
+                        (E (setExpr (replicate c m') (replicate (c-1) b1))
+                            :=?: E (eTail e2)) % (τ `onSolver` γ)
+                    )]
+        )
 
 x_app_acceleration :: Rule
 x_app_acceleration = R "x-app-acceleration" (\(SSL sol, E e1 :=?: E e2, γ) ->
