@@ -137,6 +137,34 @@ x_distribution = R "x-distribution" $ (\(SSL sol, E e1 :=?: E e2, γ) ->
                     ) e2
                     )
 
+x_part_rapp :: Rule
+x_part_rapp = R "x-part/x-r-app" (\(SSL sol, E e1 :=?: E e2, γ) ->
+    let (ns,e) = decompose e2
+        (ms,_) = decompose e1
+        mss    = partition ms
+    in  if length mss > 1 then -- x-partition
+            [ (SSL sol,
+                 foldr (%)
+                    ( (E (setExprRare (fmap addApos ms) mempty) :=?: E (setExprRare (fmap (addApos.addApos) ns) mempty)) %
+                      (E (setExpr ns' []) :=?: E (setExprRare (fmap addApos ns) mempty)) % γ)
+                    ( [ E (setExpr (replicate c m) [])
+                                :=?: E (setExprRare (fromList [n']) (ζ m))
+                        | (m,c,n') <- mss ] ++
+                      [ E (setExpr [n'] []) :=?: E (setExpr [addApos n', addApos (addApos n')] [])
+                        | n' <- toList ns ] ) )
+            | let (ms',ns') = unzip $ map (\(m,_,n) -> (m,n)) mss,
+                ζ <- dPart (fromList ms') e ]
+        else -- x-rep-applicaiton
+            let [(m,c,_)] = mss
+                m' = addApos m
+                b1 = eHead e2
+                τ = (m →→ setExpr [m'] [b1])
+            in
+            [(SSL (τ:sol),
+                (E (setExpr (replicate c m') (replicate (c-1) b1))
+                    :=?: E (eTail e2)) % (τ `onSolver` γ)
+            )])
+
 x_partition :: Rule
 x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
     let (ns,e) = decompose e2
