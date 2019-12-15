@@ -192,6 +192,13 @@ x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
                 (E (setExpr (if eLength e2 == 1 then [] else replicate c m') (replicate (c-1) b1))
                     :=?: E (eTail e2)) % (τ `onSolver` γ)
             )])
+
+x_app_acceleration :: Rule
+x_app_acceleration = R "x-app-acceleration" (\(SSL sol, E e1 :=?: E e2, γ) ->
+    let (ns,_) = decompose e2
+        m = head (toList ns)
+        τ = (m →→ e1)
+    in  [ (SSL (τ:sol), τ `onSolver` γ) ])
 x_application :: Rule
 x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
         let μ  = foldWithIndexSet (\_ mi ->
