@@ -34,6 +34,7 @@ import Simple.Substitution
     , (→→)
     , onAny
     , compose
+    , build
     , identity
     )
 import Simple.Expression
