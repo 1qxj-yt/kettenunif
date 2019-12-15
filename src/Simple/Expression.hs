@@ -175,8 +175,17 @@ eNull = bindsToExpr null
 eNullS :: Expr -> Bool
 eNullS = bindsToExprS null
 
+eLength :: Expr -> Int
+eLength = bindsToExpr length
+
+eLengthS :: Expr -> Int
+eLengthS = bindsToExprS length
+
 eHead :: Expr -> Bind
 eHead = bindsToExpr B.head
+
+eHeadS :: Expr -> SetVar
+eHeadS = bindsToExprS B.head
 
 eTail :: Expr -> Expr
 eTail = bindsToExpr' B.tail
