@@ -149,6 +149,23 @@ addApos (SGSplit a i x) = SGSplit (a+1) i x
 addApos (RCarry o i) = RCarry (addApos o) i
 addApos (RecBase a i) = RecBase (a+1) i
 
+-- | Splits the variable in the ground and set parts.
+sgSplit :: SetVar -> (SetVar, SetVar)
+sgSplit v = (SGSplit 0 v False, SGSplit 0 v True)
+
+-- | Create carrying variable.
+prepareRec :: SetVar -> SetVar
+prepareRec v = RCarry v v
+
+-- | Create the same variable as in stopRec to wait for result.
+waitBase :: SetVar -> SetVar
+waitBase = RecBase 0
+
+-- | Unwrap carried variable.
+stopRec :: SetVar -> SetVar
+stopRec (RCarry o i) = RecBase 0 i
+stopRec _ = error "called on non-carrying variable"
+
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
 isMeta _         = False
