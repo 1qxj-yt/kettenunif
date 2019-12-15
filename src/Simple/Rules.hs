@@ -46,7 +46,9 @@ import Simple.Expression
     , eConsS
     , ePartitionTo
     , ePartitionWithRestTo
+    , eLength
     , eHead
+    , eHeadS
     , eTail
     , eDelete
     , eDeleteS
