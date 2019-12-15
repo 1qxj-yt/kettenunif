@@ -130,6 +130,9 @@ expr = SetExpr mempty . fromList
 setExpr :: [SetVar] -> [Bind] -> Expr
 setExpr s e = SetExpr (fromList s) (fromList e)
 
+
+partition :: SetVars -> [(SetVar, Int, SetVar)]
+partition svs = map (\(v,oc) -> (v,oc,SubRest 0 v)) (toOccList svs)
 ssve :: SetVar -> [Bind] -> Expr
 ssve sv = SingleSVarExpr sv . fromList
 
