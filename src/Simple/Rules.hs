@@ -145,10 +145,10 @@ x_part_rapp = R "x-part/x-r-app" (\(SSL sol, E e1 :=?: E e2, γ) ->
     in  if length mss > 1 then -- x-partition
             [ (SSL sol,
                  foldr (%)
-                    ( (E (setExprRare (fmap addApos ms) mempty) :=?: E (setExprRare (fmap (addApos.addApos) ns) mempty)) %
-                      (E (setExpr ns' []) :=?: E (setExprRare (fmap addApos ns) mempty)) % γ)
+                    ( (E (SetExpr (fmap addApos ms) mempty) :=?: E (SetExpr (fmap (addApos.addApos) ns) mempty)) %
+                      (E (setExpr ns' []) :=?: E (SetExpr (fmap addApos ns) mempty)) % γ)
                     ( [ E (setExpr (replicate c m) [])
-                                :=?: E (setExprRare (fromList [n']) (ζ m))
+                                :=?: E (SetExpr (fromList [n']) (ζ m))
                         | (m,c,n') <- mss ] ++
                       [ E (setExpr [n'] []) :=?: E (setExpr [addApos n', addApos (addApos n')] [])
                         | n' <- toList ns ] ) )
