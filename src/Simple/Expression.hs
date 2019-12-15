@@ -1,5 +1,5 @@
 module Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr(Expr,SingleSVarExpr,SetExpr)
     , Binds
     , Bind((:=))
     , Var
