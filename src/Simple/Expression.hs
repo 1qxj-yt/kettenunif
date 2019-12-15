@@ -141,6 +141,10 @@ addApos (SetVar i) = HSetVar 1 i
 addApos (HSetVar a i) = HSetVar (a+1) i
 addApos (TSetVar a l r) = TSetVar (a+1) l r
 addApos (ChVar a i l r) = ChVar (a+1) i l r
+addApos (SubRest a x) = SubRest (a+1) x
+addApos (SGSplit a i x) = SGSplit (a+1) i x
+addApos (RCarry o i) = RCarry (addApos o) i
+addApos (RecBase a i) = RecBase (a+1) i
 
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
