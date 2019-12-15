@@ -199,6 +199,24 @@ x_app_acceleration = R "x-app-acceleration" (\(SSL sol, E e1 :=?: E e2, γ) ->
         m = head (toList ns)
         τ = (m →→ e1)
     in  [ (SSL (τ:sol), τ `onSolver` γ) ])
+
+x_emp_application :: Rule
+x_emp_application = R "x-emp-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
+        let μ  = foldWithIndexSet (\_ mi ->
+                    (mi →→ ( setExpr
+                        (foldWithIndexSet (\_ ni ->
+                            [combine mi ni]
+                        ) e2) [] )
+                    ) ) e1
+            ν  = foldWithIndexSet (\_ ni ->
+                    (ni →→ ( setExpr
+                        (foldWithIndexSet (\_ mi ->
+                            [combine mi ni]
+                        ) e1) [] )
+                    ) ) e2
+        in  (SSL (μ:ν:sol),
+                ((μ `mappend` ν) `onSolver` γ) ) ] )
+
 x_application :: Rule
 x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
         let μ  = foldWithIndexSet (\_ mi ->
