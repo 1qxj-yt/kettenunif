@@ -57,6 +57,10 @@ data SetVar = SetVar Integer
             | HSetVar {apos :: Int, id :: Integer}
             | TSetVar {apos :: Int, left :: SetVar, right :: SetVar}
             | ChVar   {apos :: Int, id :: Integer, from :: Var, to :: Var}
+            | SubRest {apos :: Int, inside :: SetVar}
+            | SGSplit {apos :: Int, inside :: SetVar, isGroundNotSet :: Bool}
+            | RCarry  {outside :: SetVar, inside :: SetVar}
+            | RecBase {apos :: Int, inside :: SetVar}
                                                 deriving (Ord)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
@@ -69,6 +73,10 @@ instance Eq SetVar where
     HSetVar a i == HSetVar b j = a==b && i==j
     TSetVar i l r == TSetVar j m s = i==j && (l==m && r==s) || (l==s && r==m)
     ChVar a i l r == ChVar b j m s = a==b && i==j && l==m && r==s
+    SubRest a x == SubRest b y = a == b && x == y
+    SGSplit a i x == SGSplit b j y = a == b && i == j && x == y
+    RCarry o i == RCarry p j = o == p && i == j
+    RecBase a i == RecBase b j = a == b && i == j
     _ == _ = False
 
 instance Show Bind where
@@ -83,6 +91,10 @@ instance Show SetVar where
     show (HSetVar a i) = show (SetVar i) ++ replicate a '\''
     show (TSetVar a l r) = 'T':show (l,r) ++ replicate a '\''
     show (ChVar a i l r) = 'C':'h':show i ++ show (l,r)++ replicate a '\''
+    show (SubRest a x) = 'N':'(':(show x ++ ")" ++ replicate a '\'')
+    show (SGSplit a i x) = (if x then "Gr" else "St") ++ show i ++ replicate a '\''
+    show (RCarry o i) = show o ++ "<" ++ show i ++ ">"
+    show (RecBase a i) = "<" ++ show i ++ ">" ++ replicate a '\''
 
 instance Show Expr where
     show (Expr e) = show e
