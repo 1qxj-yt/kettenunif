@@ -173,10 +173,13 @@ x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
         (ms',ns') = unzip $ map (\(m,_,n) -> (m,n)) mss
     in  [ (SSL sol,
                  foldr (%)
-                    ((E (setExpr ns' []) :=?: E (setExprRare ns mempty)) % γ)
-                    [ E (setExpr (replicate c m) [])
-                                :=?: E (setExprRare (fromList [n']) (ζ m))
-                        | (m,c,n') <- mss ] )
+                     ( (E (setExprRare (fmap addApos ms) mempty) :=?: E (setExprRare (fmap (addApos.addApos) ns) mempty)) %
+                       (E (setExpr ns' []) :=?: E (setExprRare (fmap addApos ns) mempty)) % γ)
+                     ( [ E (setExpr (replicate c m) [])
+                                 :=?: E (setExprRare (fromList [n']) (ζ m))
+                         | (m,c,n') <- mss ] ++
+                       [ E (setExpr [n'] []) :=?: E (setExpr [addApos n', addApos (addApos n')] [])
+                         | n' <- toList ns ] ) )
             | ζ <- dPart (fromList ms') e ])
 
 x_rep_application :: Rule
