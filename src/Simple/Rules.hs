@@ -171,15 +171,19 @@ x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
         (ms,_) = decompose e1
         mss    = partition ms
         (ms',ns') = unzip $ map (\(m,_,n) -> (m,n)) mss
-    in  [ (SSL sol,
+        τ = build [ m →→ setExpr [prepareRec m] [] | m <- ms' ]
+    in  [ (SSL (τ:sol),
                  foldr (%)
-                     ( (E (setExprRare (fmap addApos ms) mempty) :=?: E (setExprRare (fmap (addApos.addApos) ns) mempty)) %
-                       (E (setExpr ns' []) :=?: E (setExprRare (fmap addApos ns) mempty)) % γ)
-                     ( [ E (setExpr (replicate c m) [])
-                                 :=?: E (setExprRare (fromList [n']) (ζ m))
+                     ( (E (SetExpr (fmap waitBase ms) mempty) :=?:
+                            E (SetExpr (fmap (fst.sgSplit) ns) mempty)) %
+                       (E (setExpr ns' []) :=?:
+                            E (SetExpr (fmap (snd.sgSplit) ns) mempty)) %
+                        (τ `onSolver` γ))
+                     ( [ E (setExpr (replicate c (prepareRec m)) [])
+                                 :=?: E (SetExpr (fromList [n']) (ζ m))
                          | (m,c,n') <- mss ] ++
-                       [ E (setExpr [n'] []) :=?: E (setExpr [addApos n', addApos (addApos n')] [])
-                         | n' <- toList ns ] ) )
+                       [ E (setExpr [n'] []) :=?: E (setExpr [stN, grN] [])
+                         | n' <- toList ns, let (stN,grN) = sgSplit n'] ) )
             | ζ <- dPart (fromList ms') e ])
 
 x_rep_application :: Rule
