@@ -71,6 +71,7 @@ import Simple.Binds
 
 import qualified Data.Set as S
 import Data.List(delete)
+import Data.Foldable(toList)
 
 ------------------------------------------------
 -- Data Types
