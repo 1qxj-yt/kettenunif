@@ -27,6 +27,8 @@ module Simple.Expression
     , disjointS
     , foldWithIndex
     , foldWithIndexSet
+    , partition
+    , isPartitionExpr
     -- * Variables
     , meta
     , var
