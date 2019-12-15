@@ -14,6 +14,10 @@ module Simple.Rules
     , x_semi_tautology
     , x_distribution
     , x_application
+    , x_emp_application
+    , x_partition
+    , x_rep_application
+    , x_app_acceleration
     -- * SingleSet
     , set_distribution
     , set_application
