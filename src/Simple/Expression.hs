@@ -133,6 +133,11 @@ setExpr s e = SetExpr (fromList s) (fromList e)
 
 partition :: SetVars -> [(SetVar, Int, SetVar)]
 partition svs = map (\(v,oc) -> (v,oc,SubRest 0 v)) (toOccList svs)
+
+isPartitionExpr :: Expr -> Bool
+isPartitionExpr (SetExpr s _) = (length s == 1) && (case B.head s of SubRest _ _ -> True
+                                                                     _ -> False)
+
 ssve :: SetVar -> [Bind] -> Expr
 ssve sv = SingleSVarExpr sv . fromList
 
