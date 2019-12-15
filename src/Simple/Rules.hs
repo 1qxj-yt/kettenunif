@@ -187,7 +187,9 @@ x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
         (ms,_) = decompose e1
         mss    = partition ms
         (ms',ns') = unzip $ map (\(m,_,n) -> (m,n)) mss
-        τ = build [ m →→ setExpr [prepareRec m] [] | m <- ms' ]
+        τ = build $
+            [ m →→ setExpr [prepareRec m] [] | m <- ms' ]
+             ++ [ n' →→ setExpr [stN, grN] [] | n' <- toList ns, let (stN,grN) = sgSplit n' ]
     in  [ (SSL (τ:sol),
                  foldr (%)
                      ( (E (SetExpr (fmap waitBase ms) mempty) :=?:
@@ -195,11 +197,9 @@ x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
                        (E (setExpr ns' []) :=?:
                             E (SetExpr (fmap (snd.sgSplit) ns) mempty)) %
                         (τ `onSolver` γ))
-                     ( [ E (setExpr (replicate c (prepareRec m)) [])
+                     [ E (setExpr (replicate c (prepareRec m)) [])
                                  :=?: E (SetExpr (fromList [n']) (ζ m))
-                         | (m,c,n') <- mss ] ++
-                       [ E (setExpr [n'] []) :=?: E (setExpr [stN, grN] [])
-                         | n' <- toList ns, let (stN,grN) = sgSplit n'] ) )
+                         | (m,c,n') <- mss ] )
             | ζ <- dPart (fromList ms') e ])
 
 x_rep_application :: Rule
