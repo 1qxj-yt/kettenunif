@@ -14,6 +14,7 @@ import Simple.Expression
     )
 import Simple.UnifProblem
     ( Equation((:=?:))
+    , isBlockEq
     )
 
 
