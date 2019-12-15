@@ -30,14 +30,18 @@ fullMSet (V v1 :=?: V v2)
         (True , False) -> application
         (False, True ) -> orientation
         (True , True ) -> application
-fullMSet (E e1 :=?: E e2)
+fullMSet eq@(E e1 :=?: E e2)
     | not (disjointS e1 e2) = x_semi_tautology
     | otherwise             = case (eNull e1, eNull e2) of
-                    (True , True ) -> x_application
-                    (False, True ) -> orientation
-                    (True , False) -> if eNullS e1
-                                        then clash
-                                        else x_application
+                    (True , True ) -- -> x_emp_application
+                                | eNullS e1 && eNullS e2 -> tautology
+                                | isBlockEq eq -> x_rep_application
+                                | otherwise -> x_emp_application
+                    (False, True ) -> if isBlockEq eq then x_app_acceleration else orientation
+                    (True , False) | eNullS e1 -> clash
+                                -- x_application -- x_part_rapp
+                                   | isBlockEq eq -> x_rep_application
+                                   | otherwise -> x_partition
                     (False, False) -> x_distribution
 
 
