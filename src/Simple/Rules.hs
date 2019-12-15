@@ -137,6 +137,19 @@ x_distribution = R "x-distribution" $ (\(SSL sol, E e1 :=?: E e2, γ) ->
                     ) e2
                     )
 
+x_rep_application :: Rule
+x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
+    let (ms,_) = decompose e1
+        mss    = partition ms
+        [(m,c,_)] = mss
+        m' = (if eLength e2 == 1 then addApos else id) m
+        b1 = eHead e2
+        -- τ = (m →→ setExpr (if eLength e2 == 1 then [] else [m']) [b1])
+        τ = (m →→ setExpr [m'] [b1])
+    in  [ (SSL (τ:sol),
+                (E (setExpr (if eLength e2 == 1 then [] else replicate c m') (replicate (c-1) b1))
+                    :=?: E (eTail e2)) % (τ `onSolver` γ)
+            )])
 x_application :: Rule
 x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
         let μ  = foldWithIndexSet (\_ mi ->
