@@ -35,6 +35,10 @@ module Simple.Expression
     , isMeta
     , addApos
     , combine
+    , sgSplit
+    , prepareRec
+    , waitBase
+    , stopRec
     , ωBind
     , ωExpr
     , from
