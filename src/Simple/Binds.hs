@@ -10,6 +10,7 @@ module Simple.Binds
     , partitions
     , partitionsWithRest
     , toOccList
+    , dPart
     -- * Decomposition
     , uncons
     , Simple.Binds.head
