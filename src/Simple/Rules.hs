@@ -57,6 +57,10 @@ import Simple.Expression
     , addApos
     , decompose
     , partition
+    , sgSplit
+    , prepareRec
+    , waitBase
+    , stopRec
     )
 import Simple.Binds
     ( cons
