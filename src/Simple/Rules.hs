@@ -187,7 +187,14 @@ x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
     let (ms,_) = decompose e1
         mss    = partition ms
         [(m,c,_)] = mss
-        m' = (if eLength e2 == 1 then addApos else id) m
+    in  if eLength e2 == 0
+        then
+            let τm = (m →→ setExpr [stopRec m] [])
+                n = eHeadS e2
+                τn = (n →→ mempty)
+            in  [(SSL (τm:τn:sol), τm `onSolver` (τn `onSolver` γ) )]
+        else
+    let m' = (if eLength e2 == 1 then stopRec else addApos) m
         b1 = eHead e2
         -- τ = (m →→ setExpr (if eLength e2 == 1 then [] else [m']) [b1])
         τ = (m →→ setExpr [m'] [b1])
