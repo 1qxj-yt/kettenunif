@@ -15,6 +15,9 @@ import qualified Data.MultiSet as MS
 import Simple.Expression
     ( Expr(Expr,SingleSVarExpr)
     , Token(E,B,V)
+    , partition
+    , isPartitionExpr
+    , decompose
     )
 import Simple.Substitution
     ( Substitution
