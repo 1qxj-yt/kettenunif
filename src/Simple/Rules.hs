@@ -187,13 +187,6 @@ x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
                 n = eHeadS e2
                 τn = (n →→ mempty)
             in  [(SSL (τm:τn:sol), τm `onSolver` (τn `onSolver` γ) )]
-        1 ->
-            let b1 = eHead e2
-                τ = (m →→ setExpr [stopRec m] [b1])
-                n = eHeadS e2
-                τn = (n →→ setExpr [] (replicate (c-1) b1))
-            in  [ (SSL (τ:τn:sol), τ `onSolver` (τn `onSolver` γ)
-                    )]
         _ ->
             let m' = addApos m
                 b1 = eHead e2
