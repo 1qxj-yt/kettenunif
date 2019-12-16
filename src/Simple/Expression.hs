@@ -37,7 +37,6 @@ module Simple.Expression
     , combine
     , sgSplit
     , prepareRec
-    , waitBase
     , stopRec
     , ωBind
     , ωExpr
@@ -69,7 +68,6 @@ data SetVar = SetVar Integer
             | SubRest {apos :: Int, inside :: SetVar}
             | SGSplit {apos :: Int, inside :: SetVar, isGroundNotSet :: Bool}
             | RCarry  {outside :: SetVar, inside :: SetVar}
-            | RecBase {apos :: Int, inside :: SetVar}
                                                 deriving (Ord)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
@@ -85,7 +83,6 @@ instance Eq SetVar where
     SubRest a x == SubRest b y = a == b && x == y
     SGSplit a i x == SGSplit b j y = a == b && i == j && x == y
     RCarry o i == RCarry p j = o == p && i == j
-    RecBase a i == RecBase b j = a == b && i == j
     _ == _ = False
 
 instance Show Bind where
@@ -103,7 +100,6 @@ instance Show SetVar where
     show (SubRest a x) = 'N':'(':(show x ++ ")" ++ replicate a '\'')
     show (SGSplit a i x) = (if x then "Gr" else "St") ++ show i ++ replicate a '\''
     show (RCarry o i) = show o ++ "<" ++ show i ++ ">"
-    show (RecBase a i) = "<" ++ show i ++ ">" ++ replicate a '\''
 
 instance Show Expr where
     show (Expr e) = show e
@@ -160,7 +156,6 @@ addApos (ChVar a i l r) = ChVar (a+1) i l r
 addApos (SubRest a x) = SubRest (a+1) x
 addApos (SGSplit a i x) = SGSplit (a+1) i x
 addApos (RCarry o i) = RCarry (addApos o) i
-addApos (RecBase a i) = RecBase (a+1) i
 
 -- | Splits the variable in the ground and set parts.
 sgSplit :: SetVar -> (SetVar, SetVar)
@@ -169,10 +164,6 @@ sgSplit v = (SGSplit 0 v False, SGSplit 0 v True)
 -- | Create carrying variable.
 prepareRec :: SetVar -> SetVar
 prepareRec v = RCarry v v
-
--- | Create the same variable as in stopRec to wait for result.
-waitBase :: SetVar -> SetVar
-waitBase = RecBase 0
 
 -- | Unwrap carried variable.
 stopRec :: SetVar -> SetVar

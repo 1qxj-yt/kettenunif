@@ -64,7 +64,6 @@ import Simple.Expression
     , partition
     , sgSplit
     , prepareRec
-    , waitBase
     , stopRec
     )
 import Simple.Binds
