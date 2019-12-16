@@ -162,13 +162,13 @@ sgSplit :: SetVar -> (SetVar, SetVar)
 sgSplit v = (SGSplit 0 v False, SGSplit 0 v True)
 
 -- | Create carrying variable.
-prepareRec :: SetVar -> SetVar
-prepareRec v = RCarry v v
+prepareRec :: SetVar -> Expr -> SetVar
+prepareRec = RCarry
 
 -- | Unwrap carried variable.
-stopRec :: SetVar -> SetVar
-stopRec (RCarry o i) = RecBase 0 i
-stopRec _ = error "called on non-carrying variable"
+stopRec :: SetVar -> Expr
+stopRec (RCarry o i) = i
+stopRec v = error $ "called on non-carrying variable: " ++ show v
 
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
