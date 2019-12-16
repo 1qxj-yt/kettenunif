@@ -67,7 +67,7 @@ data SetVar = SetVar Integer
             | ChVar   {apos :: Int, id :: Integer, from :: Var, to :: Var}
             | SubRest {apos :: Int, inside :: SetVar}
             | SGSplit {apos :: Int, inside :: SetVar, isGroundNotSet :: Bool}
-            | RCarry  {outside :: SetVar, inside :: SetVar}
+            | RCarry  {outside :: SetVar, insideExpr :: Expr}
                                                 deriving (Ord)
 
 data Var  = Var Char Integer | Meta Char Integer deriving (Eq,Ord)
