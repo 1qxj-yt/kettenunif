@@ -178,14 +178,14 @@ x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
 
 x_rep_application :: Rule
 x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
-    let (ms,_) = decompose e1
+    let (ms,e) = decompose e1
         mss    = partition ms
         [(m,c,_)] = mss
     in  case eLength e2 of
         0 ->
-            let τm = (m →→ setExpr [stopRec m] [])
+            let τm = (m →→ stopRec m)
                 n = eHeadS e2
-                τn = (n →→ mempty)
+                τn = (n →→ SetExpr mempty e)
             in  [(SSL (τm:τn:sol), τm `onSolver` (τn `onSolver` γ) )]
         _ ->
             let m' = addApos m
