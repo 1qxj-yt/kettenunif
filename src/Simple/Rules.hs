@@ -197,8 +197,15 @@ x_rep_application = R "x-rep-application" (\(SSL sol, E e1 :=?: E e2, γ) ->
                     )]
         )
 
-x_app_acceleration :: Rule
-x_app_acceleration = R "x-app-acceleration" (\(SSL sol, E e1 :=?: E e2, γ) ->
+x_app_accelerationL :: Rule
+x_app_accelerationL = R "x-app-accelerationL" (\(SSL sol, E e1 :=?: E e2, γ) ->
+    let (ns,_) = decompose e1
+        m = head (toList ns)
+        τ = (m →→ e2)
+    in  [ (SSL (τ:sol), τ `onSolver` γ) ])
+
+x_app_accelerationR :: Rule
+x_app_accelerationR = R "x-app-accelerationR" (\(SSL sol, E e1 :=?: E e2, γ) ->
     let (ns,_) = decompose e2
         m = head (toList ns)
         τ = (m →→ e1)
