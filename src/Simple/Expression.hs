@@ -38,6 +38,7 @@ module Simple.Expression
     , sgSplit
     , prepareRec
     , stopRec
+    , isCarrying
     , ωBind
     , ωExpr
     , from
