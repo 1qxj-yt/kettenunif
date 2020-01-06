@@ -100,7 +100,7 @@ instance Show SetVar where
     show (ChVar a i l r) = 'C':'h':show i ++ show (l,r)++ replicate a '\''
     show (SubRest a x) = 'N':'(':(show x ++ ")" ++ replicate a '\'')
     show (SGSplit a i x) = (if x then "Gr" else "St") ++ show i ++ replicate a '\''
-    show (RCarry o i) = show o ++ "<" ++ show i ++ ">"
+    show (RCarry o i) = show o ++ "<C>"
 
 instance Show Expr where
     show (Expr e) = show e
