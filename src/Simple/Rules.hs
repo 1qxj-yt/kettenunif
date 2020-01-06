@@ -16,7 +16,8 @@ module Simple.Rules
     , x_emp_application
     , x_partition
     , x_rep_application
-    , x_app_acceleration
+    , x_app_accelerationL
+    , x_app_accelerationR
     -- * SingleSet
     , set_distribution
     , set_application
