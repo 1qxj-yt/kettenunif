@@ -37,11 +37,15 @@ fullMSet eq@(E e1 :=?: E e2)
                     (True , True ) -- -> x_emp_application
                                 | eNullS e1 && eNullS e2 -> tautology
                                 | isBlockEq eq -> x_rep_application
+                                | eLengthS e1 == 1 -> x_app_accelerationL
                                 | otherwise -> x_emp_application
-                    (False, True ) -> if isBlockEq eq then x_rep_application {- x_app_acceleration -} else orientation
+                    (False, True ) | isBlockEq eq -> x_rep_application
+                                   | eLengthS e2 == 1 -> x_app_accelerationR
+                                   | otherwise -> orientation
                     (True , False) | eNullS e1 -> clash
                                 -- x_application -- x_part_rapp
                                    | isBlockEq eq -> x_rep_application
+                                   | eLengthS e1 == 1 -> x_app_accelerationL
                                    | otherwise -> x_partition
                     (False, False) -> x_distribution
 
