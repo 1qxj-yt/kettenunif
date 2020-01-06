@@ -167,8 +167,8 @@ x_partition = R "x-partition" (\(SSL sol, E e1 :=?: E e2, γ) ->
                  foldr (%)
                      ( -- (E (SetExpr (fmap waitBase ms) mempty) :=?:
                             -- E (SetExpr (fmap (fst.sgSplit) ns) mempty)) % -- rem
-                       (E (setExpr ns' []) :=?:
-                            E (SetExpr (fmap (snd.sgSplit) ns) mempty)) %
+                       (E (SetExpr (fmap (snd.sgSplit) ns) mempty) :=?:
+                            E (setExpr ns' []) ) %
                         (τ `onSolver` γ))
                      [ E (setExpr (replicate c (prepRec m)) [])
                                  :=?: E (SetExpr (fromList [n']) (ζ m))
