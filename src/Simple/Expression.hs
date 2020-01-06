@@ -170,6 +170,10 @@ stopRec :: SetVar -> Expr
 stopRec (RCarry o i) = i
 stopRec v = error $ "called on non-carrying variable: " ++ show v
 
+isCarrying :: SetVar -> Bool
+isCarrying (RCarry _ _) = True
+isCarrying _ = False
+
 isMeta :: Var -> Bool
 isMeta (Meta _ _) = True
 isMeta _         = False
