@@ -65,7 +65,7 @@ isValidSolver = (== True) . S.findMin . S.map isValidEquation
 
 isBlockEq :: Equation -> Bool
 isBlockEq (E e1 :=?: E e2) = let (ms,_) = decompose e1 in
-        length (partition ms) == 1 && isPartitionExpr e2
+        length (partition ms) == 1 && all isCarrying ms && isPartitionExpr e2
 isBlockEq _ = False
 
 
