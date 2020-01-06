@@ -18,6 +18,7 @@ import Simple.Expression
     , Token(E,B,V)
     , partition
     , isPartitionExpr
+    , isCarrying
     , decompose
     )
 import Simple.Substitution
