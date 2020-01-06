@@ -11,6 +11,7 @@ import Simple.Expression
     , eNull
     , eNullS
     , disjointS
+    , eLengthS
     )
 import Simple.UnifProblem
     ( Equation((:=?:))
