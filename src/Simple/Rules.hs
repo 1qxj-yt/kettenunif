@@ -13,7 +13,6 @@ module Simple.Rules
     -- * Set
     , x_semi_tautology
     , x_distribution
-    , x_application
     , x_emp_application
     , x_partition
     , x_rep_application
