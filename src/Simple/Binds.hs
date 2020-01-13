@@ -8,7 +8,6 @@ module Simple.Binds
     , diff
     , disjoint
     , partitions
-    , partitionsWithRest
     , toOccList
     , dPart
     -- * Decomposition
@@ -107,9 +106,6 @@ dPart (MS ms) (MS (b Seq.:<| es)) = do
 partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [b -> Multiset a]
 partitions m e = map fst $ applyStrat simpleRep m e
 
-partitionsWithRest :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [(b -> Multiset a, Multiset a)]
-partitionsWithRest = applyStrat repWithRest
-
 -- ### Transformations ### --
 
 toOccList :: Ord a => Multiset a -> [(a, DMS.Occur)]
@@ -149,18 +145,3 @@ simpleRep (n,ms) =
     in  case traverse (`divMaybe` n) (DMS.toMap $ toDMS ms) of
             Nothing -> []
             Just mp -> [(fromDMS $ DMS.fromMap mp, mempty)]
-
-repWithRest :: Ord a => RepStrategy a
-repWithRest (n,ms) = map (fromDMS *** fromDMS) (repWithRestAux (n,toOccList ms))
-    where
-        repWithRestAux :: Ord a => (Int, [(a, DMS.Occur)]) -> [(DMS.MultiSet a, DMS.MultiSet a)]
-        repWithRestAux (n,[]) = [(mempty, mempty)]
-        repWithRestAux (n,(a,oc):xs) =
-                let divCeil n m = let (d,r) = divMod n m in if r > 0 then d+1 else d
-                    minOcc = oc `divCeil` n
-                in do
-                    oc'<-[minOcc..oc]
-                    let newXS = if oc' > 0 then DMS.fromOccurList [(a,oc')] else DMS.empty
-                    (xsRec,rRec) <- repWithRestAux (n,xs)
-                    let newR  = if oc'*n > oc then DMS.fromOccurList [(a,oc'*n - oc)] else DMS.empty
-                    return (xsRec `DMS.union` newXS, rRec `DMS.union` newR)

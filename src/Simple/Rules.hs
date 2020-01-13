@@ -49,8 +49,6 @@ import Simple.Expression
     , foldWithIndex
     , foldWithIndexSet
     , eConsS
-    , ePartitionTo
-    , ePartitionWithRestTo
     , eLength
     , eHead
     , eHeadS
@@ -229,26 +227,6 @@ x_emp_application = R "x-emp-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
                     ) ) e2
         in  (SSL (μ:ν:sol),
                 ((μ `mappend` ν) `onSolver` γ) ) ] )
-
-x_application :: Rule
-x_application = R "x-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
-        let μ  = foldWithIndexSet (\_ mi ->
-                    (mi →→ ( setExpr
-                        (foldWithIndexSet (\_ ni ->
-                            [combine mi ni]
-                        ) e2) []
-                        `mappend` χ(mi) )
-                    ) ) e1
-            ν  = foldWithIndexSet (\_ ni ->
-                    (ni →→ ( setExpr
-                        (foldWithIndexSet (\_ mi ->
-                            [combine mi ni]
-                        ) e1) []
-                        `mappend` χ'(ni))
-                    ) ) e2
-            --nfrak = foldWithIndexSet (\_ ni -> setExpr [ni] []) e2
-        in  (SSL (μ:ν:sol), {-(if eNullS nfrak && eNull r then id else (((ν `onAny` E nfrak) :=?: E r) %) )-}
-                ((μ `mappend` ν) `onSolver` γ) ) | (χ,r) <- e2 `ePartitionWithRestTo` e1, χ' <- r `ePartitionTo` e2] )
 
 
 ------------------------------------------------
