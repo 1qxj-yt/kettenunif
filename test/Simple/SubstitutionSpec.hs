@@ -4,7 +4,7 @@ import Test.Hspec
 import Simple.Substitution
 
 import Simple.Expression
-    ( Expr(Expr)
+    ( Expr
     , Bind((:=))
     , Var, var, meta
     , SetVar(SetVar)

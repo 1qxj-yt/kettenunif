@@ -35,7 +35,7 @@ import Simple.Substitution
     , identity
     )
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr,SetExpr)
+    ( Expr(SetExpr)
     , Bind((:=))
     , Token(E,B,V)
     , setExpr

@@ -5,7 +5,7 @@ import Simple.SetSubst
 
 import Simple.Expression
     ( SetVar(SetVar)
-    , Expr(Expr, SingleSVarExpr)
+    , Expr
     , Bind((:=))
     , Var
     , var

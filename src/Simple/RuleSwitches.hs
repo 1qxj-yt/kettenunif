@@ -5,7 +5,7 @@ module Simple.RuleSwitches
 import Simple.Rules
 
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr
     , Token(E,B,V)
     , isMeta
     , eNull

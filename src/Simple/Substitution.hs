@@ -17,7 +17,7 @@ module Simple.Substitution
     ) where
 
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr
     , Bind((:=))
     , Var
     , SetVar

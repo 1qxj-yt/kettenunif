@@ -14,7 +14,7 @@ import qualified Data.Set as S
 import qualified Data.MultiSet as MS
 
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr
     , Token(E,B,V)
     , partition
     , isPartitionExpr
