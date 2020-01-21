@@ -35,7 +35,7 @@ fullMSet (V v1 :=?: V v2)
 fullMSet eq@(E e1 :=?: E e2)
     | not (disjointS e1 e2) = x_semi_tautology
     | otherwise             = case (eNull e1, eNull e2) of
-                    (True , True ) -- -> x_emp_application
+                    (True , True )
                                 | eNullS e1 && eNullS e2 -> tautology
                                 | isBlockEq eq -> x_rep_application
                                 | eLengthS e1 == 1 -> x_app_accelerationL
@@ -44,7 +44,6 @@ fullMSet eq@(E e1 :=?: E e2)
                                    | eLengthS e2 == 1 -> x_app_accelerationR
                                    | otherwise -> orientation
                     (True , False) | eNullS e1 -> clash
-                                -- x_application -- x_part_rapp
                                    | isBlockEq eq -> x_rep_application
                                    | eLengthS e1 == 1 -> x_app_accelerationL
                                    | otherwise -> x_partition
