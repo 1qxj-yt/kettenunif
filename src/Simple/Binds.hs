@@ -7,7 +7,6 @@ module Simple.Binds
     , deleteAt
     , diff
     , disjoint
-    , partitions
     , toOccList
     , dPart
     -- * Decomposition
@@ -102,46 +101,7 @@ dPart (MS ms) (MS (b Seq.:<| es)) = do
         let MS res = f m
         return $ \var -> if var==m then MS (b Seq.<| res) else f var
 
--- | Simple partition.
-partitions :: (Show a,Show b,Ord a, Ord b) => Multiset b -> Multiset a -> [b -> Multiset a]
-partitions m e = map fst $ applyStrat simpleRep m e
-
 -- ### Transformations ### --
 
 toOccList :: Ord a => Multiset a -> [(a, DMS.Occur)]
 toOccList (MS m) = DMS.toOccurList . DMS.fromList $ toList m
-
-toDMS :: Ord a => Multiset a -> DMS.MultiSet a
-toDMS = DMS.fromList . toList
-
-fromDMS :: DMS.MultiSet a -> Multiset a
-fromDMS = fromList . DMS.toList
-
--- ### Repetition Strategy ### --
-
-type RepStrategy a = (Int, Multiset a) -> [(Multiset a, Multiset a)]
-
-applyStrat :: (Show a, Show b, Ord b) => RepStrategy a -> (Multiset b -> Multiset a -> [(b -> Multiset a, Multiset a)])
-applyStrat strat ms es =
-    let nub' :: Eq c => Multiset c -> Multiset (Int,c)
-        nub' = fromList . nubBy (\(_,l) (_,r) -> l==r) . zip [1..] . toList
-        ms'  = nub' ms
-        dmsM = toDMS ms
-    in do
-        ζ <- dPart ms' es
-        let reptTriples = map (\(i,m)->(m, DMS.occur m dmsM, ζ(i,m))) (toList ms')
-        foldr (\(m,oc,e) ->
-                concatMap (\(f,r) -> do
-                    (result,rest) <- strat (oc,e)
-                    return (\v -> if m==v then result else f v, r `mappend` rest)
-              ) )
-            [(mempty,mempty)] reptTriples
-
--- ### Concrete Strategies ### --
-
-simpleRep :: (Show a, Ord a) => RepStrategy a
-simpleRep (n,ms) =
-    let divMaybe n m = let (d,r) = divMod n m in if r == 0 then Just d else Nothing
-    in  case traverse (`divMaybe` n) (DMS.toMap $ toDMS ms) of
-            Nothing -> []
-            Just mp -> [(fromDMS $ DMS.fromMap mp, mempty)]
