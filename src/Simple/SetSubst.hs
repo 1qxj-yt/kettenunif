@@ -15,7 +15,7 @@ module Simple.SetSubst
     ) where
 
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr
     , Bind
     , Var
     , SetVar(SetVar)
@@ -79,9 +79,7 @@ compose sl sr = cleanUp $ Subst $ M.union (M.map (sl `onExpr`) (mp sr)) (mp sl)
 -- | Removes entries of the form \(M\mapsto M':[]\) with \(M==M'\)
 cleanUp :: Substitution -> Substitution
 cleanUp (Subst s) = Subst (M.filterWithKey neq s)
-    where   m `neq` SingleSVarExpr m' e = not (null e) || m /= m'
-            n `neq` (Expr _) = True
-            m `neq` se =
+    where   m `neq` se =
                 getAny (foldWithIndex (\i b -> Any True) se) -- not (null e)
                 ||
                 getAll (foldWithIndexSet (\_ _ -> All False) se) -- null sv
@@ -100,11 +98,6 @@ restrict (Subst s) = Subst (M.filterWithKey (\k _ -> isNotHelper k) s)
 ------------------------------------------------
 
 onExpr :: Substitution -> (Expr -> Expr)
-onExpr σ ssve@(SingleSVarExpr sv e) = case M.lookup sv (mp σ) of
-    Nothing -> ssve
-    Just (Expr e2) -> Expr (e2 `mappend` e)
-    Just (SingleSVarExpr m e2) -> SingleSVarExpr m (e2 `mappend` e)
-onExpr σ ssve@(Expr _) = ssve
 onExpr σ se = setExpr [] (foldWithIndex (\_ b -> [b]) se)
     `mappend` foldWithIndexSet (\_ sv -> case M.lookup sv (mp σ) of
         Nothing -> setExpr [sv] []

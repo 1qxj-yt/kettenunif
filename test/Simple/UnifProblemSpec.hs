@@ -31,7 +31,6 @@ shorterIsSmaller p1 p2 =
         p1 <= p2
 
 leftHasSetVars :: UnifProblemEl -> Bool
-leftHasSetVars (SingleSVarExpr _ _ :=.: _)   = True
 leftHasSetVars (e :=.: _) = let (svs,bs) = decompose e in not (null svs)
 
 left :: UnifProblemEl -> Expr
@@ -39,6 +38,4 @@ left (e :=.: _) = e
 
 
 bindsOf :: Expr -> Binds
-bindsOf (SingleSVarExpr _ b) = b
-bindsOf (Expr b) = b
 bindsOf e = snd $ decompose e

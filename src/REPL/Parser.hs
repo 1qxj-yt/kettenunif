@@ -15,7 +15,7 @@ import Simple.Substitution
     , compose
     )
 import Simple.Expression
-    ( Expr(Expr,SingleSVarExpr)
+    ( Expr
     , Bind((:=))
     , Var
     , SetVar(SetVar)
@@ -128,13 +128,6 @@ setVar = do
     n <- option 0 natural
     a <- many (char '\'')
     return (foldr (.) id (map (const addApos) a) $ SetVar n)
-
-singleSetExpr :: Parser Expr
-singleSetExpr = do
-    sv <- setVar
-    char ':'
-    Expr bs <- expression
-    return $ SingleSVarExpr sv bs
 
 setVars :: Parser [SetVar]
 setVars = semiSep setVar

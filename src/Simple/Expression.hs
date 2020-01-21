@@ -1,5 +1,5 @@
 module Simple.Expression
-    ( Expr(Expr,SingleSVarExpr,SetExpr)
+    ( Expr(SetExpr)
     , Binds
     , Bind((:=))
     , Var
@@ -9,7 +9,6 @@ module Simple.Expression
     , decompose
     -- * Expression
     , expr
-    , ssve
     , setExpr
     , eConsS
     , eNull
@@ -53,7 +52,7 @@ import qualified Data.Map.Strict as M
 -- Data
 ------------------------------------------------
 
-data Expr = Expr Binds | SingleSVarExpr SetVar Binds | SetExpr SetVars Binds  deriving (Eq)
+data Expr = SetExpr SetVars Binds  deriving Eq
 type SetVars = Multiset SetVar
 type Binds = Multiset Bind
 
@@ -96,18 +95,11 @@ instance Show SetVar where
     show (RCarry o i) = show o ++ "<C>"
 
 instance Show Expr where
-    show (Expr e) = show e
-    show (SingleSVarExpr sv e) = show sv++":"++show e
     show (SetExpr s e) = case (null s, null e) of
         (True ,   _  ) -> show e
         (  _  ,   _  ) -> intercalate ";" (toList $ fmap show s) ++ ":" ++ show e
 
 instance Ord Expr where
-    compare (Expr e) (Expr e') = compare e e'
-    compare (Expr _) (SingleSVarExpr _ _) = LT
-    compare (SingleSVarExpr _ _) (Expr _) = GT
-    compare (SingleSVarExpr s e) (SingleSVarExpr s' e') =
-        compare e e' `mappend` compare s s'
     compare (SetExpr s e) (SetExpr s' e') =
         compare e e' `mappend` compare s s'
 
@@ -133,8 +125,6 @@ isPartitionExpr :: Expr -> Bool
 isPartitionExpr (SetExpr s _) = (length s == 1) && (case B.head s of SubRest _ _ -> True
                                                                      _ -> False)
 
-ssve :: SetVar -> [Bind] -> Expr
-ssve sv = SingleSVarExpr sv . fromList
 
 meta :: Char -> Integer -> Var
 meta c i  = if isUpper c then Meta c i else error "meta variable must be upper case"
@@ -222,9 +212,7 @@ clean (SetExpr s1 e1) (SetExpr s2 e2) =
     (SetExpr (s1 `B.diff` s2) e1, SetExpr (s2 `B.diff` s1) e2)
 
 disjointS :: Expr -> Expr -> Bool
-disjointS (SingleSVarExpr s1 _) (SingleSVarExpr s2 _) = s1 /= s2
 disjointS (SetExpr s1 e1) (SetExpr s2 e2) = disjoint s1 s2
-disjointS _ _ = True
 
 
 ------------------------------------------------
@@ -235,18 +223,12 @@ disjointS _ _ = True
 ωBind f (v1:=v2) = f v1 := f v2
 
 ωExpr :: (Var -> Var) -> (Expr -> Expr)
-ωExpr f (Expr e) = Expr (fmap (ωBind f) e)
-ωExpr f (SingleSVarExpr b e) = SingleSVarExpr b (fmap (ωBind f) e)
 ωExpr f (SetExpr s e) = SetExpr s (fmap (ωBind f) e)
 
 bindsToExpr :: (Binds -> a) -> (Expr -> a)
-bindsToExpr f (Expr bs) = f bs
-bindsToExpr f (SingleSVarExpr _ bs) = f bs
 bindsToExpr f (SetExpr _ bs) = f bs
 
 bindsToExpr' :: (Binds -> Binds) -> (Expr -> Expr)
-bindsToExpr' f (Expr bs) = Expr (f bs)
-bindsToExpr' f (SingleSVarExpr sv bs) = SingleSVarExpr sv (f bs)
 bindsToExpr' f (SetExpr sv bs) = SetExpr sv (f bs)
 
 bindsToExprS :: (SetVars -> a) -> (Expr -> a)
@@ -256,8 +238,6 @@ bindsToExprS' :: (SetVars -> SetVars) -> (Expr -> Expr)
 bindsToExprS' f (SetExpr sv bs) = SetExpr (f sv) bs
 
 foldWithIndex :: Monoid m => (Int -> Bind -> m) -> Expr -> m
-foldWithIndex f (Expr e) = foldMapWithIndex f e
-foldWithIndex f (SingleSVarExpr _ e) = foldMapWithIndex f e
 foldWithIndex f (SetExpr _ e) = foldMapWithIndex f e
 
 foldWithIndexSet :: Monoid m => (Int -> SetVar -> m) -> Expr -> m
