@@ -48,7 +48,8 @@ fullMSet eq@(E e1 :=?: E e2)
                                    | isBlockEq eq -> x_rep_application
                                    | eLengthS e1 == 1 -> x_app_accelerationL
                                    | otherwise -> x_partition
-                    (False, False) -> x_distribution
+                    (False, False) | eNullS e1 && eNullS e2 && eLength e1 /= eLength e2 -> clash
+                                   | otherwise -> x_distribution
 
 
 singleMSet :: RuleSwitch
