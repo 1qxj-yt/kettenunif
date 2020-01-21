@@ -18,13 +18,6 @@ module Simple.Rules
     , x_rep_application
     , x_app_accelerationL
     , x_app_accelerationR
-    -- * SingleSet
-    , set_distribution
-    , set_application
-    , biset_tautology
-    , biset_application
-    , biset_distribution
-    , mset_semi_tautology
     ) where
 
 import Simple.UnifProblem
@@ -227,44 +220,3 @@ x_emp_application = R "x-emp-application" (\(SSL sol, E e1 :=?: E e2, γ) -> [
                     ) ) e2
         in  (SSL (μ:ν:sol),
                 ((μ `mappend` ν) `onSolver` γ) ) ] )
-
-
-------------------------------------------------
--- Single Set Extension
-------------------------------------------------
-
--- | Note: Includes set_clash
-set_distribution :: Rule
-set_distribution = R "set-distribution" (apply distribution)
-
-set_application :: Rule
-set_application = R "set-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?: E e,γ) ->
-            [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
-
-set_orientation :: Rule
-set_orientation = R "set-orientation" (apply orientation)
-
-biset_tautology :: Rule
-biset_tautology = R "biset-tautology" (\(sol,E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2),γ) ->
-            [(sol, (E (Expr e1) :=?: E (Expr e2)) % γ)] )
-
-biset_distribution :: Rule
-biset_distribution = R "biset-distribution" (\(SSL sol,E (SingleSVarExpr sv1 e1) :=?: E e2sv@(SingleSVarExpr sv2 e2),γ) ->
-            let sv2' = addApos sv2
-                sv1' = if sv1 == sv2 then sv2' else sv1
-                (b1,e1s) = uncons e1
-                b1s = (cons b1 mempty)
-            in  ((SSL ((sv2 →→ SingleSVarExpr sv2' b1s):sol)),
-                    (E (SingleSVarExpr sv1' e1s) :=?: E (SingleSVarExpr sv2' e2)) % ((sv2 →→ SingleSVarExpr sv2' b1s) `onSolver` γ) ):
-                        (foldWithIndex (\i b2 ->
-                            [(SSL sol, (B b1 :=?: B b2) % (E (SingleSVarExpr sv1 e1s) :=?: E (eDelete i e2sv)) % γ)]
-                        )) e2sv
-            )
-
-biset_application :: Rule
-biset_application = R "biset-application" (\(SSL sol,E (SingleSVarExpr sv _) :=?: E e,γ) ->
-                [(SSL ((sv →→ e):sol), (sv →→ e) `onSolver` γ)] )
-
-mset_semi_tautology :: Rule
-mset_semi_tautology = R "mset-semi-tautology" (\(sol, E (SingleSVarExpr _ e1) :=?: E (SingleSVarExpr _ e2), γ) ->
-            [(sol, (E (Expr e1) :=?: E (Expr e2)) % γ)])
